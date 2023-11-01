@@ -63,9 +63,6 @@ void IRCBot::receiveIRCMessage(char* buffer, size_t bufferSize) {
     }
 }
 
-void IRCBot::sendAPIRequest() {
-    // Implement sending an API request here
-}
 std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::string& message) {
 CURL* curl = curl_easy_init();
 if (curl) {

@@ -27,7 +27,6 @@ class IRCBot{
 	    void connectToServer();
 	    void sendIRCMessage(const std::string& message);
 	    void receiveIRCMessage(char* buffer, size_t bufferSize);
-	    void sendAPIRequest();
 		std::string generateGPTResponse(const std::string& apiKey, const std::string& message);
 	public :
 		IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& apiEndpoint);
