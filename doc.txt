@@ -1,0 +1,35 @@
+Documentation générale sur les sockets en C++ :
+
+- https://www.geeksforgeeks.org/socket-programming-cc/
+
+- https://stackoverflow.com/questions/27014955/socket-connect-vs-bind
+
+Documentation sur les functions autorisées :
+
+Donc déjà la grande majorité des functions sont C ce qui veut dire qu'il y a un man, c'est cool !
+
+- socket (http://manpagesfr.free.fr/man/man2/socket.2.html) {
+	socket retourne le fd du socket.
+	utilisation : socket(PF_INET, SOCK_STREAM, 0) :
+	PF_INET = ipv4,
+	SOCK_STREAM = TCP,
+	0 = internet protocol (IP)
+}
+
+- setsockopt (http://manpagesfr.free.fr/man/man2/getsockopt.2.html) {
+	donc en gros ça permet de manipuler les options liés à un socket,
+	comme par exemple celle qui permet de forcer la création d'un socket sur un port qui était utilisé avant
+	et qui avait des "restes" de données.	
+}
+
+- getsockname (http://manpagesfr.free.fr/man/man2/getsockname.2.html) {
+	donc ce truc ça permet de récupérer à partir du fd d'un socket les infos liés à celui-ci.
+	ça va le stocker dans une structure spécifique et après tu peux en tirer le port et l'ip utilisée par exemple.
+}
+
+- pour ces trucs la getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo faite un prompt gpt pour l'explication,
+c'est plus simple
+
+- bind (http://manpagesfr.free.fr/man/man2/bind.2.html) {
+	
+}
