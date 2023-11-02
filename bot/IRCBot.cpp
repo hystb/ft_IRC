@@ -47,7 +47,6 @@ void IRCBot::connectToServer() {
 void IRCBot::sendIRCMessage(const std::string& message) {
      if (_ircSocket != -1) {
         std::string ircMessage = message + "\r\n";
-        std::cout << message << std::endl;
         send(_ircSocket, ircMessage.c_str(), ircMessage.length(), 0);
     } 
 	else 
@@ -72,11 +71,11 @@ void IRCBot::receiveIRCMessage(char* buffer, size_t bufferSize) {
     }
 }
 
- FILE* popen98(const char* command, const char* mode) {
+static FILE* popen98(const char* command, const char* mode) {
     return popen(command, mode);
 }
 
-void pclose98(FILE* stream) {
+static void pclose98(FILE* stream) {
     pclose(stream);
 }
 
@@ -91,7 +90,6 @@ std::string exec(const char* cmd) {
     std::string result;
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
         result += buffer;
-        std::cout << result << std::endl;
     }
 
     pclose98(pipe);
@@ -105,13 +103,12 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
         -H \"Content-Type: application/json\" \
         -H \"Authorization: Bearer " + apiKey + "\" \
         -d '" + jsonPayload + "' | jq '.choices[].message.content'";
-    std::cout << command << std::endl;
     std::string output = exec(command.c_str());
     return output;
 }
 
-IRCBot::IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& apiEndpoint, const std::string& password, const std::string& apiKey)
-    : _server(server), _port(port), _channel(channel), _nickname(nickname), _apiEndpoint(apiEndpoint), _password(password), _apiKey(apiKey) {
+IRCBot::IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey)
+    : _server(server), _port(port), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey) {
     _ircSocket = createSocket(server, port);
 }
 
@@ -133,33 +130,29 @@ void IRCBot::run() {
 
     while (true) {
         receiveIRCMessage(buffer, sizeof(buffer));
-        std::cout << buffer;
 		received = buffer;
 
     	if (received.find("!gpt") != std::string::npos) {
-            std::cout << std::string(buffer).length() << std::endl;
 			if (std::string(buffer).length() > 43)
 			{
 				message = &buffer[41];
                 for (size_t i = 0; i < message.length(); ) {
-                char c = message[i];
-                if (c < 32 || c >= 126) 
-                    message.erase(i, 1);
-                else if (c == 34 || c == 39)
-                    message.replace(i, 1, 1, ' ');
-                else 
-                    i++;
+                    char c = message[i];
+                    if (c < 32 || c >= 126) 
+                        message.erase(i, 1);
+                    else if (c == 34 || c == 39)
+                        message.replace(i, 1, 1, ' ');
+                    else 
+                        i++;
                 }                
-                std::cout << message << std::endl;
 				response = generateGPTResponse(_apiKey, message);
                 for (size_t i = 0; i < response.length(); ) {
-                char c = response[i];
-                if (c < 32 || c >= 126 || c == 34) 
-                    response.erase(i, 1);
-                else 
-                    i++;
+                    char c = response[i];
+                    if (c < 32 || c >= 126 || c == 34) 
+                        response.erase(i, 1);
+                    else 
+                        i++;
                 }   
-                std::cout << response << std::endl;
     	    	sendIRCMessage("PRIVMSG " + _channel +  " :" + response);
 			}
 			else
@@ -167,6 +160,7 @@ void IRCBot::run() {
     	}
     }
 }
+
 const char* IRCBot::ConnectionError::what(void) const throw(){
 			return ("Connection to IRC server failed or was cancelled\0");
 }

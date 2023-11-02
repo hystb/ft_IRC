@@ -12,15 +12,14 @@ int main(int argc, char const *argv[])
 		const std::string password = argv[4];
 		const std::string apikey = argv[5];
     	const std::string nickname = "RocketBot";
-    	const std::string apiEndpoint = "https://api.openai.com/v1//v1/chat/completions";
 		try
 		{
-    		IRCBot bot(server, port, channel, nickname, apiEndpoint, password, apikey);
+    		IRCBot bot(server, port, channel, nickname, password, apikey);
     		bot.run();
 		}
 		catch (std::exception &e)
 		{
-			std::cerr << e.what();
+			std::cerr << e.what() << std::endl;
 		}
 	}
 	else

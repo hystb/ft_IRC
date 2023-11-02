@@ -2,20 +2,14 @@
 # define BOT_HPP
 
 # include <iostream>
-# include <string>
 # include <cstring>
 # include <exception>
 # include <sys/socket.h>
-# include <netinet/in.h>
 # include <netdb.h>
 # include <unistd.h>
-# include <string>
 # include <sstream>
-# include <vector>
 # include <algorithm>
-# include <cstdlib>
 # include <cstdio>
-# include <memory>
 
 class IRCBot{
 	private:
@@ -24,7 +18,6 @@ class IRCBot{
 	    int16_t 	_port;
 	    std::string _channel;
 	    std::string _nickname;
-	    std::string _apiEndpoint;
 	    int 		_ircSocket;
 		std::string _password;
 
@@ -34,7 +27,7 @@ class IRCBot{
 	    void receiveIRCMessage(char* buffer, size_t bufferSize);
 		std::string generateGPTResponse(const std::string& apiKey, const std::string& question);
 	public :
-		IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& apiEndpoint, const std::string& password, const std::string& apiKey);
+		IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey);
 		class ConnectionError : public std::exception{
 		public:
 			virtual const char* what() const throw();
