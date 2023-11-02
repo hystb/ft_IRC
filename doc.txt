@@ -34,3 +34,10 @@ c'est plus simple
 	permet d'affecter une addresse contenue dans la structure sockaddr a un socket cree au prealable par sockfr,
 	cela est necessaire pour pouvoir accepter des connections avec acceptt
 }
+
+- htons, htonl, ntohs, ntohl (http://manpagesfr.free.fr/man/man3/byteorder.3.html) {
+	permet de faire des conversions d'octets entre port et reseau -> cf le man est simple
+}
+
+
+pourquoi on peut caster sockaddr_in en sockaddr -> https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
