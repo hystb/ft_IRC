@@ -6,7 +6,8 @@ CFLAGS 		= -Wall -Wextra -Werror -std=c++98
 NAME 		= ircserv
 #---------------------------------------------------#
 SRCS		= \
-src/main.cpp
+src/main.cpp\
+src/network/server.cpp
 
 OBJ_DIR 	= .obj
 
