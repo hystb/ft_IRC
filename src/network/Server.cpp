@@ -15,27 +15,38 @@ Server& Server::operator=(const Server &parent)
 
 Server::~Server(void) {}
 
-void Server::setup(void) {
-	fd_sock = socket(PF_INET, SOCK_STREAM, 0);
-	if (fd_sock == -1)
-		throw (Server::initException());
-	if (bind(fd_sock, (sockaddr *)&_sockaddr, sizeof(_sockaddr)) == -1)
-		throw (Server::initException());
-	if (listen(fd_sock, 5000) == -1)
-		throw (Server::initException());
-	
+void Server::prepare(void) {
+	_sockaddr.sin_port = htons(_port);
+	_sockaddr.sin_family = PF_INET;
+	_sockaddr.sin_addr.s_addr = inet_addr("127.0.0.1"); // revoir ça ! ou IN_ADDR_ANY
+
+	_fd_sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (_fd_sock == -1)
+		throw (initSocketException());
+	if (bind(_fd_sock, (sockaddr *)&_sockaddr, sizeof(_sockaddr)) == -1)
+		throw (initBindException());
+	if (listen(_fd_sock, 128) == -1)
+		throw (Server::initListenException());
+	std::cout << "Server now listening on " << std::endl;
 }
 
-void dev(void)
-{
-	int fd_sock;
-	struct sockaddr_in serverAddress;
+void Server::start(void) {
+	socklen_t addrlen = sizeof(_sockaddr);
 
-	serverAddress.sin_family = PF_INET;
-	serverAddress.sin_port = htons(3000);
+	while (1) {
+		if (accept(_fd_sock, (sockaddr *) &_sockaddr, &addrlen))
+			std::cout << "dwadwa" << std::endl;
+	}
+}
 
-	fd_sock = socket(PF_INET, SOCK_STREAM, 0);
-	bind(fd_sock, (sockaddr *)&serverAddress, sizeof(serverAddress));
-	listen(fd_sock, 10);
-	std::cout << fd_sock << std::endl;
+Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
+	try {
+		prepare();
+		start();
+	} catch (std::exception &e)
+	{
+		std::cout << "Fatal : Server failed to initialized !" << std::endl;
+		std::cout << "-> " << e.what() << std::endl;
+		throw (e);
+	}
 }

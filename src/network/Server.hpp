@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <exception>
 
 class Server
@@ -16,40 +17,36 @@ private:
 
 	/* other private var(s)*/
 	struct sockaddr_in 	_sockaddr;
-	int					fd_sock;
+	int					_fd_sock;
 
 	/* canonical form */
-	
+	Server(void);
+
 	/* private(s) function(s)*/
-	void setup(void);
+	void prepare(void);
+	void start(void);
 	
 public:
-	Server(void);
-	Server(int16_t port, std::string password);
 	Server& operator=(const Server &parent);
 	Server(const Server &parent);
+	Server(int16_t port, std::string password);	
 	
 	~Server(void);
 
 	/* exceptions */
-	class initException : public std::exception {
+	class initSocketException : public std::exception {
 		public:
-			virtual const char * what() const throw() { return ("Error while creating socket !"); };
+			virtual const char * what() const throw() { return ("Error while creating the socket !"); };
+	};
+
+	class initBindException : public std::exception {
+		public:
+			virtual const char * what() const throw() { return ("Error while binded the socket !"); };
+	};
+
+	class initListenException : public std::exception {
+		public:
+			virtual const char * what() const throw() { return ("Error while listening to the socket !"); };
 	};
 };
-
-Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
-	_sockaddr.sin_port = htons(_port);
-	_sockaddr.sin_family = PF_INET;
-
-	try {
-		setup();
-	} catch (std::exception &e)
-	{
-		std::cout << "Fatal Error : Server failed to initialized !" << std::endl;
-		std::cout << "-> " << e.what() << std::endl;
-		throw (e);
-	}
-}
-
 #endif

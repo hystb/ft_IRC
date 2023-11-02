@@ -41,3 +41,5 @@ c'est plus simple
 
 
 pourquoi on peut caster sockaddr_in en sockaddr -> https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
+
+https://stackoverflow.com/questions/20396820/socket-programing-permission-denied port interdits
