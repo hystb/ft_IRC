@@ -31,5 +31,6 @@ Donc déjà la grande majorité des functions sont C ce qui veut dire qu'il y a 
 c'est plus simple
 
 - bind (http://manpagesfr.free.fr/man/man2/bind.2.html) {
-	
+	permet d'affecter une addresse contenue dans la structure sockaddr a un socket cree au prealable par sockfr,
+	cela est necessaire pour pouvoir accepter des connections avec acceptt
 }
