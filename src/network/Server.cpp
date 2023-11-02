@@ -19,6 +19,10 @@ void Server::setup(void) {
 	fd_sock = socket(PF_INET, SOCK_STREAM, 0);
 	if (fd_sock == -1)
 		throw (Server::initException());
+	if (bind(fd_sock, (sockaddr *)&_sockaddr, sizeof(_sockaddr)) == -1)
+		throw (Server::initException());
+	if (listen(fd_sock, 5000) == -1)
+		throw (Server::initException());
 	
 }
 

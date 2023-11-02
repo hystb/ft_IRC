@@ -1,7 +1,6 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <cstdint>
 #include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -20,15 +19,16 @@ private:
 	int					fd_sock;
 
 	/* canonical form */
-	Server(void);
-	Server& operator=(const Server &parent);
-	Server(const Server &parent);
 	
 	/* private(s) function(s)*/
 	void setup(void);
 	
 public:
+	Server(void);
 	Server(int16_t port, std::string password);
+	Server& operator=(const Server &parent);
+	Server(const Server &parent);
+	
 	~Server(void);
 
 	/* exceptions */
@@ -39,7 +39,7 @@ public:
 };
 
 Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
-	_sockaddr.sin_port = htons(port);
+	_sockaddr.sin_port = htons(_port);
 	_sockaddr.sin_family = PF_INET;
 
 	try {
