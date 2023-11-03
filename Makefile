@@ -1,18 +1,20 @@
 #---------------------------------------------------#
 CC 			= c++
 
-CFLAGS 		= -Wall -Wextra -Werror -std=c++98
+CFLAGS 		= -Wall -Wextra -Werror -fsanitize=address -std=c++98
 
 NAME 		= ircserv
 #---------------------------------------------------#
 SRCS		= \
-src/main.cpp
+src/main.cpp\
+src/network/Server.cpp
 
 OBJ_DIR 	= .obj
 
 OBJS		= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 HEADERS		= \
+src/network/Server.hpp
 #---------------------------------------------------#
 all:
 	$(MAKE) $(NAME)
