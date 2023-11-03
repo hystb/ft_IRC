@@ -82,12 +82,12 @@ void Server::start(void) {
 	while (1) {
 		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
 		if (poll_value < 0)
-			return ; // do something here
+			closeFds(); // do something here
 		if (_clients_fd[0].revents & POLLIN)
 		{
 			socket_client = accept(_fd_sock, (sockaddr *) &sockaddr_client, &addrlen_client);
 			if (socket_client < 0)
-				return ; // do something here
+				closeFds() // do something here
 			if (_clients_nb < MAX_CLIENTS) // mean that there is some place
 			{
 				std::cout << "There is a new client with the socket number " << socket_client << std::endl;
@@ -113,7 +113,7 @@ void Server::start(void) {
 				if (value == -1)
 					handleClientDeconnection(i);
 				else if (value == -2)
-					return; // changer ça c'est caca
+					closeFds(); // changer ça c'est caca
 				else
 					std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
 			}
@@ -130,6 +130,12 @@ void Server::handleClientDeconnection(int index)
         _clients_fd[i] = _clients_fd[i + 1];
     }
     _clients_nb--;
+}
+
+void Server::closeFds(void)
+{
+	for (int i = 0; i <= _clients_nb; i++)
+		close(_clients_fd[i].fd);
 }
 
 

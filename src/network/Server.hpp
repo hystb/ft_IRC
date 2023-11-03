@@ -37,6 +37,9 @@ private:
 
 	void handleClientDeconnection(int index);
 
+	/* exit and errors functions */
+	void closeFds(void);
+
 	/* tools functions */
 	int getRawEntry(std::string &buff, int fd, std::string del);
 		
