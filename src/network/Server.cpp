@@ -44,6 +44,27 @@ void Server::prepare(void) {
 		std::cout << "The password is : " << _password << std::endl;
 	}
 }
+
+void Server::getRawEntry(std::string &buff, int fd, std::string del)
+{
+	char c_buff[1024];
+	int i = 0;
+
+	while (i < 1024)
+	{
+		c_buff[i++] = 0;
+	}		
+	while (recv(fd, c_buff, 1023, 0))
+	{
+		buff.append(c_buff);		
+		if (buff.compare(buff.length() - del.length(), del.length(), del) == 0)
+		{
+			buff.append("\0");
+			return ;
+		}
+	}
+}
+
 // /r/n pour finir message
 void Server::start(void) {
 	struct sockaddr_in 	sockaddr_client;
@@ -68,7 +89,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_nb++;
-				std::cout << "nombres de clients maintenant : " << _clients_nb << std::endl;
+				// la faire le nouveau client avec comme statut undefined
 			}
 			else // here refuse the client cause server is full
 			{
@@ -79,9 +100,10 @@ void Server::start(void) {
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
-				char buff[1234];
-				read(_clients_fd[i].fd, buff, 1000);
-				std::cout << "Le message recu du fd " << _clients_fd[i].fd << " :" << buff << std::endl;
+				std::string messageReceived;
+				
+				getRawEntry(messageReceived, _clients_fd[i].fd, "\r\n");
+				std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
 			}
 		}
 	}

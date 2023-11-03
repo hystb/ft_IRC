@@ -34,6 +34,9 @@ private:
 	void prepare(void);
 	void start(void);
 
+	/* tools functions */
+	void getRawEntry(std::string &buff, int fd, std::string del);
+		
 	
 public:
 	Server& operator=(const Server &parent);
