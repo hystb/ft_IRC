@@ -8,9 +8,6 @@ int main(int argc, char const *argv[])
 	(void) argc;
 	(void) argv;
 	
-	std::cout << "Wow c'est vraiment cool !" << std::endl;
 	Server s = Server(4000, "coucou");
 	return 0;
-
-
 }

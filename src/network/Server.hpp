@@ -6,7 +6,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <exception>
+#include <unistd.h>
+#include <poll.h>
+#include <exception> 
+
+#include <stdio.h> // a enlever
+
+#define MAX_CLIENTS 1000
 
 class Server
 {
@@ -17,6 +23,8 @@ private:
 
 	/* other private var(s)*/
 	struct sockaddr_in 	_sockaddr;
+	struct pollfd		_clients_fd[MAX_CLIENTS];
+	int					_clients_nb;
 	int					_fd_sock;
 
 	/* canonical form */
@@ -25,6 +33,7 @@ private:
 	/* private(s) function(s)*/
 	void prepare(void);
 	void start(void);
+
 	
 public:
 	Server& operator=(const Server &parent);
@@ -39,14 +48,9 @@ public:
 			virtual const char * what() const throw() { return ("Error while creating the socket !"); };
 	};
 
-	class initBindException : public std::exception {
+	class initException : public std::exception {
 		public:
-			virtual const char * what() const throw() { return ("Error while binded the socket !"); };
-	};
-
-	class initListenException : public std::exception {
-		public:
-			virtual const char * what() const throw() { return ("Error while listening to the socket !"); };
+			virtual const char * what() const throw() { return ("Error while binding and listening to the socket !"); };
 	};
 };
 #endif

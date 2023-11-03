@@ -42,4 +42,9 @@ c'est plus simple
 
 pourquoi on peut caster sockaddr_in en sockaddr -> https://www.gta.ufrj.br/ensino/eel878/sockets/sockaddr_inman.html
 
-https://stackoverflow.com/questions/20396820/socket-programing-permission-denied port interdits
+https://stackoverflow.com/questions/20396820/socket-programing-permission-denied port interdits\
+
+
+
+https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-bind-bind-name-socket
+https://www.ibm.com/docs/en/i/7.1?topic=designs-using-poll-instead-select
