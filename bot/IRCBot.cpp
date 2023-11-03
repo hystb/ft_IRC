@@ -89,6 +89,7 @@ std::string exec(const char* cmd) {
     char buffer[128];
     std::string result;
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+        std::cout << result << std::endl;
         result += buffer;
     }
 
@@ -104,6 +105,7 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
         -H \"Authorization: Bearer " + apiKey + "\" \
         -d '" + jsonPayload + "' | jq '.choices[].message.content'";
     std::string output = exec(command.c_str());
+    std::cout << "output : " << output << std::endl; 
     return output;
 }
 
@@ -146,13 +148,18 @@ void IRCBot::run() {
                         i++;
                 }                
 				response = generateGPTResponse(_apiKey, message);
+                std::cout << "response : " << response << std::endl;
                 for (size_t i = 0; i < response.length(); ) {
                     char c = response[i];
-                    if (c < 32 || c >= 126 || c == 34) 
+                    if ((c >=  0 && c < 32) || c == 34)
+                    { 
+                        std::cout << static_cast<int> (response[i]) << response[i] << std::endl;
                         response.erase(i, 1);
+                    }
                     else 
                         i++;
-                }   
+                }
+                std::cout << "response : " << response << std::endl;   
     	    	sendIRCMessage("PRIVMSG " + _channel +  " :" + response);
 			}
 			else
