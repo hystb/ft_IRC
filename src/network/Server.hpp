@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <poll.h>
+#include <fcntl.h>
 #include <exception> 
 
 #include <stdio.h> // a enlever
@@ -34,8 +35,10 @@ private:
 	void prepare(void);
 	void start(void);
 
+	void handleClientDeconnection(int index);
+
 	/* tools functions */
-	void getRawEntry(std::string &buff, int fd, std::string del);
+	int getRawEntry(std::string &buff, int fd, std::string del);
 		
 	
 public:

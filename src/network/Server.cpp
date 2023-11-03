@@ -45,22 +45,27 @@ void Server::prepare(void) {
 	}
 }
 
-void Server::getRawEntry(std::string &buff, int fd, std::string del)
+int Server::getRawEntry(std::string &buff, int fd, std::string del)
 {
-	char c_buff[1024];
-	int i = 0;
+	char 	c_buff[1024];
+	int 	i;
+	int		value;
 
-	while (i < 1024)
+	while (true)
 	{
-		c_buff[i++] = 0;
-	}		
-	while (recv(fd, c_buff, 1023, 0))
-	{
+		i = 0;
+		while (i < 1024)
+			c_buff[i++] = 0;
+		value = recv(fd, c_buff, 1023, 0);
+		if (value == -1)
+			return (-2); // erreur system a gerer
+		if (value == 0)
+			return (-1); // le client s'est déconnecté
 		buff.append(c_buff);		
 		if (buff.compare(buff.length() - del.length(), del.length(), del) == 0)
 		{
 			buff.append("\0");
-			return ;
+			return (0);
 		}
 	}
 }
@@ -89,6 +94,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_nb++;
+
 				// la faire le nouveau client avec comme statut undefined
 			}
 			else // here refuse the client cause server is full
@@ -101,22 +107,40 @@ void Server::start(void) {
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
 				std::string messageReceived;
-				
-				getRawEntry(messageReceived, _clients_fd[i].fd, "\r\n");
-				std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
+				int			value;
+
+				value = getRawEntry(messageReceived, _clients_fd[i].fd, "\r\n");
+				if (value == -1)
+					handleClientDeconnection(i);
+				else if (value == -2)
+					return; // changer ça c'est caca
+				else
+					std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
 			}
 		}
 	}
 }
 
+void Server::handleClientDeconnection(int index)
+{
+	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
+	close(_clients_fd[index].fd);
+
+    for (int i = index; i < _clients_nb; i++) {
+        _clients_fd[i] = _clients_fd[i + 1];
+    }
+    _clients_nb--;
+}
+
+
 Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
 	try {
 		prepare();
-		start();
 	} catch (std::exception &e)
 	{
 		std::cout << "Fatal : Server failed to initialized !" << std::endl;
 		std::cout << "-> " << e.what() << std::endl;
 		throw (e);
 	}
+	start();
 }

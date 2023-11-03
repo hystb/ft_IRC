@@ -9,5 +9,6 @@ int main(int argc, char const *argv[])
 	(void) argv;
 	
 	Server s = Server(4000, "coucou");
+
 	return 0;
 }
