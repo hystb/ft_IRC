@@ -112,7 +112,13 @@ void Server::start(void) {
 				else if (value == -2)
 					interrupt();
 				else
-					std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
+				{
+					try {
+						_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
+					} catch (std::exception &e){
+						std::cout << "Error : " << e.what() << std::endl;
+					}
+				}
 			}
 		}
 	}

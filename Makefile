@@ -7,14 +7,18 @@ NAME 		= ircserv
 #---------------------------------------------------#
 SRCS		= \
 src/main.cpp\
-src/network/Server.cpp
+src/network/Server.cpp\
+src/commands/CommandHandler.cpp\
+src/commands/Command.cpp
 
 OBJ_DIR 	= .obj
 
 OBJS		= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 HEADERS		= \
-src/network/Server.hpp
+src/network/Server.hpp\
+src/commands/CommandHandler.hpp\
+src/commands/Command.hpp
 #---------------------------------------------------#
 all:
 	$(MAKE) $(NAME)

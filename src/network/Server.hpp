@@ -10,8 +10,11 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <exception> 
+#include "../commands/CommandHandler.hpp"
 
 #include <stdio.h> // a enlever
+
+
 
 #define MAX_CLIENTS 2
 
@@ -27,6 +30,7 @@ private:
 	struct pollfd		_clients_fd[MAX_CLIENTS + 1];
 	int					_clients_nb;
 	int					_fd_sock;
+	CommandHandler		_command_handler;
 
 	/* canonical form */
 	Server(void);
