@@ -154,7 +154,7 @@ void Server::sendMessage(int client, std::string message) // a remplacer et a me
 		std::cout << "Failed to send a message to the client !" << std::endl;	
 }
 
-Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
+Server::Server(uint16_t port, std::string password) : _port(port), _password(password) {
 	try {
 		prepare();
 	} catch (std::exception &e)

@@ -10,6 +10,7 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <exception> 
+#include <sstream>
 #include "../commandhandler/CommandHandler.hpp"
 
 #include <stdio.h> // a enlever
@@ -20,7 +21,7 @@ class Server
 {
 private:
 	/* user input */
-	int16_t 	_port;
+	uint16_t 	_port;
 	std::string _password;
 
 	/* other private var(s)*/
@@ -29,6 +30,8 @@ private:
 	int					_clients_nb;
 	int					_fd_sock;
 	CommandHandler		_command_handler;
+	// channels
+	// clients 
 
 	/* canonical form */
 	Server(void);
@@ -52,7 +55,7 @@ private:
 public:
 	Server& operator=(const Server &parent);
 	Server(const Server &parent);
-	Server(int16_t port, std::string password);	
+	Server(uint16_t port, std::string password);	
 	
 	~Server(void);
 

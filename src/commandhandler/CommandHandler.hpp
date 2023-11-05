@@ -19,6 +19,7 @@ private:
 	void join(void) const;
 	void invite(void) const;
 	void topic(void) const;
+	void mode(void) const;
 
 public:
 	/* canonical form */
