@@ -113,14 +113,10 @@ void Server::start(void) {
 					interrupt();
 				else
 				{
-					if (_clients_nb == 1)
-						continue ;
 					for (int j = 1; j <= _clients_nb; j++)
 					{
 						if (_clients_fd[j].fd != _clients_fd[i].fd)
-						{
 							sendMessage(_clients_fd[j].fd, messageReceived);
-						}
 					}
 
 					// try {
