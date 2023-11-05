@@ -29,7 +29,7 @@ void Server::prepare(void) {
 	if (_fd_sock == -1)
 		throw (initSocketException());
 	if (setsockopt(_fd_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) < 0 || 
-		bind(_fd_sock, (sockaddr *)&_sockaddr, sizeof(_sockaddr)) == -1 || 
+		bind(_fd_sock, (sockaddr *) &_sockaddr, sizeof(_sockaddr)) == -1 || 
 		listen(_fd_sock, 128) == -1)
 	{
 		close(_fd_sock);
@@ -58,9 +58,9 @@ int Server::getRawEntry(std::string &buff, int fd, std::string del)
 			c_buff[i++] = 0;
 		value = recv(fd, c_buff, 1023, 0);
 		if (value == -1)
-			return (-2); // erreur system a gerer
+			return (-2);
 		if (value == 0)
-			return (-1); // le client s'est déconnecté
+			return (-1);
 		buff.append(c_buff);		
 		if (buff.compare(buff.length() - del.length(), del.length(), del) == 0)
 		{
@@ -82,38 +82,35 @@ void Server::start(void) {
 	while (1) {
 		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
 		if (poll_value < 0)
-			closeFds(); // do something here
-		if (_clients_fd[0].revents & POLLIN)
-		{
+			interrupt();
+		if (_clients_fd[0].revents & POLLIN) {
 			socket_client = accept(_fd_sock, (sockaddr *) &sockaddr_client, &addrlen_client);
 			if (socket_client < 0)
-				closeFds() // do something here
-			if (_clients_nb < MAX_CLIENTS) // mean that there is some place
-			{
+				interrupt();
+			if (_clients_nb < MAX_CLIENTS) { // mean that there is some place
 				std::cout << "There is a new client with the socket number " << socket_client << std::endl;
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_nb++;
-
 				// la faire le nouveau client avec comme statut undefined
 			}
-			else // here refuse the client cause server is full
-			{
+			else {  // here refuse the client cause server is full
+				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
 				close(socket_client);
 			}
 		}
-		for (int i = 1; i <= _clients_nb; i++)	
+		for (int i = 1; i <= _clients_nb + 1; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
-				std::string messageReceived;
+				std::string messageReceived = "";
 				int			value;
 
 				value = getRawEntry(messageReceived, _clients_fd[i].fd, "\r\n");
 				if (value == -1)
 					handleClientDeconnection(i);
 				else if (value == -2)
-					closeFds(); // changer ça c'est caca
+					interrupt();
 				else
 					std::cout << "[" << _clients_fd[i].fd << "]: " << messageReceived;
 			}
@@ -138,6 +135,18 @@ void Server::closeFds(void)
 		close(_clients_fd[i].fd);
 }
 
+void Server::interrupt(void)
+{
+	closeFds();
+	std::cout << "Something bad happened !" << std::endl;
+	throw (crashException());
+}
+
+void Server::sendMessage(int client, std::string message) // a remplacer et a mettre dans les clients !
+{
+	if (send(client, message.c_str(), message.length(), 0) < 0)
+		std::cout << "Failed to send a message to the client !" << std::endl;	
+}
 
 Server::Server(int16_t port, std::string password) : _port(port), _password(password) {
 	try {
