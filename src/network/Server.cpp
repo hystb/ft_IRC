@@ -70,7 +70,6 @@ int Server::getRawEntry(std::string &buff, int fd, std::string del)
 	}
 }
 
-// /r/n pour finir message
 void Server::start(void) {
 	struct sockaddr_in 	sockaddr_client;
 	int					socket_client;
@@ -113,11 +112,12 @@ void Server::start(void) {
 					interrupt();
 				else
 				{
-					try {
-						_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
-					} catch (std::exception &e){
-						std::cout << "Error : " << e.what() << std::endl;
-					}
+					std::cout << messageReceived << std::endl;
+					// try {
+					// 	_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
+					// } catch (std::exception &e){
+					// 	std::cout << "Error : " << e.what() << std::endl;
+					// }
 				}
 			}
 		}

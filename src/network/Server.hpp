@@ -14,7 +14,7 @@
 
 #include <stdio.h> // a enlever
 
-#define MAX_CLIENTS 2
+#define MAX_CLIENTS 1000
 
 class Server
 {

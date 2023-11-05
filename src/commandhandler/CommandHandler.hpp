@@ -9,6 +9,12 @@ class CommandHandler
 private:
 	/* all commands are registered here */
 
+	/* unlogged commands */
+	void quit(void) const;
+	void pass(void) const;
+	void nick(void) const;
+
+	/* logged commands */
 	void kick(void) const;
 	void join(void) const;
 	void invite(void) const;

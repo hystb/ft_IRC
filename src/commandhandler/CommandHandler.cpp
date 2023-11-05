@@ -20,12 +20,28 @@ CommandHandler& CommandHandler::operator=(const CommandHandler& parent)
 	return (*this);
 }
 
+// void CommandHandler::loggedCommands(int client, Command &cmd)
+// void CommandHandler::unloggedCommands(int client, Command &cmd)
+
 void CommandHandler::handleCommand(int client, std::string input)
 {
 	(void) client;
+	int i = 0;
 	std::string	commands[4] = {"INVITE", "JOIN", "KICK", "TOPIC"};
 	void (CommandHandler::*functions[4])() const = {&CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
 	Command cmd = Command(input);
+
+	while (commands[i] != cmd.getCommand() && i < 4)
+		i++;
+	switch (i)
+	{
+	case 0:
+		/* code */
+		break;
+	case 4:
+		// throw (); veut dire que la commande n'est pas reconnue
+		break;
+	}
 	
 	// if (client.state == validate ) a implementer quand on la classe
 

@@ -48,3 +48,8 @@ https://stackoverflow.com/questions/20396820/socket-programing-permission-denied
 
 https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-bind-bind-name-socket
 https://www.ibm.com/docs/en/i/7.1?topic=designs-using-poll-instead-select
+
+
+
+ultra interessant sur irc 
+https://modern.ircdocs.horse/#connection-messages
