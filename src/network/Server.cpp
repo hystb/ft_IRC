@@ -45,6 +45,7 @@ void Server::prepare(void) {
 	}
 }
 
+/* this function get a full entry in a std::string until it reach \r\n */
 int Server::getRawEntry(std::string &buff, int fd, std::string del)
 {
 	char 	c_buff[1024];

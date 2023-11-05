@@ -20,31 +20,25 @@ CommandHandler& CommandHandler::operator=(const CommandHandler& parent)
 	return (*this);
 }
 
-// void CommandHandler::loggedCommands(int client, Command &cmd)
-// void CommandHandler::unloggedCommands(int client, Command &cmd)
-
-void CommandHandler::handleCommand(int client, std::string input)
+void CommandHandler::commands(int client, Command &cmd)
 {
-	(void) client;
+	// treat all the command about logged users
 	int i = 0;
-	std::string	commands[4] = {"INVITE", "JOIN", "KICK", "TOPIC"};
-	void (CommandHandler::*functions[4])() const = {&CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
-	Command cmd = Command(input);
+	std::string	commands[8] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC"};
+	void (CommandHandler::*functions[8])() const = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
 
 	while (commands[i] != cmd.getCommand() && i < 4)
 		i++;
-	switch (i)
-	{
-	case 0:
-		/* code */
-		break;
-	case 4:
-		// throw (); veut dire que la commande n'est pas reconnue
-		break;
-	}
-	
-	// if (client.state == validate ) a implementer quand on la classe
+	// if (i > 3 && client.state == PAS LOGGED)
+		// return (client.sendMEssage("pasposbbile chakakl"));
+	(this->*(functions[i]))();
+}
 
+void CommandHandler::handleCommand(int client, std::string input)
+{
+	Command cmd = Command(input);
+	
+	commands(client, cmd);
 	// debug only
 	std::cout << "input : " << cmd.getInput();
 	std::cout << "command : " << cmd.getCommand() << std::endl;

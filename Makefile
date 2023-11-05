@@ -12,9 +12,13 @@ src/commandhandler/CommandHandler.cpp\
 src/commandhandler/Command.cpp\
 src/commandhandler/commands/invite.cpp\
 src/commandhandler/commands/join.cpp\
+src/commandhandler/commands/kick.cpp\
+src/commandhandler/commands/mode.cpp\
+src/commandhandler/commands/nick.cpp\
+src/commandhandler/commands/pass.cpp\
+src/commandhandler/commands/quit.cpp\
 src/commandhandler/commands/topic.cpp\
-src/commandhandler/commands/kick.cpp
-
+src/commandhandler/commands/user.cpp
 
 OBJ_DIR 	= .obj
 

@@ -53,3 +53,5 @@ https://www.ibm.com/docs/en/i/7.1?topic=designs-using-poll-instead-select
 
 ultra interessant sur irc 
 https://modern.ircdocs.horse/#connection-messages
+
+// pass -> nick -> user

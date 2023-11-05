@@ -7,12 +7,13 @@
 class CommandHandler
 {
 private:
-	/* all commands are registered here */
+	void commands(int client, Command &cmd);
 
 	/* unlogged commands */
 	void quit(void) const;
 	void pass(void) const;
 	void nick(void) const;
+	void user(void) const;
 
 	/* logged commands */
 	void kick(void) const;

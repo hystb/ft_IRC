@@ -12,6 +12,7 @@ private:
 	std::string 				_command;
 	std::vector<std::string>	_parameters;
 	std::string					_content;
+	// mettre le client la !
 
 	void parse(void);
 
