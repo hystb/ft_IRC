@@ -99,7 +99,7 @@ void Server::start(void) {
 				close(socket_client);
 			}
 		}
-		for (int i = 1; i <= _clients_nb + 1; i++) // this is for the actual connected users !
+		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
@@ -113,7 +113,16 @@ void Server::start(void) {
 					interrupt();
 				else
 				{
-					std::cout << messageReceived << std::endl;
+					if (_clients_nb == 1)
+						continue ;
+					for (int j = 1; j <= _clients_nb; j++)
+					{
+						if (_clients_fd[j].fd != _clients_fd[i].fd)
+						{
+							sendMessage(_clients_fd[j].fd, messageReceived);
+						}
+					}
+
 					// try {
 					// 	_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
 					// } catch (std::exception &e){
