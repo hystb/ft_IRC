@@ -23,8 +23,13 @@ CommandHandler& CommandHandler::operator=(const CommandHandler& parent)
 void CommandHandler::handleCommand(int client, std::string input)
 {
 	(void) client;
-	
+	std::string	commands[4] = {"INVITE", "JOIN", "KICK", "TOPIC"};
+	void (CommandHandler::*functions[4])() const = {&CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
 	Command cmd = Command(input);
+	
+	// if (client.state == validate ) a implementer quand on la classe
+
+	// debug only
 	std::cout << "input : " << cmd.getInput();
 	std::cout << "command : " << cmd.getCommand() << std::endl;
 	std::cout << "parameters : ";

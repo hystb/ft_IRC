@@ -26,10 +26,10 @@ public:
 	Command(std::string input);
 
 	/* getters */
-	std::string&			 	getInput(void);
-	std::string& 				getCommand(void);
-	std::vector<std::string>& 	getParameters(void);
-	std::string&				getContent(void);
+	const std::string&			 	getInput(void) const;
+	const std::string& 				getCommand(void) const;
+	const std::vector<std::string>& 	getParameters(void) const;
+	const std::string&				getContent(void) const;
 
 
 	/* exceptions */

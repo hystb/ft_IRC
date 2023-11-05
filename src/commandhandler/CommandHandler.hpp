@@ -6,6 +6,14 @@
 
 class CommandHandler
 {
+private:
+	/* all commands are registered here */
+
+	void kick(void) const;
+	void join(void) const;
+	void invite(void) const;
+	void topic(void) const;
+
 public:
 	/* canonical form */
 	CommandHandler(void);

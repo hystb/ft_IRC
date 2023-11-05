@@ -16,19 +16,19 @@ Command& Command::operator=(const Command &parent)
 
 Command::~Command(void) {}
 
-std::string&			 	Command::getInput(void) {
+const std::string&			 	Command::getInput(void) const {
 	return (_input);
 }
 
-std::string& 				Command::getCommand(void) {
+const std::string& 				Command::getCommand(void) const {
 	return (_command);
 }
 
-std::vector<std::string>& 	Command::getParameters(void) {
+const std::vector<std::string>& 	Command::getParameters(void) const {
 	return (_parameters);
 }
 
-std::string&				Command::getContent(void) {
+const std::string&				Command::getContent(void) const {
 	return (_content);
 }
 

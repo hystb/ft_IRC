@@ -10,11 +10,9 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <exception> 
-#include "../commands/CommandHandler.hpp"
+#include "../commandhandler/CommandHandler.hpp"
 
 #include <stdio.h> // a enlever
-
-
 
 #define MAX_CLIENTS 2
 
