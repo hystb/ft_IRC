@@ -61,8 +61,8 @@ int Server::getRawEntry(std::string &buff, int fd, std::string del)
 			return (-2);
 		if (value == 0)
 			return (-1);
-		buff.append(c_buff);		
-		if (buff.compare(buff.length() - del.length(), del.length(), del) == 0)
+		buff.append(c_buff);
+		if (buff.length() >= del.length() && buff.compare(buff.length() - del.length(), del.length(), del) == 0)
 		{
 			buff.append("\0");
 			return (0);
@@ -132,7 +132,6 @@ void Server::start(void) {
 
 void Server::handleClientDeconnection(int index)
 {
-	Client *save;
 	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
 
 	delete _clients[_clients_fd[index].fd];
@@ -158,7 +157,7 @@ void Server::interrupt(void)
 	throw (crashException());
 }
 
-void Server::sendMessage(int client, std::string message) // a remplacer et a mettre dans les clients !
+void Server::sendMessage(int client, std::string message)
 {
 	if (send(client, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
