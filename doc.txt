@@ -11,7 +11,7 @@ Donc déjà la grande majorité des functions sont C ce qui veut dire qu'il y a 
 - socket (http://manpagesfr.free.fr/man/man2/socket.2.html) {
 	socket retourne le fd du socket.
 	utilisation : socket(PF_INET, SOCK_STREAM, 0) :
-	PF_INET = ipv4,
+	PF_INET6 = ipv6,
 	SOCK_STREAM = TCP,
 	0 = internet protocol (IP)
 }
@@ -48,3 +48,10 @@ https://stackoverflow.com/questions/20396820/socket-programing-permission-denied
 
 https://www.ibm.com/docs/en/zos/2.3.0?topic=functions-bind-bind-name-socket
 https://www.ibm.com/docs/en/i/7.1?topic=designs-using-poll-instead-select
+
+
+
+ultra interessant sur irc 
+https://modern.ircdocs.horse/#connection-messages
+
+// pass -> nick -> user
