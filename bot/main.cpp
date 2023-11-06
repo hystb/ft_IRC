@@ -2,23 +2,24 @@
 
 int main(int argc, char const *argv[])
 {
-	if (argc == 4)
-	{ 
-		const std::string server = argv[1];
+	if (argc == 6)
+	{	size_t size;
+		std::string server = argv[1];
     	int port;
 		std::istringstream iss(argv[2]);
 		iss >> port;
-    	const std::string channel = argv[3];
+    	const std::string channel = "#" + std::string(argv[3]);
+		const std::string password = argv[4];
+		const std::string apikey = argv[5];
     	const std::string nickname = "RocketBot";
-    	const std::string apiEndpoint = "https://api.openai.com/v1/engines/davinci/completions";
 		try
 		{
-    		IRCBot bot(server, port, channel, nickname, apiEndpoint);
+    		IRCBot bot(server, port, channel, nickname, password, apikey);
     		bot.run();
 		}
 		catch (std::exception &e)
 		{
-			std::cout << e.what() << std::endl;
+			std::cerr << e.what() << std::endl;
 		}
 	}
 	else
