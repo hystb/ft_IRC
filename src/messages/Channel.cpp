@@ -10,13 +10,13 @@ Channel::Channel(const Channel &parent)
 	(*this) = parent;
 }
 
-Channel& Channel::operator=(Channel &parent)//const ?
+Channel& Channel::operator=(const Channel &parent)//const ?
 {
 	if (this != &parent) {
-		for (std::map<Client, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
-			parent.addClient(it->first, it->second);
-			// parent._clients.insert(std::pair<Client, bool>(it->first, it->second));
-		}
+		// for (std::map<Client, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		// 	parent.addClient(it->first, it->second);
+		// 	// parent._clients.insert(std::pair<Client, bool>(it->first, it->second));
+		// }
 	}
 	return (*this);
 }
@@ -26,13 +26,13 @@ Channel& Channel::operator=(Channel &parent)//const ?
 // 	_clients.insert(std::pair<Client, bool>(client, 0));
 // }
 
-void Channel::addClient(const Client &client, bool isModerator) {
-	_clients.insert(std::pair<Client, bool>(client, isModerator));
+void Channel::addClient(Client *client, bool isModerator) {
+	_clients.insert(std::pair<Client*, bool>(client, isModerator));
 }
 
 void Channel::removeClient(const std::string& username) {
-	for (std::map<Client, bool>::iterator it = _clients.begin(); it != _clients.end(); ) {
-		if (it->first.getUsername() == username) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ) {
+		if (it->first->getUsername() == username) {
 			_clients.erase(it++);
 		} else {
 			++it;
@@ -41,10 +41,10 @@ void Channel::removeClient(const std::string& username) {
 }
 
 void Channel::listClients() {
-	for (std::map<Client, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		const Client& client = it->first;
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		const Client* client = it->first;
 		bool isModerator = it->second;
-		std::cout << "Client: " << client.getUsername();
+		std::cout << "Client: " << client->getUsername();
 		if (isModerator)
 			std::cout << " Moderator" << std::endl;
 		else
@@ -52,6 +52,6 @@ void Channel::listClients() {
 	}
 }
 
-void Channel::setModerator(Client &client) {
+void Channel::setModerator(Client *client) {
 	_clients[client] = 1;
 }
