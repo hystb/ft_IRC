@@ -5,7 +5,6 @@
 
 # define MAX_CLIENTS 1000
 
-
 class Server
 {
 private:
@@ -14,12 +13,13 @@ private:
 	std::string _password;
 
 	/* other private var(s)*/
-	struct sockaddr_in 		_sockaddr;
-	struct pollfd			_clients_fd[MAX_CLIENTS + 1];
-	int						_clients_nb;
-	int						_fd_sock;
-	CommandHandler			_command_handler;
-	std::map<int, Client*>	_clients;
+	struct sockaddr_in 				_sockaddr;
+	struct pollfd					_clients_fd[MAX_CLIENTS + 1];
+	int								_clients_nb;
+	int								_fd_sock;
+	CommandHandler					_command_handler;
+	std::map<int, Client*>			_clients;
+	std::map<std::string, Channel>	_channels;
 	// channels
 
 	/* canonical form */

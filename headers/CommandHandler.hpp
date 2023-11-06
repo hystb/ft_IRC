@@ -8,7 +8,7 @@ class Command;
 class CommandHandler
 {
 private:
-	void commands(Client &client, Command &cmd);
+	void commands(Command &cmd);
 
 	/* unlogged commands */
 	void quit(Command& cmd);
@@ -30,6 +30,6 @@ public:
 	CommandHandler& operator=(const CommandHandler& parent);
 	CommandHandler(const CommandHandler& parent);
 
-	void handleCommand(Client &client, std::string input); // a remplacer justement avec les vrais clients !
+	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels);
 };
 #endif

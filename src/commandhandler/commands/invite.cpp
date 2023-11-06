@@ -2,5 +2,5 @@
 
 void CommandHandler::invite(Command& cmd)
 {
-
+	
 }
