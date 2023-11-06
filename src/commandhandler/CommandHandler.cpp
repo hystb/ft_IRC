@@ -33,8 +33,6 @@ void CommandHandler::commands(Client &client, Command &cmd)
 		return (client.sendMessage("You must be logged to use that command !"));
 	while (commands[i] != cmd.getCommand() && i < 4)
 		i++;
-	// if (i > 3 && client.state == PAS LOGGED)
-		// return (client.sendMEssage("pasposbbile chakakl"));
 	(this->*(functions[i]))(cmd);
 }
 
