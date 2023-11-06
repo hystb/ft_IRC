@@ -1,21 +1,26 @@
 #ifndef SERVER_HPP
-#define SERVER_HPP
+# define SERVER_HPP
 
-#include <iostream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <poll.h>
-#include <fcntl.h>
-#include <exception> 
-#include <sstream>
-#include "../commandhandler/CommandHandler.hpp"
+# include <iostream>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# include <poll.h>
+# include <fcntl.h>
+# include <exception> 
+# include <sstream>
+# include <map>
 
-#include <stdio.h> // a enlever
+# include "../messages/Client.hpp"
+# include "../commandhandler/CommandHandler.hpp"
 
-#define MAX_CLIENTS 1000
+# include <stdio.h> // a enlever
+
+# define MAX_CLIENTS 1000
+
+class CommandHandler;
 
 class Server
 {
@@ -25,13 +30,13 @@ private:
 	std::string _password;
 
 	/* other private var(s)*/
-	struct sockaddr_in 	_sockaddr;
-	struct pollfd		_clients_fd[MAX_CLIENTS + 1];
-	int					_clients_nb;
-	int					_fd_sock;
-	CommandHandler		_command_handler;
+	struct sockaddr_in 		_sockaddr;
+	struct pollfd			_clients_fd[MAX_CLIENTS + 1];
+	int						_clients_nb;
+	int						_fd_sock;
+	CommandHandler			_command_handler;
+	std::map<int, Client>	_clients;
 	// channels
-	// clients 
 
 	/* canonical form */
 	Server(void);

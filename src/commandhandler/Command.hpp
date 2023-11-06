@@ -1,9 +1,11 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
-#include <iostream>
-#include <vector>
-#include <exception>
+# include <vector>
+# include <iostream>
+# include <exception>
+class CommandHandler;
+class Client;
 
 class Command
 {

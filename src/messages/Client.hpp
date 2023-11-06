@@ -1,24 +1,28 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
-#include <iostream>
+
+# include "../network/Server.hpp"
 
 class Client
 {
 	public:
-		Client(const std::string& username, bool isModerator);
+		Client(const std::string& username, int socket);
 		~Client(void);
 		Client& operator=(const Client &parent);
 		Client(const Client &parent);
 
-		// getter
+		/* getters */
 		std::string	getUsername(void) const;
-		bool		getIsModerator(void) const;
+		int getSocket(void) const;
+		bool isPassWordUnlocked(void) const;
+		bool isConnected(void) const;
 
+		/* attributes */
+		void sendMessage(std::string message) const;
 	private:
 		Client(void);
 
 		std::string	_username;
-		bool 		_isModerator;
 		int			_socketFd;
 		bool		_passwordUnlocked;
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?

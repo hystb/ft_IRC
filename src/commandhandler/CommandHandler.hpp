@@ -1,13 +1,16 @@
 #ifndef COMMANDHANDLER_HPP
-#define COMMANDHANDLER_HPP
+# define COMMANDHANDLER_HPP
 
-#include <iostream>
-#include "Command.hpp"
+# include "Command.hpp"
+# include "../messages/Client.hpp"
+
+class Command;
+class Client;
 
 class CommandHandler
 {
 private:
-	void commands(int client, Command &cmd);
+	void commands(Client &client, Command &cmd);
 
 	/* unlogged commands */
 	void quit(Command& cmd);
@@ -29,6 +32,6 @@ public:
 	CommandHandler& operator=(const CommandHandler& parent);
 	CommandHandler(const CommandHandler& parent);
 
-	void handleCommand(int client, std::string input); // a remplacer justement avec les vrais clients !
+	void handleCommand(Client &client, std::string input); // a remplacer justement avec les vrais clients !
 };
 #endif

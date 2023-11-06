@@ -1,10 +1,7 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-//#include <vector>
-#include <map>
-#include <iostream>
-#include "Client.hpp"
+# include "../network/Server.hpp"
 
 class Channel
 {

@@ -91,7 +91,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_nb++;
-				// la faire le nouveau client avec comme statut undefined
+				_clients.insert(std::pair<int, Client>(socket_client, Client("undefined", 0)));
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -133,6 +133,8 @@ void Server::start(void) {
 void Server::handleClientDeconnection(int index)
 {
 	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
+
+	_clients.erase(_clients_fd[index].fd);
 	close(_clients_fd[index].fd);
 
     for (int i = index; i < _clients_nb; i++) {
