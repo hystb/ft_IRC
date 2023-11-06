@@ -1,4 +1,4 @@
-#include "Server.hpp"
+# include <global.hpp>
 
 Server::Server(void) { }
 
@@ -91,7 +91,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_nb++;
-				_clients.insert(std::pair<int, Client>(socket_client, Client("undefined", 0)));
+				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client)));
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -113,12 +113,12 @@ void Server::start(void) {
 					interrupt();
 				else
 				{
-					for (int j = 1; j <= _clients_nb; j++)
+					for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 					{
-						if (_clients_fd[j].fd != _clients_fd[i].fd)
-							sendMessage(_clients_fd[j].fd, messageReceived);
+						std::cout << it->second->getSocket() << std::endl;
+						if (it->second->getSocket() != _clients_fd[i].fd)
+							it->second->sendMessage(messageReceived);
 					}
-
 					// try {
 					// 	_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
 					// } catch (std::exception &e){
@@ -132,8 +132,10 @@ void Server::start(void) {
 
 void Server::handleClientDeconnection(int index)
 {
+	Client *save;
 	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
 
+	delete _clients[_clients_fd[index].fd];
 	_clients.erase(_clients_fd[index].fd);
 	close(_clients_fd[index].fd);
 

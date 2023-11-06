@@ -1,11 +1,7 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
-# include <vector>
-# include <iostream>
-# include <exception>
-class CommandHandler;
-class Client;
+# include <global.hpp>
 
 class Command
 {

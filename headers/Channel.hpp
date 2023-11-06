@@ -1,7 +1,9 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-# include "../network/Server.hpp"
+# include <global.hpp>
+
+class Client;
 
 class Channel
 {

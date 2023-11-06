@@ -1,4 +1,4 @@
-#include "Client.hpp"
+# include <global.hpp>
 
 Client::Client(const std::string& username, int socket) : _username(username), _socketFd(socket), _passwordUnlocked(0), _userConnected(0) {}
 

@@ -27,21 +27,23 @@ OBJ_DIR 	= .obj
 OBJS		= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 HEADERS		= \
-src/network/Server.hpp\
-src/commandhandler/CommandHandler.hpp\
-src/commandhandler/Command.hpp\
-src/messages/Channel.hpp\
-src/messages/Client.hpp
+headers/global.hpp\
+headers/Channel.hpp\
+headers/Client.hpp\
+headers/Command.hpp\
+headers/CommandHandler.hpp\
+headers/Server.hpp
+
 #---------------------------------------------------#
 all:
 	$(MAKE) $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -I headers/ -o $(NAME)
 
 $(OBJ_DIR)/%.o : %.cpp $(HEADERS)
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I headers/ -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)

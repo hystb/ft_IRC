@@ -1,4 +1,4 @@
-#include "Channel.hpp"
+# include <global.hpp>
 
 Channel::Channel(void) {}
 

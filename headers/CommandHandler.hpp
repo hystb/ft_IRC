@@ -1,11 +1,9 @@
 #ifndef COMMANDHANDLER_HPP
 # define COMMANDHANDLER_HPP
 
-# include "Command.hpp"
-# include "../messages/Client.hpp"
+# include <global.hpp>
 
 class Command;
-class Client;
 
 class CommandHandler
 {

@@ -1,5 +1,4 @@
-#include <iostream>
-#include "network/Server.hpp"
+#include <global.hpp>
 
 int checkPort(std::string port)
 {

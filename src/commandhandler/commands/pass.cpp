@@ -1,4 +1,4 @@
-#include "../CommandHandler.hpp"
+# include <global.hpp>
 
 void CommandHandler::pass(Command& cmd)
 {

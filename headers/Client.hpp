@@ -1,7 +1,7 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-# include "../network/Server.hpp"
+# include <global.hpp>
 
 class Client
 {

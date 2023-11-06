@@ -1,4 +1,4 @@
-#include "Command.hpp"
+# include <global.hpp>
 
 Command::Command(void) {}
 
