@@ -1,6 +1,9 @@
 #include "Channel.hpp"
 
+// canonical
 Channel::Channel(void) {}
+
+Channel::Channel(const std::string& name) {}
 
 Channel::Channel(const Channel &parent)
 {
@@ -14,9 +17,7 @@ Channel& Channel::operator=(const Channel &parent)
 	return (*this);
 }
 
-
 // map
-
 void Channel::addClient(Client &client) {
 	_clients.insert(std::pair<Client, bool>(client, 0));
 }

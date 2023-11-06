@@ -9,7 +9,8 @@
 class Channel
 {
 	public:
-		Channel(const std::string& name) : _name(name) {}
+		// canonical
+		Channel(const std::string& name);
 		~Channel(void);
 		Channel& operator=(const Channel &parent);
 		Channel(const Channel &parent);
@@ -23,7 +24,7 @@ class Channel
 	private:
 		Channel(void);
 		std::string 			_name;
-		std::map<Client, bool>	_clients;//0 or 1 if moderator
+		std::map<Client, bool>	_clients;
 };
 
 #endif
