@@ -18,8 +18,7 @@ class Channel
 		void addClient(Client &client);
 		void removeClient(const std::string& username);
 		void listClients(void);
-
-		// setter???
+		void setModerator(Client &client);
 
 	private:
 		Channel(void);

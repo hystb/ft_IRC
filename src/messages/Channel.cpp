@@ -14,11 +14,12 @@ Channel& Channel::operator=(const Channel &parent)
 	return (*this);
 }
 
+
 // map
 
-// void addClient(Client &client) {
-// 	_clients[client.getUsername()] = client.getIsModerator();
-// }
+void Channel::addClient(Client &client) {
+	_clients.insert(std::pair<Client, bool>(client, 0));
+}
 
 void Channel::removeClient(const std::string& username) {
 	for (std::map<Client, bool>::iterator it = _clients.begin(); it != _clients.end(); ) {
@@ -40,4 +41,8 @@ void Channel::listClients() {
 		else
 			std::cout << " Ordinary mortals" << std::endl;
 	}
+}
+
+void Channel::setModerator(Client &client) {
+	_clients[client] = 1;
 }
