@@ -25,13 +25,16 @@ void CommandHandler::commands(int client, Command &cmd)
 	// treat all the command about logged users
 	int i = 0;
 	std::string	commands[8] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC"};
-	void (CommandHandler::*functions[8])() const = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
+	void (CommandHandler::*functions[8])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
+
+	if (cmd.getCommand() == "CAP")
+		return ;
 
 	while (commands[i] != cmd.getCommand() && i < 4)
 		i++;
 	// if (i > 3 && client.state == PAS LOGGED)
 		// return (client.sendMEssage("pasposbbile chakakl"));
-	(this->*(functions[i]))();
+	(this->*(functions[i]))(cmd);
 }
 
 void CommandHandler::handleCommand(int client, std::string input)

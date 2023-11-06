@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::topic(void) const
+void CommandHandler::topic(Command& cmd)
 {
 
 }

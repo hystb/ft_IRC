@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::pass(void) const
+void CommandHandler::pass(Command& cmd)
 {
 
 }

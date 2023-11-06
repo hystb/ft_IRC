@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::quit(void) const
+void CommandHandler::quit(Command& cmd)
 {
 
 }

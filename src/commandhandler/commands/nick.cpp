@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::nick(void) const
+void CommandHandler::nick(Command& cmd)
 {
 
 }

@@ -35,7 +35,6 @@ void Server::prepare(void) {
 		close(_fd_sock);
 		throw (initException());
 	}
-
 	if (getsockname(_fd_sock, (sockaddr *) &_sockaddr, &addrlen_serv) == 0)
 	{
 		char ip[INET_ADDRSTRLEN];
@@ -99,6 +98,7 @@ void Server::start(void) {
 				close(socket_client);
 			}
 		}
+
 		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client

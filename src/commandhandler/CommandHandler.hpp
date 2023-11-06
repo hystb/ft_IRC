@@ -10,17 +10,17 @@ private:
 	void commands(int client, Command &cmd);
 
 	/* unlogged commands */
-	void quit(void) const;
-	void pass(void) const;
-	void nick(void) const;
-	void user(void) const;
+	void quit(Command& cmd);
+	void pass(Command& cmd);
+	void nick(Command& cmd);
+	void user(Command& cmd);
 
 	/* logged commands */
-	void kick(void) const;
-	void join(void) const;
-	void invite(void) const;
-	void topic(void) const;
-	void mode(void) const;
+	void kick(Command& cmd);
+	void join(Command& cmd);
+	void invite(Command& cmd);
+	void topic(Command& cmd);
+	void mode(Command& cmd);
 
 public:
 	/* canonical form */

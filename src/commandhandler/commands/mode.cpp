@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::mode(void) const
+void CommandHandler::mode(Command& cmd)
 {
 
 }

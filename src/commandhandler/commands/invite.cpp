@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::invite(void) const
+void CommandHandler::invite(Command& cmd)
 {
 
 }

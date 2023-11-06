@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::user(void) const
+void CommandHandler::user(Command& cmd)
 {
 
 }

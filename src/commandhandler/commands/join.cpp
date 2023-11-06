@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::join(void) const
+void CommandHandler::join(Command& cmd)
 {
 
 }

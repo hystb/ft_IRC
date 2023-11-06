@@ -1,6 +1,6 @@
 #include "../CommandHandler.hpp"
 
-void CommandHandler::kick(void) const
+void CommandHandler::kick(Command& cmd)
 {
 
 }
