@@ -10,16 +10,24 @@ Channel::Channel(const Channel &parent)
 	(*this) = parent;
 }
 
-Channel& Channel::operator=(const Channel &parent)
+Channel& Channel::operator=(Channel &parent)//const ?
 {
-	(void) parent;
-	//do something here;
+	if (this != &parent) {
+		for (std::map<Client, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+			parent.addClient(it->first, it->second);
+			// parent._clients.insert(std::pair<Client, bool>(it->first, it->second));
+		}
+	}
 	return (*this);
 }
 
 // map
-void Channel::addClient(Client &client) {
-	_clients.insert(std::pair<Client, bool>(client, 0));
+// void Channel::addClient(const Client &client) {
+// 	_clients.insert(std::pair<Client, bool>(client, 0));
+// }
+
+void Channel::addClient(const Client &client, bool isModerator) {
+	_clients.insert(std::pair<Client, bool>(client, isModerator));
 }
 
 void Channel::removeClient(const std::string& username) {
