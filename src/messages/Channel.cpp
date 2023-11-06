@@ -21,6 +21,8 @@ Channel& Channel::operator=(const Channel &parent)//const ?
 	return (*this);
 }
 
+Channel::~Channel(void) {}
+
 // map
 // void Channel::addClient(const Client &client) {
 // 	_clients.insert(std::pair<Client, bool>(client, 0));

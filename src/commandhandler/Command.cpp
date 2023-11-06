@@ -1,19 +1,5 @@
 # include <global.hpp>
 
-Command::Command(void) {}
-
-Command::Command(const Command &parent)
-{
-	(*this) = parent;
-}
-
-Command& Command::operator=(const Command &parent)
-{
-	(void) parent;
-	//do something here;
-	return (*this);
-}
-
 Command::~Command(void) {}
 
 const std::string&			 	Command::getInput(void) const {
@@ -30,6 +16,14 @@ const std::vector<std::string>& 	Command::getParameters(void) const {
 
 const std::string&				Command::getContent(void) const {
 	return (_content);
+}
+
+std::map<std::string, Channel*>& Command::getChannels(void) {
+	return (_channels);
+}
+
+Client* Command::getClient(void) {
+	return (_client);
 }
 
 void Command::parse(void) 
@@ -62,7 +56,7 @@ void Command::parse(void)
 	}
 }
 
-Command::Command(std::string input) : _input(input)
+Command::Command(std::string input, Client *client, std::map<std::string, Channel*>& channels) : _input(input), _client(client), _channels(channels)
 {
 	_command = "\0";
 	_content = "\0";
