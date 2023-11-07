@@ -21,6 +21,8 @@ class Channel
 		void listClients(void);
 		void setModerator(Client *client);
 
+		/* getters */
+		std::map<Client*, bool>& getClients(void);
 	private:
 		Channel(void);
 		std::string 			_name;

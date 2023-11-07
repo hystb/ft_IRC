@@ -1,6 +1,6 @@
 # include <global.hpp>
 
-CommandHandler::CommandHandler(std::string &pass, std::map<int, Client*> &clients) : _pass(pass), _clients(clients)
+CommandHandler::CommandHandler(std::string &pass) : _pass(pass)
 {
 }
 
@@ -26,9 +26,9 @@ void CommandHandler::commands(Command &cmd)
 	}
 }
 
-void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels)
+void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels, std::map<int, Client*> &clients)
 {
-	Command cmd = Command(input, client, channels);
+	Command cmd = Command(input, client, channels, clients);
 	commands(cmd);
 	// debug only
 	// std::cout << "input : " << cmd.getInput();

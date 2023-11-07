@@ -57,11 +57,19 @@ void 	Client::sendMessage(std::string message) const
 }
 
 /* this functions will broadcast all others clients that are in the same channels that the target client */
-static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string& content)
+void Client::broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content)
 {
-	// for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
-	// {
-	// 	Channel* actual = it->second();
-	// 	for ()
-	// }
+	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		Channel* actual = it->second;
+		std::map<Client*, bool> users = actual->getClients();
+
+		for (std::map<Client*, bool>::iterator jt = users.begin(); jt != users.end(); jt++)
+		{
+			Client* client = jt->first;
+
+			if (client != targetClient)
+				client->sendMessage(content);
+		}
+	}
 }

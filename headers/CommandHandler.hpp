@@ -25,13 +25,12 @@ private:
 
 	/* vars */
 	std::string& 				_pass;
-	std::map<int, Client*>& 	_clients;
 
 public:
 	/* canonical form */
-	CommandHandler(std::string &pass, std::map<int, Client*> &clients);
+	CommandHandler(std::string &pass);
 	~CommandHandler(void);
 
-	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels);
+	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels, std::map<int, Client*> &clients);
 };
 #endif

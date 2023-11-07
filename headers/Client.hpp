@@ -4,6 +4,7 @@
 # include <global.hpp>
 
 class Server;
+class Channel;
 class Client
 {
 	public:
@@ -27,6 +28,9 @@ class Client
 		/* attributes */
 		void sendMessage(std::string message) const;
 		std::string& getBuffer(void);
+
+		static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
+		
 	private:
 		Client(void);
 
@@ -40,6 +44,5 @@ class Client
 		Server		&_server;
 		//- les chanels dont il est membre ? tab de string avec les noms des chanels, en map?
 };
-
 
 #endif

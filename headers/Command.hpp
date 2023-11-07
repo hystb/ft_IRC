@@ -12,6 +12,8 @@ private:
 	std::string							_content;
 	Client* 							_client;
 	std::map<std::string, Channel*>&	_channels;
+	std::map<int, Client*>&				_clients;
+
 	// mettre le client la !
 
 	void parse(void);
@@ -21,7 +23,7 @@ public:
 	~Command(void);
 
 	/* constructor */
-	Command(std::string input, Client *client, std::map<std::string, Channel*>& channels);
+	Command(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*>& clients);
 
 	/* getters */
 	const std::string&			 		getInput(void) const;
@@ -30,6 +32,7 @@ public:
 	const std::string&					getContent(void) const;
 
 	std::map<std::string, Channel*>&  	getChannels(void);
+	std::map<int, Client*>&				getClients(void);
 	Client* 							getClient(void);
 
 

@@ -57,3 +57,8 @@ void Channel::listClients() {
 void Channel::setModerator(Client *client) {
 	_clients[client] = 1;
 }
+
+
+std::map<Client*, bool>& Channel::getClients(void) {
+	return (_clients);
+}

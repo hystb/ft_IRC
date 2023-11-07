@@ -105,7 +105,7 @@ void Server::start(void) {
 				else if (value == 1)
 				{
 					try {
-						_commandHandler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels);
+						_commandHandler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels, _clients);
 					} catch (std::exception &e){
 						std::cout << "Error : " << e.what() << std::endl;
 					}

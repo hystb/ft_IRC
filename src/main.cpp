@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 			std::map<int, Client*> 	clients;
 			std::string				password = argv[2];
 
-			CommandHandler commandHandler = CommandHandler(password, clients);
+			CommandHandler commandHandler = CommandHandler(password);
 			Server server = Server(checkPort(argv[1]), password, commandHandler, clients);
 		} catch (std::exception &e) {
 			std::cout << e.what() << std::endl;

@@ -22,6 +22,9 @@ std::map<std::string, Channel*>& Command::getChannels(void) {
 	return (_channels);
 }
 
+std::map<int, Client*>& Command::getClients(void) {
+	return (_clients);
+}
 Client* Command::getClient(void) {
 	return (_client);
 }
@@ -59,7 +62,7 @@ void Command::parse(void)
 	}
 }
 
-Command::Command(std::string input, Client *client, std::map<std::string, Channel*>& channels) : _input(input), _client(client), _channels(channels)
+Command::Command(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*>& clients) : _input(input), _client(client), _channels(channels), _clients(clients)
 {
 	_command = "\0";
 	_content = "\0";
