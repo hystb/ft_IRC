@@ -3,7 +3,8 @@
 int main(int argc, char const *argv[])
 {
 	if (argc == 6)
-	{	size_t size;
+	{	
+		size_t size;
 		std::string server = argv[1];
     	int port;
 		std::istringstream iss(argv[2]);
@@ -24,8 +25,7 @@ int main(int argc, char const *argv[])
 	}
 	else
 	{
-		std::cout << "Args needed as following <Server Address> <Port> <Channel>" << std::endl;
+		std::cout << "Args needed as following <Server Address> <Port> <Channel> <Password> <ApiKey> <Channel Password>" << std::endl;
 	}
-
-    return 0;
+	return 0;
 }
