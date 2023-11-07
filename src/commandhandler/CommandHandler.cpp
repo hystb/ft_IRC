@@ -10,8 +10,6 @@ CommandHandler::~CommandHandler(void)
 
 void CommandHandler::commands(Command &cmd)
 {
-	// treat all the command about logged users
-	int i = 0;
 	std::string	commands[8] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC"};
 	void (CommandHandler::*functions[8])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
 

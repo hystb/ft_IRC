@@ -2,30 +2,31 @@
 
 Command::~Command(void) {}
 
-const std::string&			 	Command::getInput(void) const {
+const std::string&	Command::getInput(void) const {
 	return (_input);
 }
 
-const std::string& 				Command::getCommand(void) const {
+const std::string& 	Command::getCommand(void) const {
 	return (_command);
 }
 
-const std::vector<std::string>& 	Command::getParameters(void) const {
+const std::vector<std::string>& Command::getParameters(void) const {
 	return (_parameters);
 }
 
-const std::string&				Command::getContent(void) const {
+const std::string&	Command::getContent(void) const {
 	return (_content);
 }
 
-std::map<std::string, Channel*>& Command::getChannels(void) {
+std::map<std::string, Channel*>&	Command::getChannels(void) {
 	return (_channels);
 }
 
-std::map<int, Client*>& Command::getClients(void) {
+std::map<int, Client*>&	Command::getClients(void) {
 	return (_clients);
 }
-Client* Command::getClient(void) {
+
+Client*	Command::getClient(void) {
 	return (_client);
 }
 

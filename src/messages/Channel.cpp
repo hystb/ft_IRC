@@ -3,18 +3,9 @@
 // canonical
 Channel::Channel(void) {}
 
-Channel::Channel(const std::string& name, const std::string& password, Client *client) : _name(name), _password(password) {
+Channel::Channel(const std::string& name, const std::string& password, Client *client) : _name(name), _password(password)
+{
 	addClient(client, 1);
-}
-
-Channel::Channel(const Channel &parent)
-{
-	(*this) = parent;
-}
-
-Channel& Channel::operator=(const Channel &parent)
-{
-	return (*this);
 }
 
 Channel::~Channel(void) {}

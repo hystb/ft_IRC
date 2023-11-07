@@ -4,18 +4,12 @@ Client::Client(const std::string& nickname, int socket, Server& server) : _nickn
 
 Client::~Client(void) {}
 
-
-std::string Client::getNickname(void) const {
+std::string	Client::getNickname(void) const {
 	return _nickname;
 }
 
-std::string Client::getUsername(void) const {
+std::string	Client::getUsername(void) const {
 	return _username;
-}
-
-void	Client::setUsername(std::string& username)
-{
-	_username = username;
 }
 
 std::string&	Client::getBuffer(void) {
@@ -26,6 +20,10 @@ int		Client::getSocket(void) const {
 	return _socketFd;
 }
 
+Server&	Client::getServer(void) const {
+	return _server;
+}
+
 bool	Client::isPassWordUnlocked(void) const {
 	return _passwordUnlocked;
 }
@@ -34,20 +32,20 @@ bool	Client::isConnected(void) const {
 	return _userConnected;
 }
 
-void Client::setPassordUnlocked(bool value) {
+void	Client::setUsername(std::string& username){
+	_username = username;
+}
+
+void	Client::setPassordUnlocked(bool value) {
 	_passwordUnlocked = value;
 }
 
-void Client::setUserConnected(bool value) {
+void	Client::setUserConnected(bool value) {
 	_userConnected = value;
 }
 
-void Client::setNickname(std::string& name) {
+void	Client::setNickname(std::string& name) {
 	_nickname = name;
-}
-
-Server& Client::getServer(void) const {
-	return _server;
 }
 
 void 	Client::sendMessage(std::string message) const 

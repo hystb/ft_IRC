@@ -11,8 +11,6 @@ class Channel
 		// canonical
 		Channel(const std::string& name, const std::string& password, Client *client);
 		~Channel(void);
-		Channel& operator=(const Channel &parent);//const ?
-		Channel(const Channel &parent);
 
 		// map
 		// void addClient(const Client &client);
