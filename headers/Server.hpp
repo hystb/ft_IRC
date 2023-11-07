@@ -19,7 +19,7 @@ private:
 	int								_fd_sock;
 	CommandHandler					_command_handler;
 	std::map<int, Client*>			_clients;
-	std::map<std::string, Channel>	_channels;
+	std::map<std::string, Channel*>	_channels;
 	// channels
 
 	/* canonical form */

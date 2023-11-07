@@ -13,12 +13,14 @@ class Client
 
 		/* getters */
 		std::string	getUsername(void) const;
-		int getSocket(void) const;
-		bool isPassWordUnlocked(void) const;
-		bool isConnected(void) const;
+		int 		getSocket(void) const;
+		bool 		isPassWordUnlocked(void) const;
+		bool 		isConnected(void) const;
+
 
 		/* attributes */
 		void sendMessage(std::string message) const;
+		
 	private:
 		Client(void);
 
