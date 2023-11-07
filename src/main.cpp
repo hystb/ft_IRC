@@ -26,11 +26,12 @@ int main(int argc, char const *argv[])
 			return (std::cout << "Error in port syntax (0 - 65 535) !" << std::endl, 1);
 		if (checkPort(argv[1]) < 1025)
 			std::cout << "Warning ! This port might be reserved to a root access !" << std::endl;
-		try {
+		// try {
 			Server server = Server(checkPort(argv[1]), argv[2]);
-		} catch (std::exception &e) {
-			std::cout << e.what() << std::endl;
-		}
+			perror("oula :");
+		// } catch (std::exception &e) {
+		// 	std::cout << e.what() << std::endl;
+		// }
 	}
 	return (0);
 }

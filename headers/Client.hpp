@@ -19,6 +19,7 @@ class Client
 
 		/* attributes */
 		void sendMessage(std::string message) const;
+		std::string& getBuffer(void);
 	private:
 		Client(void);
 
@@ -26,6 +27,8 @@ class Client
 		int			_socketFd;
 		bool		_passwordUnlocked;
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?
+		
+		std::string _buffer;
 		//- les chanels dont il est membre ? tab de string avec les noms des chanels, en map?
 };
 

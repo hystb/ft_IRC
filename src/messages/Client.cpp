@@ -21,6 +21,10 @@ std::string	Client::getUsername(void) const {
 	return _username;
 }
 
+std::string& Client::getBuffer(void) {
+	return _buffer;
+}
+
 int		Client::getSocket(void) const {
 	return _socketFd;
 }
