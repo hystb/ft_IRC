@@ -25,8 +25,8 @@ class Client
 		void setUsername(std::string& username);
 
 		/* attributes */
-		void sendMessage(std::string message) const;
-		std::string& getBuffer(void);
+		void 			sendMessage(std::string message) const;
+		std::string&	getBuffer(void);
 	private:
 		Client(void);
 
