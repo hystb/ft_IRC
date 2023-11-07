@@ -14,9 +14,9 @@
 # include <sstream>
 # include <map>
 
-# include <Command.hpp>
 # include <Client.hpp>
 # include <Channel.hpp>
+# include <Command.hpp>
 # include <CommandHandler.hpp>
 # include <Server.hpp>
 

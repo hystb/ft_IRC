@@ -113,6 +113,7 @@ void Server::start(void) {
 					interrupt();
 				else
 				{
+					std::cout << messageReceived;
 					for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 					{
 						if (it->second->getSocket() != _clients_fd[i].fd)

@@ -20,7 +20,7 @@ CommandHandler& CommandHandler::operator=(const CommandHandler& parent)
 	return (*this);
 }
 
-void CommandHandler::commands(Client &client, Command &cmd)
+void CommandHandler::commands(Command &cmd)
 {
 	// treat all the command about logged users
 	int i = 0;
@@ -29,18 +29,20 @@ void CommandHandler::commands(Client &client, Command &cmd)
 
 	if (cmd.getCommand() == "CAP")
 		return ;
-	if (client.isConnected() && i > 3)
-		return (client.sendMessage("You must be logged to use that command !"));
-	while (commands[i] != cmd.getCommand() && i < 4)
-		i++;
-	(this->*(functions[i]))(cmd);
+	if (!cmd.getClient()->isConnected() && i > 3)
+		return (cmd.getClient()->sendMessage("You must be logged to use that command !"));
+	for (int i = 0; i < 8; i++)
+	{
+		if (commands[i] == cmd.getCommand())
+			return ((this->*(functions[i]))(cmd));
+	}
 }
 
-void CommandHandler::handleCommand(Client &client, std::string input)
+void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels)
 {
-	Command cmd = Command(input);
+	Command cmd = Command(input, client, channels);
 	
-	commands(client, cmd);
+	commands(cmd);
 	// debug only
 	std::cout << "input : " << cmd.getInput();
 	std::cout << "command : " << cmd.getCommand() << std::endl;
