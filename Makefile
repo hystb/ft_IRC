@@ -20,7 +20,7 @@ src/commandhandler/commands/nick.cpp\
 src/commandhandler/commands/pass.cpp\
 src/commandhandler/commands/quit.cpp\
 src/commandhandler/commands/topic.cpp\
-src/commandhandler/commands/user.cpp
+src/commandhandler/commands/user.cpp\
 
 OBJ_DIR 	= .obj
 

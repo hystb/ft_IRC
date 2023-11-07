@@ -11,9 +11,8 @@ void CommandHandler::pass(Command& cmd)
 	std::vector<std::string> param = cmd.getParameters();
 	Client					 *client = cmd.getClient();
 
-	std::cout << "ye sui la" << std::endl;
 	if (client->isPassWordUnlocked())
-		return (client->sendMessage(client->getUsername() + " :You may not reregister\n"));
+		return (client->sendMessage(client->getNickname() + " :You may not reregister\n"));
 	if (param.size() == 0)
 		refuseConnection(client, "Client PASS :Not enough parameters\n");
 	else if (param.at(0) != _pass)

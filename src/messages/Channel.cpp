@@ -34,7 +34,7 @@ void Channel::addClient(Client *client, bool isModerator) {
 
 void Channel::removeClient(const std::string& username) {
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ) {
-		if (it->first->getUsername() == username) {
+		if (it->first->getNickname() == username) {
 			_clients.erase(it++);
 		} else {
 			++it;
@@ -46,7 +46,7 @@ void Channel::listClients() {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
 		bool isModerator = it->second;
-		std::cout << "Client: " << client->getUsername();
+		std::cout << "Client: " << client->getNickname();
 		if (isModerator)
 			std::cout << " Moderator" << std::endl;
 		else

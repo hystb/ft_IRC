@@ -9,21 +9,17 @@ class Server
 {
 	private:
 		/* user input */
-		uint16_t 	_port;
-		std::string _password;
+		uint16_t 						_port;
+		std::string 					_password;
 
 		/* other private var(s)*/
 		struct sockaddr_in 				_sockaddr;
 		struct pollfd					_clients_fd[MAX_CLIENTS + 1];
 		int								_clients_nb;
 		int								_fd_sock;
-		CommandHandler					_command_handler;
-		std::map<int, Client*>			_clients;
+		CommandHandler&					_commandHandler;
+		std::map<int, Client*>&			_clients;
 		std::map<std::string, Channel*>	_channels;
-		// channels
-
-		/* canonical form */
-		Server(void);
 
 		/* startup functions ! */
 		void prepare(void);
@@ -36,15 +32,11 @@ class Server
 		void closeFds(void);
 		void interrupt(void);
 
-
 		/* tools functions */
 		int getRawEntry(Client* client, std::string del, std::string &dest);
 
-
 	public:
-		Server& operator=(const Server &parent);
-		Server(const Server &parent);
-		Server(uint16_t port, std::string password);	
+		Server(uint16_t port, std::string password, CommandHandler& cmd_handler, std::map<int, Client*>& clients);	
 
 		~Server(void);
 

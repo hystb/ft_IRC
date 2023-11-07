@@ -11,15 +11,18 @@ class Client
 		~Client(void);
 
 		/* getters */
-		std::string	getUsername(void) const;
+		std::string getNickname(void) const;
 		int getSocket(void) const;
 		bool isPassWordUnlocked(void) const;
 		bool isConnected(void) const;
 		Server& getServer(void) const;
+		std::string getUsername(void) const;
 
 		/* setters */
 		void setPassordUnlocked(bool value);
 		void setUserConnected(bool value);
+		void setNickname(std::string& name);
+		void setUsername(std::string& username);
 
 		/* attributes */
 		void sendMessage(std::string message) const;
@@ -27,7 +30,8 @@ class Client
 	private:
 		Client(void);
 
-		std::string	_username;
+		std::string	_nickname;
+		std::string _username;
 		int			_socketFd;
 		bool		_passwordUnlocked;
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?

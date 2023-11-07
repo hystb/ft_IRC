@@ -24,16 +24,14 @@ private:
 	void mode(Command& cmd);
 
 	/* vars */
-	std::string _pass;
-
+	std::string& 				_pass;
+	std::map<int, Client*>& 	_clients;
 
 public:
 	/* canonical form */
-	CommandHandler();
-	CommandHandler(std::string &pass);
+	CommandHandler(std::string &pass, std::map<int, Client*> &clients);
 	~CommandHandler(void);
 
-	void setPassword(std::string pass);
 	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels);
 };
 #endif

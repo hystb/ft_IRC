@@ -1,18 +1,5 @@
 # include <global.hpp>
 
-Server::Server(void) { }
-
-Server::Server(const Server &parent)
-{
-	(*this) = parent;
-}
-
-Server& Server::operator=(const Server &parent)
-{
-	(void) parent;
-	return (*this);
-}
-
 Server::~Server(void) {}
 
 /* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
@@ -118,7 +105,7 @@ void Server::start(void) {
 				else if (value == 1)
 				{
 					try {
-						_command_handler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels);
+						_commandHandler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels);
 					} catch (std::exception &e){
 						std::cout << "Error : " << e.what() << std::endl;
 					}
@@ -170,8 +157,7 @@ void Server::sendMessage(int client, std::string message)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
 }
 
-Server::Server(uint16_t port, std::string password) : _port(port), _password(password) {
-	_command_handler.setPassword(password);
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients) {
 	try {
 		prepare();
 	} catch (std::exception &e)

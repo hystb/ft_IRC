@@ -1,15 +1,24 @@
 # include <global.hpp>
 
-Client::Client(const std::string& username, int socket, Server& server) : _username(username), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server) {}
+Client::Client(const std::string& nickname, int socket, Server& server) : _nickname(nickname), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server) {}
 
 Client::~Client(void) {}
 
 
-std::string	Client::getUsername(void) const {
+std::string Client::getNickname(void) const {
+	return _nickname;
+}
+
+std::string Client::getUsername(void) const {
 	return _username;
 }
 
-std::string& Client::getBuffer(void) {
+void	Client::setUsername(std::string& username)
+{
+	_username = username;
+}
+
+std::string&	Client::getBuffer(void) {
 	return _buffer;
 }
 
@@ -33,6 +42,10 @@ void Client::setUserConnected(bool value) {
 	_userConnected = value;
 }
 
+void Client::setNickname(std::string& name) {
+	_nickname = name;
+}
+
 Server& Client::getServer(void) const {
 	return _server;
 }
@@ -41,4 +54,14 @@ void 	Client::sendMessage(std::string message) const
 {
 	if (send(_socketFd, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
+}
+
+/* this functions will broadcast all others clients that are in the same channels that the target client */
+static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string& content)
+{
+	// for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
+	// {
+	// 	Channel* actual = it->second();
+	// 	for ()
+	// }
 }
