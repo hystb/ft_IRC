@@ -27,7 +27,11 @@ int main(int argc, char const *argv[])
 		if (checkPort(argv[1]) < 1025)
 			std::cout << "Warning ! This port might be reserved to a root access !" << std::endl;
 		try {
-			Server server = Server(checkPort(argv[1]), argv[2]);
+			std::map<int, Client*> 	clients;
+			std::string				password = argv[2];
+
+			CommandHandler commandHandler = CommandHandler(password, clients);
+			Server server = Server(checkPort(argv[1]), password, commandHandler, clients);
 		} catch (std::exception &e) {
 			std::cout << e.what() << std::endl;
 		}

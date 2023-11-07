@@ -38,7 +38,7 @@ void Channel::listClients() {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
 		bool isModerator = it->second;
-		std::cout << "Client: " << client->getUsername();
+		std::cout << "Client: " << client->getNickname();
 		if (isModerator)
 			std::cout << " Moderator" << std::endl;
 		else

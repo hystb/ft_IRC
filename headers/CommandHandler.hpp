@@ -23,12 +23,14 @@ private:
 	void topic(Command& cmd);
 	void mode(Command& cmd);
 
+	/* vars */
+	std::string& 				_pass;
+	std::map<int, Client*>& 	_clients;
+
 public:
 	/* canonical form */
-	CommandHandler(void);
+	CommandHandler(std::string &pass, std::map<int, Client*> &clients);
 	~CommandHandler(void);
-	CommandHandler& operator=(const CommandHandler& parent);
-	CommandHandler(const CommandHandler& parent);
 
 	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels);
 };

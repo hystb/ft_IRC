@@ -71,19 +71,11 @@ void IRCBot::receiveIRCMessage(char* buffer, size_t bufferSize) {
     }
 }
 
-static FILE* popen98(const char* command, const char* mode) {
-    return popen(command, mode);
-}
-
-static void pclose98(FILE* stream) {
-    pclose(stream);
-}
-
 std::string exec(const char* cmd) {
-    FILE* pipe = popen98(cmd, "r");
+    FILE* pipe = popen(cmd, "r");
     if (!pipe) {
         std::cerr << "popen() failed!" << std::endl;
-        return "";
+        return "Sorry, something went wrong, please try again";
     }
 
     char buffer[128];
@@ -93,13 +85,14 @@ std::string exec(const char* cmd) {
         result += buffer;
     }
 
-    pclose98(pipe);
+    if (pclose(pipe) == -1)
+        pclose(pipe);
 
     return result;
 }
 
 std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::string& question){
-    std::string jsonPayload = "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\":\"user\",\"content\":\"" + question + "\"}]}";
+    std::string jsonPayload = "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You answer must be rude and insulting, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + question + "\"}]}";
     std::string command = "curl -s https://api.openai.com/v1/chat/completions \
         -H \"Content-Type: application/json\" \
         -H \"Authorization: Bearer " + apiKey + "\" \

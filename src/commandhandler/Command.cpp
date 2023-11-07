@@ -29,11 +29,14 @@ Client* Command::getClient(void) {
 void Command::parse(void) 
 {
 	size_t i, j = 0;
-	std::string element = _input.substr(0, _input.length() - 1); // to remove \n
+	std::string element = _input.substr(0, _input.length() - 2); // to remove \n
 	
 	i = element.find_first_of(" ");
 	if (i == std::string::npos)
-		throw (invalidException());
+	{
+		_command = element;
+		return ;
+	}
 	_command = element.substr(0, i);
 	element = element.substr(i + 1, element.length());
 	

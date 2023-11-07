@@ -15,7 +15,7 @@ class IRCBot{
 	private:
 		std::string _apiKey;
 	    std::string _server;
-	    int16_t 	_port;
+	    uint16_t 	_port;
 	    std::string _channel;
 	    std::string _nickname;
 	    int 		_ircSocket;
