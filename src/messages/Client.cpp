@@ -1,24 +1,16 @@
 # include <global.hpp>
 
-Client::Client(const std::string& username, int socket) : _username(username), _socketFd(socket), _passwordUnlocked(0), _userConnected(0) {}
-
-Client::Client(const Client &parent)
-{
-	(*this) = parent;
-}
-
-Client& Client::operator=(const Client &parent)
-{
-	(void) parent;
-	//do something here;
-	return (*this);
-}
+Client::Client(const std::string& username, int socket, Server& server) : _username(username), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server) {}
 
 Client::~Client(void) {}
 
 
 std::string	Client::getUsername(void) const {
 	return _username;
+}
+
+std::string& Client::getBuffer(void) {
+	return _buffer;
 }
 
 int		Client::getSocket(void) const {
@@ -31,6 +23,18 @@ bool	Client::isPassWordUnlocked(void) const {
 
 bool	Client::isConnected(void) const {
 	return _userConnected;
+}
+
+void Client::setPassordUnlocked(bool value) {
+	_passwordUnlocked = value;
+}
+
+void Client::setUserConnected(bool value) {
+	_userConnected = value;
+}
+
+Server& Client::getServer(void) const {
+	return _server;
 }
 
 void 	Client::sendMessage(std::string message) const 
