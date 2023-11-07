@@ -3,19 +3,23 @@
 
 # include <global.hpp>
 
+class Server;
 class Client
 {
 	public:
-		Client(const std::string& username, int socket);
+		Client(const std::string& username, int socket, Server& server);
 		~Client(void);
-		Client& operator=(const Client &parent);
-		Client(const Client &parent);
 
 		/* getters */
 		std::string	getUsername(void) const;
 		int getSocket(void) const;
 		bool isPassWordUnlocked(void) const;
 		bool isConnected(void) const;
+		Server& getServer(void) const;
+
+		/* setters */
+		void setPassordUnlocked(bool value);
+		void setUserConnected(bool value);
 
 		/* attributes */
 		void sendMessage(std::string message) const;
@@ -29,7 +33,9 @@ class Client
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?
 		
 		std::string _buffer;
+		Server		&_server;
 		//- les chanels dont il est membre ? tab de string avec les noms des chanels, en map?
 };
+
 
 #endif

@@ -23,13 +23,17 @@ private:
 	void topic(Command& cmd);
 	void mode(Command& cmd);
 
+	/* vars */
+	std::string _pass;
+
+
 public:
 	/* canonical form */
-	CommandHandler(void);
+	CommandHandler();
+	CommandHandler(std::string &pass);
 	~CommandHandler(void);
-	CommandHandler& operator=(const CommandHandler& parent);
-	CommandHandler(const CommandHandler& parent);
 
+	void setPassword(std::string pass);
 	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels);
 };
 #endif

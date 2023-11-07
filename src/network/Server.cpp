@@ -91,8 +91,9 @@ void Server::start(void) {
 				std::cout << "There is a new client with the socket number " << socket_client << std::endl;
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
+				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
-				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client)));
+				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -116,18 +117,11 @@ void Server::start(void) {
 					continue;
 				else if (value == 1)
 				{
-					std::cout << messageReceived;
-					for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-					{
-						if (it->second->getSocket() != _clients_fd[i].fd)
-							it->second->sendMessage(messageReceived);
+					try {
+						_command_handler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels);
+					} catch (std::exception &e){
+						std::cout << "Error : " << e.what() << std::endl;
 					}
-
-					// try {
-					// 	_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
-					// } catch (std::exception &e){
-					// 	std::cout << "Error : " << e.what() << std::endl;
-					// }
 				}
 			}
 		}
@@ -146,6 +140,15 @@ void Server::handleClientDeconnection(int index)
         _clients_fd[i] = _clients_fd[i + 1];
     }
     _clients_nb--;
+}
+
+void Server::disconnectClient(int fd)
+{
+	int i = 0;
+
+	while (i <=_clients_nb && _clients_fd[i].fd != fd)
+		i++;
+	handleClientDeconnection(i);
 }
 
 void Server::closeFds(void)
@@ -168,6 +171,7 @@ void Server::sendMessage(int client, std::string message)
 }
 
 Server::Server(uint16_t port, std::string password) : _port(port), _password(password) {
+	_command_handler.setPassword(password);
 	try {
 		prepare();
 	} catch (std::exception &e)
