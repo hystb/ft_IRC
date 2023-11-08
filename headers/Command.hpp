@@ -54,4 +54,8 @@ void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, const Channel *channel);
 void RPL_TOPIC(const Client &client, const Channel *channel);
 
+void ERR_USERONCHANNEL(const Client &client, const Channel *channel);
+void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
+void RPL_INVITING(const Client &client, const Channel *channel);
+
 

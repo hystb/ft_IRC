@@ -1,6 +1,5 @@
 # include <global.hpp>
 
-// cas particuliers
 void RPL_TOPIC(const Client &client, const Channel *channel) {
 	client.sendMessage(client.getUsername() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
 }
@@ -14,7 +13,6 @@ void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std:
 	client.sendMessage(client.getUsername() + " " + command +" :Not enough parameters\r\n");
 }
 
-// meme modele
 void JOIN_MSG(const Client &client, const Channel *channel) {//fait maison apres les deux points
 	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Joined the server\r\n");
 }
@@ -49,4 +47,12 @@ void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel) {
 
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
+}
+
+void ERR_USERONCHANNEL(const Client &client, const Channel *channel) {
+	client.sendMessage(client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
+}
+
+void RPL_INVITING(const Client &client, const Channel *channel) {
+	client.sendMessage(client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
 }
