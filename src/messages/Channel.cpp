@@ -32,7 +32,6 @@ void Channel::removeClient(Client *client) {
 		break;
 		}
 	}
-	// sendMessage(":" + client->getUsername() + " JOIN #" + this->_name); KICK MSG
 }
 
 void Channel::setModerator(Client *client) {

@@ -12,12 +12,12 @@ void CommandHandler::invite(Command& cmd)
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), it->second);
 		return;
 	}
-	if (0) { //channel is on mode invite only and user is not operator)
+	if (0) { //channel is on mode invite only and user is not operator)//need to do mode
 		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), it->second);
 		return ;
 	}
-	if ((it->second->isMember(cmd.getClient()))) { // celui qui est invité est deja sur le channel
-		// probleme ils sont listé par username et non par nickname dans la map -> change la map?
+	if (0) { // celui qui est invité est deja sur le channel
+		// probleme dans la commande INVITE on donne le nickname
 		ERR_USERONCHANNEL(*cmd.getClient(), it->second);
 	}
 	if (!(it->second->isMember(cmd.getClient()))) { //celui qui veut inviter n'est pas sur le channel
@@ -25,7 +25,7 @@ void CommandHandler::invite(Command& cmd)
 		return ;
 	}
 	else {
-		it->second->addClient(cmd.getClient(), 0);
+		// inviter ici
 		RPL_INVITING(*cmd.getClient(), it->second);
 	}
 }

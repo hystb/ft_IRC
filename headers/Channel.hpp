@@ -15,23 +15,23 @@ class Channel
 		Channel(const Channel &parent);
 
 		// client map
-		void addClient(Client *client, bool isModerator);
-		void removeClient(Client *client);
-		void setModerator(Client *client);
-		void listClients(void);// for test only
+		void	addClient(Client *client, bool isModerator);
+		void	removeClient(Client *client);
+		void	setModerator(Client *client);
+		void	listClients(void);// for test only
+		bool 	isMember(Client *client);
 
 		// invited vector
-		void addInvited(Client *client);
-		void removeInvited(const std::string& username);
-		void listInvited(void);//for test only
+		void	addInvited(Client *client);
+		void	removeInvited(const std::string& username);
+		void	listInvited(void);//for test only
+		bool	isInvited(const std::string& username);
 
 		// getter
 		std::string	getName(void) const;
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		int			getLimit(void) const;
-		bool 		isMember(Client *client);
-		bool		isInvited(const std::string& username);
 
 		// extra
 		void	sendMessage(std::string message) const;
