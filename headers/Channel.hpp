@@ -11,20 +11,18 @@ class Channel
 		// canonical
 		Channel(const std::string& name, const std::string& password, Client *client);
 		~Channel(void);
-		Channel& operator=(const Channel &parent);//const ?
+		Channel& operator=(const Channel &parent);
 		Channel(const Channel &parent);
 
 		// client map
 		void addClient(Client *client, bool isModerator);
-		void removeClient(const std::string& username);
+		void removeClient(Client *client);
 		void setModerator(Client *client);
-		bool isInvited(const std::string& username);
 		void listClients(void);// for test only
 
 		// invited vector
-		void removeInvited(const std::string& username);
 		void addInvited(Client *client);
-		bool isMember(Client *client);
+		void removeInvited(const std::string& username);
 		void listInvited(void);//for test only
 
 		// getter
@@ -32,6 +30,8 @@ class Channel
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		int			getLimit(void) const;
+		bool 		isMember(Client *client);
+		bool		isInvited(const std::string& username);
 
 		// extra
 		void	sendMessage(std::string message) const;

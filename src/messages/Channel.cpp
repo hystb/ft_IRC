@@ -19,19 +19,31 @@ Channel& Channel::operator=(const Channel &parent)
 
 Channel::~Channel(void) {}
 
-// map
+// client map
 void Channel::addClient(Client *client, bool isModerator) {
-	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);//log, to modify?
+	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
 	_clients.insert(std::pair<Client*, bool>(client, isModerator));
 }
 
-void Channel::removeClient(const std::string& username) {
+void Channel::removeClient(Client *client) {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
-		if (it->first->getUsername() == username)
-			_clients.erase(it++);
-		else
-			++it;
+		if (it->first == client) {
+			_clients.erase(it);
+		break;
+		}
 	}
+	// sendMessage(":" + client->getUsername() + " JOIN #" + this->_name); KICK MSG
+}
+
+void Channel::setModerator(Client *client) {
+	_clients[client] = 1;
+}
+
+bool Channel::isMember(Client *client) {
+    std::map<Client*, bool>::iterator it = _clients.find(client);
+    if (it != _clients.end())
+        return true;
+    return false;
 }
 
 void Channel::listClients() {
@@ -45,27 +57,6 @@ void Channel::listClients() {
 			std::cout << " Ordinary mortals" << std::endl;
 	}
 }
-
-void Channel::setModerator(Client *client) {
-	_clients[client] = 1;
-}
-
-
-bool Channel::isMember(Client *client) {
-    std::map<Client*, bool>::iterator it = _clients.find(client);
-    if (it != _clients.end())
-        return true;
-    return false;
-}
-
-// getter
-std::string	Channel::getName(void) const { return _name; }
-std::string	Channel::getTopic(void) const { return _topic; }
-std::string	Channel::getPassword(void) const { return _password; }
-int			Channel::getLimit(void) const { return _limit; }
-
-// extra
-void	Channel::sendMessage(std::string message) const {}
 
 // invited vector
 void Channel::addInvited(Client *client) {
@@ -81,8 +72,6 @@ void Channel::removeInvited(const std::string& username) {
     }
 }
 
-void Channel::listInvited(void) {} //to do
-
 bool Channel::isInvited(const std::string& username) {
     for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
         if ((*it)->getUsername() == username) {
@@ -91,3 +80,14 @@ bool Channel::isInvited(const std::string& username) {
     }
 	return false;
 }
+
+void Channel::listInvited(void) {} //to do
+
+// getter
+std::string	Channel::getName(void) const { return _name; }
+std::string	Channel::getTopic(void) const { return _topic; }
+std::string	Channel::getPassword(void) const { return _password; }
+int			Channel::getLimit(void) const { return _limit; }
+
+// extra
+void	Channel::sendMessage(std::string message) const {}
