@@ -21,7 +21,7 @@ Channel::~Channel(void) {}
 
 // map
 void Channel::addClient(Client *client, bool isModerator) {
-	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);//log
+	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);//log, to modify?
 	_clients.insert(std::pair<Client*, bool>(client, isModerator));
 }
 
@@ -54,6 +54,32 @@ void Channel::setModerator(Client *client) {
 std::string	Channel::getName(void) const { return _name; }
 std::string	Channel::getTopic(void) const { return _topic; }
 std::string	Channel::getPassword(void) const { return _password; }
+int			Channel::getLimit(void) const { return _limit; }
 
 // extra
 void	Channel::sendMessage(std::string message) const {}
+
+// invited vector
+void Channel::addInvited(Client *client) {
+	_invited.push_back(client);
+}
+
+void Channel::removeInvited(const std::string& username) {
+    // for (auto it = _invited.begin(); it != _invited.end(); ++it) {//remplacer auto
+    //     if ((*it)->getUsername() == username) {
+    //         _invited.erase(it);
+    //         break;
+    //     }
+    // }
+}
+
+void Channel::listInvited(void) {} //to do
+
+bool Channel::isInvited(const std::string& username) {
+    // for (auto it = _invited.begin(); it != _invited.end(); ++it) {//remplacer auto
+    //     if ((*it)->getUsername() == username) {
+    //         return true;
+    //     }
+    // }
+	return false;
+}

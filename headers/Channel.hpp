@@ -14,27 +14,36 @@ class Channel
 		Channel& operator=(const Channel &parent);//const ?
 		Channel(const Channel &parent);
 
-		// map
-		// void addClient(const Client &client);
+		// client map
 		void addClient(Client *client, bool isModerator);
 		void removeClient(const std::string& username);
 		void listClients(void);
 		void setModerator(Client *client);
 
+		// invited vector
+		void removeInvited(const std::string& username);
+		void addInvited(Client *client);
+		void listInvited(void);
+		bool isInvited(const std::string& username);
+
 		// getter
 		std::string	getName(void) const;
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
+		int			getLimit(void) const;
 
 		// extra
 		void	sendMessage(std::string message) const;
 
 	private:
-		Channel(void);
 		std::string 			_name;
 		std::string 			_topic;
 		std::string				_password;
+		int						_limit;
+		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;
+
+		Channel(void);
 };
 
 #endif
