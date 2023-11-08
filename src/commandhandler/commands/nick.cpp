@@ -24,4 +24,5 @@ void CommandHandler::nick(Command& cmd)
 		Client::broadcastFromClient(cmd.getChannels(), client, ":" + client->getNickname() + " NICK " + nickname + "\r\n");
 	}
 	client->setNickname(nickname);
+	client->doLogin();
 }

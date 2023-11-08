@@ -38,3 +38,11 @@ void ERR_INVITEONLYCHAN(const Channel *channel, const Client &client) {
 	//channel->sendMessage(client.getUsername() + " " +   channel->getName() + " :End of /NAMES list");
 	//"<client> <channel> :Cannot join channel (+i)"
 }
+
+void ERR_ALREADYREGISTERED(const Client &client) {
+	client.sendMessage(client.getNickname() + " :You may not reregister\r\n");
+}
+
+void ERR_NOTREGISTERED(const Client &client) {
+	client.sendMessage(client.getNickname() + " :You have not registered\r\n");
+}

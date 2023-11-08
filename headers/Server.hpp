@@ -4,6 +4,7 @@
 # include <global.hpp>
 
 # define MAX_CLIENTS 1000
+# define NETWORK_NAME "Team Rocket"
 
 class Server
 {
@@ -33,7 +34,8 @@ class Server
 		void interrupt(void);
 
 		/* tools functions */
-		int getRawEntry(Client* client, std::string del, std::string &dest);
+		int 	getRawEntry(Client* client);
+		int		extractEntry(std::string del, std::string& dest, Client* client);
 
 	public:
 		Server(uint16_t port, std::string password, CommandHandler& cmd_handler, std::map<int, Client*>& clients);	

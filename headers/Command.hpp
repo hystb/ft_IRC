@@ -29,7 +29,7 @@ public:
 	const std::string&			 		getInput(void) const;
 	const std::string& 					getCommand(void) const;
 	const std::vector<std::string>& 	getParameters(void) const;
-	const std::string&					getContent(void) const;
+	std::string							getContent(void) const;
 
 	std::map<std::string, Channel*>&  	getChannels(void);
 	std::map<int, Client*>&				getClients(void);
@@ -42,4 +42,8 @@ public:
 			virtual const char * what() const throw() { return ("Invalid command syntax !"); };
 	};
 };
+
+void ERR_ALREADYREGISTERED(const Client &client);
+void ERR_NOTREGISTERED(const Client &client);
+
 #endif

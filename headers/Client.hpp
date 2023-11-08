@@ -12,22 +12,27 @@ class Client
 		~Client(void);
 
 		/* getters */
-		std::string getNickname(void) const;
 		int getSocket(void) const;
 		bool isPassWordUnlocked(void) const;
 		bool isConnected(void) const;
 		Server& getServer(void) const;
 		std::string getUsername(void) const;
+		std::string getNickname(void) const;
+		std::string getRealname(void) const;
+
 
 		/* setters */
 		void setPassordUnlocked(bool value);
 		void setUserConnected(bool value);
 		void setNickname(std::string& name);
 		void setUsername(std::string& username);
+		void setRealname(std::string  realname);
 
 		/* attributes */
 		void sendMessage(std::string message) const;
 		std::string& getBuffer(void);
+		void doLogin(void);
+
 
 		static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
 		
@@ -36,6 +41,7 @@ class Client
 
 		std::string	_nickname;
 		std::string _username;
+		std::string _realname;
 		int			_socketFd;
 		bool		_passwordUnlocked;
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?

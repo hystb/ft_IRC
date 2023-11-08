@@ -17,10 +17,8 @@ void CommandHandler::commands(Command &cmd)
 		return ;
 	for (int i = 0; i < 8; i++)
 	{
-		if (i > 0 && !cmd.getClient()->isPassWordUnlocked())
-			return (cmd.getClient()->sendMessage("You must enter server password first !\r\n"));
-		if (i > 3 && !cmd.getClient()->isConnected())
-			return (cmd.getClient()->sendMessage("You must be registered to do that !\r\n"));
+		if ((i > 0 && !cmd.getClient()->isPassWordUnlocked()) || (i > 3 && !cmd.getClient()->isConnected()))
+			return (ERR_NOTREGISTERED(*cmd.getClient()));
 		if (commands[i] == cmd.getCommand())
 			return ((this->*(functions[i]))(cmd));
 	}
@@ -36,9 +34,9 @@ void CommandHandler::handleCommand(std::string input, Client *client, std::map<s
 	// std::cout << "parameters : ";
 	// for (unsigned i = 0; i < cmd.getParameters().size(); i++)
 	// {
-	// 	std::cout << cmd.getParameters().at(i);
-	// 	if (i + 1 < cmd.getParameters().size())
-	// 		std::cout << ", ";
+		// std::cout << cmd.getParameters().at(i);
+		// if (i + 1 < cmd.getParameters().size())
+			// std::cout << ", ";
 	// }
 	// std::cout << std::endl;
 	// std::cout << "content : " << cmd.getContent() << std::endl;

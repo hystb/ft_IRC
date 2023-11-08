@@ -32,7 +32,7 @@ void Server::prepare(void) {
 }
 
 /* this function get a full entry in a std::string until it reach \r\n */
-int Server::getRawEntry(Client* client, std::string del, std::string &dest)
+int Server::getRawEntry(Client* client)
 {
 	char 		c_buff[1024];
 	std::string &buff = client->getBuffer();
@@ -43,20 +43,32 @@ int Server::getRawEntry(Client* client, std::string del, std::string &dest)
 	while (i < 1024)
 		c_buff[i++] = 0;
 	value = recv(client->getSocket(), c_buff, 1023, 0);
-	if (value == -1)
-		return (-2);
-	if (value == 0)
+	if (value <= 0)
 		return (-1);
 	buff.append(c_buff);
-	if (buff.length() >= del.length() && buff.compare(buff.length() - del.length(), del.length(), del) == 0)
+	return (1);
+}
+
+int Server::extractEntry(std::string del, std::string& dest, Client* client)
+{
+	std::string &buff = client->getBuffer();
+	
+	dest.clear();
+	if (buff.length() >= del.length() && buff.find(del) != std::string::npos)
 	{
-		buff.append("\0");
-		dest.append(buff);
-		buff.clear();
+		int j = buff.find(del);
+		std::string toAdd;
+
+		toAdd.append(buff.substr(0, j + del.length()));
+		toAdd.append("\0");
+		dest.append(toAdd);
+
+		buff = buff.substr(j + del.length(), buff.length());
 		return (1);
 	}
 	return (0);
 }
+
 
 void Server::start(void) {
 	struct sockaddr_in 	sockaddr_client;
@@ -92,22 +104,25 @@ void Server::start(void) {
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
+				Client*		client = _clients[_clients_fd[i].fd];
 				std::string messageReceived = "";
 				int			value;
 
-				value = getRawEntry(_clients[_clients_fd[i].fd], "\r\n", messageReceived);
+				value = getRawEntry(client);
 				if (value == -1)
 					handleClientDeconnection(i);
-				else if (value == -2)
-					interrupt();
 				else if (value == 0)
 					continue;
 				else if (value == 1)
 				{
-					try {
-						_commandHandler.handleCommand(messageReceived, _clients[_clients_fd[i].fd], _channels, _clients);
-					} catch (std::exception &e){
-						std::cout << "Error : " << e.what() << std::endl;
+					while (extractEntry("\r\n", messageReceived, client))
+					{
+						try {
+							_commandHandler.handleCommand(messageReceived, client, _channels, _clients);
+						} catch (std::exception &e){
+							std::cout << "Error : " << e.what() << std::endl;
+						}
+						messageReceived.clear();
 					}
 				}
 			}

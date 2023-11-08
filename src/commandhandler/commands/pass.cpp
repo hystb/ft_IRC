@@ -12,7 +12,7 @@ void CommandHandler::pass(Command& cmd)
 	Client					 *client = cmd.getClient();
 
 	if (client->isPassWordUnlocked())
-		return (client->sendMessage(client->getNickname() + " :You may not reregister\r\n"));
+		return (ERR_ALREADYREGISTERED(*client));
 	if (param.size() == 0)
 		refuseConnection(client, "Client PASS :Not enough parameters\r\n");
 	else if (param.at(0) != _pass)

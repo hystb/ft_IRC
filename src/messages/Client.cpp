@@ -12,6 +12,10 @@ std::string	Client::getUsername(void) const {
 	return _username;
 }
 
+std::string	Client::getRealname(void) const {
+	return _realname;
+}
+
 std::string&	Client::getBuffer(void) {
 	return _buffer;
 }
@@ -48,10 +52,24 @@ void	Client::setNickname(std::string& name) {
 	_nickname = name;
 }
 
+void	Client::setRealname(std::string name) {
+	_realname = name;
+}
+
+
 void 	Client::sendMessage(std::string message) const 
 {
 	if (send(_socketFd, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
+}
+
+void	Client::doLogin(void)
+{
+	if (isPassWordUnlocked() && getUsername() != "\0" && getNickname() != "undefined")
+	{
+		setUserConnected(1);
+		sendMessage(getUsername() + " :Welcome to the " + NETWORK_NAME + " Network, " + getNickname() + "\r\n");
+	}
 }
 
 /* this functions will broadcast all others clients that are in the same channels that the target client */

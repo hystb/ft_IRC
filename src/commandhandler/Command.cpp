@@ -14,7 +14,7 @@ const std::vector<std::string>& Command::getParameters(void) const {
 	return (_parameters);
 }
 
-const std::string&	Command::getContent(void) const {
+std::string Command::getContent(void) const {
 	return (_content);
 }
 
