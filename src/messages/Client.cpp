@@ -1,6 +1,6 @@
 # include <global.hpp>
 
-Client::Client(const std::string& nickname, int socket, Server& server) : _nickname(nickname), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server) {}
+Client::Client(const std::string& nickname, int socket, Server& server) : _nickname(nickname), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server), _username("\0") {}
 
 Client::~Client(void) {}
 
