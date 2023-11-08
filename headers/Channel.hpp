@@ -15,11 +15,13 @@ class Channel
 		Channel(const Channel &parent);
 
 		// client map
-		void	addClient(Client *client, bool isModerator);
+		void	addClient(Client *client, bool isOperator);
 		void	removeClient(Client *client);
 		void	setModerator(Client *client);
 		void	listClients(void);// for test only
 		bool 	isMember(Client *client);
+		bool 	isMember(const std::string &clientName);
+		bool	isOperator(Client *client);
 
 		// invited vector
 		void	addInvited(Client *client);

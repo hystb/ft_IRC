@@ -20,9 +20,9 @@ Channel& Channel::operator=(const Channel &parent)
 Channel::~Channel(void) {}
 
 // client map
-void Channel::addClient(Client *client, bool isModerator) {
+void Channel::addClient(Client *client, bool isOperator) {
 	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
-	_clients.insert(std::pair<Client*, bool>(client, isModerator));
+	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
 void Channel::removeClient(Client *client) {
@@ -39,18 +39,35 @@ void Channel::setModerator(Client *client) {
 }
 
 bool Channel::isMember(Client *client) {
-    std::map<Client*, bool>::iterator it = _clients.find(client);
-    if (it != _clients.end())
-        return true;
-    return false;
+	std::map<Client*, bool>::iterator it = _clients.find(client);
+	if (it != _clients.end())
+		return true;
+	return false;
+}
+
+bool Channel::isMember(const std::string &clientName) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->first->getUsername() == clientName)
+			return true;
+	}
+	return false;
+}
+
+bool Channel::isOperator(Client *client) {
+	std::map<Client*, bool>::iterator it = _clients.find(client);
+	if (it == _clients.end())
+		return false;
+	if (it->second)
+		return true;
+	return false;
 }
 
 void Channel::listClients() {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
-		bool isModerator = it->second;
+		bool isOperator = it->second;
 		std::cout << "Client: " << client->getNickname();
-		if (isModerator)
+		if (isOperator)
 			std::cout << " Moderator" << std::endl;
 		else
 			std::cout << " Ordinary mortals" << std::endl;
@@ -63,20 +80,20 @@ void Channel::addInvited(Client *client) {
 }
 
 void Channel::removeInvited(const std::string& username) {
-    for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
-        if ((*it)->getUsername() == username) {
-            _invited.erase(it);
-            break;
-        }
-    }
+	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+		if ((*it)->getUsername() == username) {
+			_invited.erase(it);
+			break;
+		}
+	}
 }
 
 bool Channel::isInvited(const std::string& username) {
-    for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
-        if ((*it)->getUsername() == username) {
-            return true;
-        }
-    }
+	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+		if ((*it)->getUsername() == username) {
+			return true;
+		}
+	}
 	return false;
 }
 
