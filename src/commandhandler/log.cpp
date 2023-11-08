@@ -37,8 +37,12 @@ void ERR_USERONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
 }
 
-void JOIN_MSG(const Client &client, const Channel *channel) {//fait maison apres les deux points
+void LOG_JOIN(const Client &client, const Channel *channel) {//fait maison apres les deux points
 	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Joined the server\r\n");
+}
+
+void LOG_KICK(const Client &client, const Channel *channel) {//fait maison apres les deux points
+	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
 }
 
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel) {

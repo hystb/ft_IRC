@@ -26,7 +26,7 @@ void CommandHandler::join(Command& cmd)
 		return ;
 	}
 	else {
-		JOIN_MSG(*cmd.getClient(), it->second);
+		LOG_JOIN(*cmd.getClient(), it->second);
 		RPL_TOPIC(*cmd.getClient(), it->second);
 		RPL_NAMREPLY(*cmd.getClient(), it->second);
 		RPL_ENDOFNAMES(*cmd.getClient(), it->second);

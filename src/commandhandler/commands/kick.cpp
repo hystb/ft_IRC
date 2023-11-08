@@ -27,6 +27,6 @@ void CommandHandler::kick(Command& cmd)
 	}
 	else {
 		it->second->removeClient(cmd.getClient());
-		//kick log
+		LOG_KICK(*cmd.getClient(), it->second);
 	}
 }
