@@ -17,7 +17,11 @@ Channel& Channel::operator=(const Channel &parent)
 	return (*this);
 }
 
-Channel::~Channel(void) {}
+Channel::~Channel(void) {
+	// for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
+	// 	delete it->first;
+	// }
+}
 
 // client map
 void Channel::addClient(Client *client, bool isOperator) {
@@ -28,6 +32,7 @@ void Channel::addClient(Client *client, bool isOperator) {
 void Channel::removeClient(Client *client) {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
 		if (it->first == client) {
+			// delete it->first;//is that ok ?
 			_clients.erase(it);
 		break;
 		}
@@ -42,7 +47,7 @@ bool Channel::isMember(Client *client) {
 	std::map<Client*, bool>::iterator it = _clients.find(client);
 	if (it != _clients.end())
 		return true;
-	return false;
+return false;
 }
 
 bool Channel::isMember(const std::string &clientName) {
