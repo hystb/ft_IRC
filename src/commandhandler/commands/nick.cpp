@@ -16,13 +16,15 @@ void CommandHandler::nick(Command& cmd)
 		if (nickname == it->second->getNickname())
 			return (client->sendMessage(client->getNickname() + " " + nickname + " :Nickname is already in use\r\n"));
 	}
-	if (client->getNickname() == "undefined")
-		client->sendMessage("NICK " + nickname + "\r\n");
-	else
+	if (client->getNickname() != "undefined")
 	{
 		client->sendMessage(":" + client->getNickname() + " NICK " + nickname +"\r\n");
 		Client::broadcastFromClient(cmd.getChannels(), client, ":" + client->getNickname() + " NICK " + nickname + "\r\n");
+		client->setNickname(nickname);
 	}
-	client->setNickname(nickname);
-	client->doLogin();
+	else
+	{
+		client->setNickname(nickname);
+		client->doLogin();
+	}
 }
