@@ -3,7 +3,7 @@
 void refuseConnection(Client* client, std::string why)
 {
 	client->sendMessage(why);
-	client->getServer().disconnectClient(client->getSocket());
+	client->setDisconnection(1);
 }
 
 void CommandHandler::pass(Command& cmd)
@@ -14,9 +14,9 @@ void CommandHandler::pass(Command& cmd)
 	if (client->isPassWordUnlocked())
 		return (ERR_ALREADYREGISTERED(*client));
 	if (param.size() == 0)
-		refuseConnection(client, "Client PASS :Not enough parameters\r\n");
+		refuseConnection(client, "undefined PASS :Not enough parameters\r\n");
 	else if (param.at(0) != _pass)
-		refuseConnection(client, "Client :Password incorrect\r\n");
+		refuseConnection(client, "undefined :Password incorrect\r\n");
 	else
 	{
 		client->setPassordUnlocked(1);

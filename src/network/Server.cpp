@@ -54,6 +54,8 @@ int Server::extractEntry(std::string del, std::string& dest, Client* client)
 	std::string &buff = client->getBuffer();
 	
 	dest.clear();
+	if (client->isToDisconnect())
+		return (0);
 	if (buff.length() >= del.length() && buff.find(del) != std::string::npos)
 	{
 		int j = buff.find(del);
@@ -68,7 +70,6 @@ int Server::extractEntry(std::string del, std::string& dest, Client* client)
 	}
 	return (0);
 }
-
 
 void Server::start(void) {
 	struct sockaddr_in 	sockaddr_client;
@@ -99,7 +100,6 @@ void Server::start(void) {
 				close(socket_client);
 			}
 		}
-
 		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
@@ -124,6 +124,8 @@ void Server::start(void) {
 						}
 						messageReceived.clear();
 					}
+					if (client->isToDisconnect())
+						handleClientDeconnection(i);
 				}
 			}
 		}

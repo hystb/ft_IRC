@@ -46,3 +46,7 @@ void ERR_ALREADYREGISTERED(const Client &client) {
 void ERR_NOTREGISTERED(const Client &client) {
 	client.sendMessage(client.getNickname() + " :You have not registered\r\n");
 }
+
+void ERR_NEEDMOREPARAMS(const Client &client, std::string commandName) {
+	client.sendMessage(client.getNickname() + " " + commandName + " :Not enough parameters");
+}

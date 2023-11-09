@@ -36,6 +36,14 @@ bool	Client::isConnected(void) const {
 	return _userConnected;
 }
 
+bool	Client::isToDisconnect(void) const {
+	return _toDisconnect;
+}
+
+void	Client::setDisconnection(bool value) {
+	_toDisconnect = value;
+}
+
 void	Client::setUsername(std::string& username){
 	_username = username;
 }

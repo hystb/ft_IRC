@@ -45,5 +45,6 @@ public:
 
 void ERR_ALREADYREGISTERED(const Client &client);
 void ERR_NOTREGISTERED(const Client &client);
+void ERR_NEEDMOREPARAMS(const Client &client, std::string commandName);
 
 #endif
