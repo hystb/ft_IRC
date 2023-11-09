@@ -5,6 +5,11 @@
 
 # define MAX_CLIENTS 1000
 # define NETWORK_NAME "Team Rocket"
+# define SERVER_NAME "ft_irc"
+# define SERVER_VERSION "1.0"
+# define RULES_NICKLEN "10"
+# define RULES_CHANELLEN "50"
+# define RULES_TOPICLEN "200"
 
 class Server
 {

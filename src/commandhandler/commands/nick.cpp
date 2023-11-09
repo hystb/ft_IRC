@@ -1,5 +1,12 @@
 # include <global.hpp>
 
+int isInvalid(std::string nickname)
+{
+	if (nickname.find_first_of(" :#") != std::string::npos)
+		return (1);
+	return (0);
+}
+
 void CommandHandler::nick(Command& cmd)
 {
 	std::vector<std::string> 	param = cmd.getParameters();
@@ -7,14 +14,16 @@ void CommandHandler::nick(Command& cmd)
 	std::string					nickname;
 
 	if (param.size() == 0)
-		return (client->sendMessage(client->getNickname() + " :No nickname given\r\n"));
+		return (ERR_NONICKNAMEGIVEN(*client));
 	nickname = param.at(0);
 	if (nickname == "undefined")
-		return (client->sendMessage(client->getNickname() + " :Forbidden nickname\r\n"));
+		return (ERR_ERRONEUSNICKNAME(*client, nickname));
+	if (isInvalid(nickname))
+		return (ERR_ERRONEUSNICKNAME(*client, nickname));
 	for (std::map<int, Client*>::iterator it = cmd.getClients().begin(); it != cmd.getClients().end(); it++)
 	{
 		if (nickname == it->second->getNickname())
-			return (client->sendMessage(client->getNickname() + " " + nickname + " :Nickname is already in use\r\n"));
+			return (ERR_NICKNAMEINUSE(*client, nickname));
 	}
 	if (client->getNickname() != "undefined")
 	{
@@ -24,6 +33,7 @@ void CommandHandler::nick(Command& cmd)
 	}
 	else
 	{
+		client->sendMessage("ebillon!@localhost NICK ebillon\r\n");
 		client->setNickname(nickname);
 		client->doLogin();
 	}

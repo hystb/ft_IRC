@@ -1,8 +1,11 @@
 # include <global.hpp>
 
-void refuseConnection(Client* client, std::string why)
+void refuseConnection(Client* client, std::string why, Command& cmd)
 {
-	client->sendMessage(why);
+	if (why == "ARGS")
+		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());
+	if (why == "FAIL")
+		ERR_PASSWDMISMATCH(*client);
 	client->setDisconnection(1);
 }
 
@@ -14,9 +17,9 @@ void CommandHandler::pass(Command& cmd)
 	if (client->isPassWordUnlocked())
 		return (ERR_ALREADYREGISTERED(*client));
 	if (param.size() == 0)
-		refuseConnection(client, "undefined PASS :Not enough parameters\r\n");
+		refuseConnection(client, "ARGS", cmd);
 	else if (param.at(0) != _pass)
-		refuseConnection(client, "undefined :Password incorrect\r\n");
+		refuseConnection(client, "FAIL", cmd);
 	else
 	{
 		client->setPassordUnlocked(1);

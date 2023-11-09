@@ -1,6 +1,6 @@
 # include <global.hpp>
 
-Client::Client(const std::string& nickname, int socket, Server& server) : _nickname(nickname), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server), _username("\0") {}
+Client::Client(const std::string& nickname, int socket, Server& server) : _nickname(nickname), _socketFd(socket), _passwordUnlocked(0), _userConnected(0), _server(server), _username("\0"), _toDisconnect(0) {}
 
 Client::~Client(void) {}
 
@@ -76,7 +76,13 @@ void	Client::doLogin(void)
 	if (isPassWordUnlocked() && getUsername() != "\0" && getNickname() != "undefined")
 	{
 		setUserConnected(1);
-		sendMessage(getUsername() + " :Welcome to the " + NETWORK_NAME + " Network, " + getNickname() + "\r\n");
+		RPL_WELCOME(*this);
+		RPL_YOURHOST(*this);
+		RPL_MYINFO(*this);
+		RPL_ISUPPORT(*this);
+		RPL_MOTDSTART(*this);
+		RPL_MOTD(*this, "wow incroyable");
+		RPL_ENDOFMOTD(*this);
 	}
 }
 
