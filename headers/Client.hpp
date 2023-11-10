@@ -35,6 +35,8 @@ class Client
 		void doLogin(void);
 
 		static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
+		static void warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels);
+		static std::string getClientID(const Client &client);
 		
 	private:
 		Client(void);

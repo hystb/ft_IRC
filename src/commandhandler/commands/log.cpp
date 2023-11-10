@@ -103,3 +103,4 @@ void RPL_ENDOFMOTD(const Client &client) {
 void ERR_UNKNOWNCOMMAND(const Client &client) {
 	client.sendMessage(":localhost 421 " + client.getNickname() + " : Unknowm command\r\n");
 }
+

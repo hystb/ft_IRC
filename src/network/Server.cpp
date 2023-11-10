@@ -26,8 +26,8 @@ void Server::prepare(void) {
 	{
 		char ip[INET_ADDRSTRLEN];
 		inet_ntop(PF_INET, &(_sockaddr.sin_addr), ip, INET_ADDRSTRLEN);
-		std::cout << "Server now listening on " << ip << ":" << _port << std::endl;
-		std::cout << "The password is : " << _password << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
 	}
 }
 
@@ -88,12 +88,12 @@ void Server::start(void) {
 			if (socket_client < 0)
 				interrupt();
 			if (_clients_nb < MAX_CLIENTS) { // mean that there is some place
-				std::cout << "There is a new client with the socket number " << socket_client << std::endl;
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
 				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
 				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << std::endl;
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -134,12 +134,15 @@ void Server::start(void) {
 
 void Server::handleClientDeconnection(int index)
 {
-	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
+	Client *client = _clients[_clients_fd[index].fd];
 
-	delete _clients[_clients_fd[index].fd];
-	_clients.erase(_clients_fd[index].fd);
-	close(_clients_fd[index].fd);
-
+	if (client->getNickname() != "undefined" && client->getUsername() != "\0")
+		std::cout << Server::getServerLog() << GRAY << client->getNickname() << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+	else
+		std::cout << Server::getServerLog() << GRAY << "Unlogged client disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+	_clients.erase(client->getSocket());
+	close(client->getSocket());
+	delete client;
     for (int i = index; i < _clients_nb; i++) {
         _clients_fd[i] = _clients_fd[i + 1];
     }
@@ -172,6 +175,13 @@ void Server::sendMessage(int client, std::string message)
 {
 	if (send(client, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
+}
+
+std::string Server::getServerLog(void) {
+	std::stringstream ss;
+
+	ss << BOLD << + "[SERVER] " << RESET;
+	return (ss.str());
 }
 
 Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients) {

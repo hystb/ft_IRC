@@ -19,13 +19,13 @@ int checkPort(std::string port)
 int main(int argc, char const *argv[])
 {
 	if (argc != 3)
-		std::cerr << "Bad usage ! ./ircserv <port> <password>" << std::endl;
+		std::cerr << RED <<  "Bad usage ! ./ircserv <port> <password>" << RESET << std::endl;
 	else
 	{
 		if (checkPort(argv[1]) == -1)
-			return (std::cout << "Error in port syntax (0 - 65 535) !" << std::endl, 1);
+			return (std::cout << RED << "Error in port syntax (0 - 65 535) !" << RESET << std::endl, 1);
 		if (checkPort(argv[1]) < 1025)
-			std::cout << "Warning ! This port might be reserved to a root access !" << std::endl;
+			std::cout << YELLOW << "Warning ! This port might be reserved to a root access !" << RESET << std::endl;
 		try {
 			std::map<int, Client*> 	clients;
 			std::string				password = argv[2];
@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
 			CommandHandler commandHandler = CommandHandler(password);
 			Server server = Server(checkPort(argv[1]), password, commandHandler, clients);
 		} catch (std::exception &e) {
-			perror("la : ");
+			perror("la : ");// faudra supprimer ça batard
 			std::cout << e.what() << std::endl;
 		}
 	}

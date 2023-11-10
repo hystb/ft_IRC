@@ -49,6 +49,8 @@ class Server
 
 		void disconnectClient(int index);
 
+		static std::string getServerLog(void);
+
 		/* exceptions */
 		class initSocketException : public std::exception {
 			public:

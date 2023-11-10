@@ -40,6 +40,10 @@ bool	Client::isToDisconnect(void) const {
 	return _toDisconnect;
 }
 
+std::string Client::getClientID(const Client &client) {
+	return (":" + client.getNickname() + "!" + client.getUsername() + "@localhost");
+}
+
 void	Client::setDisconnection(bool value) {
 	_toDisconnect = value;
 }
@@ -64,11 +68,10 @@ void	Client::setRealname(std::string name) {
 	_realname = name;
 }
 
-
 void 	Client::sendMessage(std::string message) const 
 {
 	if (send(_socketFd, message.c_str(), message.length(), 0) < 0)
-		std::cout << "Failed to send a message to the client !" << std::endl;	
+		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
 }
 
 void	Client::doLogin(void)
@@ -91,6 +94,7 @@ void	Client::doLogin(void)
 		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%\r\n");
 		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%%%\r\n");
 		RPL_ENDOFMOTD(*this);
+		std::cout << Server::getServerLog() << "Client " << YELLOW << BOLD << getUsername() << RESET << " successfuly log into the server as " << GREEN << BOLD << getNickname() << RESET << " (" << getSocket() << ")" << std::endl;  
 	}
 }
 
