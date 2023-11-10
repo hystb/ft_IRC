@@ -137,7 +137,7 @@ void Server::handleClientDeconnection(int index)
 	Client *client = _clients[_clients_fd[index].fd];
 
 	if (client->getNickname() != "undefined" && client->getUsername() != "\0")
-		std::cout << Server::getServerLog() << GRAY << client->getNickname() << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 	else
 		std::cout << Server::getServerLog() << GRAY << "Unlogged client disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 	_clients.erase(client->getSocket());
