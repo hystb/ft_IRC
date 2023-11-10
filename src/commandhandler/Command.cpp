@@ -2,38 +2,45 @@
 
 Command::~Command(void) {}
 
-const std::string&			 	Command::getInput(void) const {
+const std::string&	Command::getInput(void) const {
 	return (_input);
 }
 
-const std::string& 				Command::getCommand(void) const {
+const std::string& 	Command::getCommand(void) const {
 	return (_command);
 }
 
-const std::vector<std::string>& 	Command::getParameters(void) const {
+const std::vector<std::string>& Command::getParameters(void) const {
 	return (_parameters);
 }
 
-const std::string&				Command::getContent(void) const {
+std::string Command::getContent(void) const {
 	return (_content);
 }
 
-std::map<std::string, Channel*>& Command::getChannels(void) {
+std::map<std::string, Channel*>&	Command::getChannels(void) {
 	return (_channels);
 }
 
-Client* Command::getClient(void) {
+std::map<int, Client*>&	Command::getClients(void) {
+	return (_clients);
+}
+
+Client*	Command::getClient(void) {
 	return (_client);
 }
 
 void Command::parse(void) 
 {
 	size_t i, j = 0;
-	std::string element = _input.substr(0, _input.length() - 1); // to remove \n
+	std::string element = _input.substr(0, _input.length() - 2); // to remove \n
 	
 	i = element.find_first_of(" ");
 	if (i == std::string::npos)
-		throw (invalidException());
+	{
+		_command = element;
+		return ;
+	}
 	_command = element.substr(0, i);
 	element = element.substr(i + 1, element.length());
 	
@@ -56,7 +63,7 @@ void Command::parse(void)
 	}
 }
 
-Command::Command(std::string input, Client *client, std::map<std::string, Channel*>& channels) : _input(input), _client(client), _channels(channels)
+Command::Command(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*>& clients) : _input(input), _client(client), _channels(channels), _clients(clients)
 {
 	_command = "\0";
 	_content = "\0";

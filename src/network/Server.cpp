@@ -1,18 +1,5 @@
 # include <global.hpp>
 
-Server::Server(void) { }
-
-Server::Server(const Server &parent)
-{
-	(*this) = parent;
-}
-
-Server& Server::operator=(const Server &parent)
-{
-	(void) parent;
-	return (*this);
-}
-
 Server::~Server(void) {}
 
 /* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
@@ -39,35 +26,49 @@ void Server::prepare(void) {
 	{
 		char ip[INET_ADDRSTRLEN];
 		inet_ntop(PF_INET, &(_sockaddr.sin_addr), ip, INET_ADDRSTRLEN);
-		std::cout << "Server now listening on " << ip << ":" << _port << std::endl;
-		std::cout << "The password is : " << _password << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
 	}
 }
 
 /* this function get a full entry in a std::string until it reach \r\n */
-int Server::getRawEntry(std::string &buff, int fd, std::string del)
+int Server::getRawEntry(Client* client)
 {
-	char 	c_buff[1024];
-	int 	i;
-	int		value;
+	char 		c_buff[1024];
+	std::string &buff = client->getBuffer();
+	int 		i;
+	int			value;
 
-	while (true)
+	i = 0;
+	while (i < 1024)
+		c_buff[i++] = 0;
+	value = recv(client->getSocket(), c_buff, 1023, 0);
+	if (value <= 0)
+		return (-1);
+	buff.append(c_buff);
+	return (1);
+}
+
+int Server::extractEntry(std::string del, std::string& dest, Client* client)
+{
+	std::string &buff = client->getBuffer();
+	
+	dest.clear();
+	if (client->isToDisconnect())
+		return (0);
+	if (buff.length() >= del.length() && buff.find(del) != std::string::npos)
 	{
-		i = 0;
-		while (i < 1024)
-			c_buff[i++] = 0;
-		value = recv(fd, c_buff, 1023, 0);
-		if (value == -1)
-			return (-2);
-		if (value == 0)
-			return (-1);
-		buff.append(c_buff);		
-		if (buff.compare(buff.length() - del.length(), del.length(), del) == 0)
-		{
-			buff.append("\0");
-			return (0);
-		}
+		int j = buff.find(del);
+		std::string toAdd;
+
+		toAdd.append(buff.substr(0, j + del.length()));
+		toAdd.append("\0");
+		dest.append(toAdd);
+
+		buff = buff.substr(j + del.length(), buff.length());
+		return (1);
 	}
+	return (0);
 }
 
 void Server::start(void) {
@@ -87,43 +88,44 @@ void Server::start(void) {
 			if (socket_client < 0)
 				interrupt();
 			if (_clients_nb < MAX_CLIENTS) { // mean that there is some place
-				std::cout << "There is a new client with the socket number " << socket_client << std::endl;
 				_clients_fd[_clients_nb + 1].fd = socket_client;
 				_clients_fd[_clients_nb + 1].events = POLLIN;
+				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
-				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client)));
+				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << std::endl;
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
 				close(socket_client);
 			}
 		}
-
 		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
+				Client*		client = _clients[_clients_fd[i].fd];
 				std::string messageReceived = "";
 				int			value;
 
-				value = getRawEntry(messageReceived, _clients_fd[i].fd, "\r\n");
+				value = getRawEntry(client);
 				if (value == -1)
 					handleClientDeconnection(i);
-				else if (value == -2)
-					interrupt();
-				else
+				else if (value == 0)
+					continue;
+				else if (value == 1)
 				{
-					std::cout << messageReceived;
-					for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+					while (extractEntry("\r\n", messageReceived, client))
 					{
-						if (it->second->getSocket() != _clients_fd[i].fd)
-							it->second->sendMessage(messageReceived);
+						try {
+							_commandHandler.handleCommand(messageReceived, client, _channels, _clients);
+						} catch (std::exception &e){
+							std::cout << "Error : " << e.what() << std::endl;
+						}
+						messageReceived.clear();
 					}
-					// try {
-					// 	_command_handler.handleCommand(_clients_fd[i].fd, messageReceived);
-					// } catch (std::exception &e){
-					// 	std::cout << "Error : " << e.what() << std::endl;
-					// }
+					if (client->isToDisconnect())
+						handleClientDeconnection(i);
 				}
 			}
 		}
@@ -132,17 +134,28 @@ void Server::start(void) {
 
 void Server::handleClientDeconnection(int index)
 {
-	Client *save;
-	std::cout << "[" << _clients_fd[index].fd << "]: " << "disconnected !" << std::endl;
+	Client *client = _clients[_clients_fd[index].fd];
 
-	delete _clients[_clients_fd[index].fd];
-	_clients.erase(_clients_fd[index].fd);
-	close(_clients_fd[index].fd);
-
+	if (client->getNickname() != "undefined" && client->getUsername() != "\0")
+		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+	else
+		std::cout << Server::getServerLog() << GRAY << "Unlogged client disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+	_clients.erase(client->getSocket());
+	close(client->getSocket());
+	delete client;
     for (int i = index; i < _clients_nb; i++) {
         _clients_fd[i] = _clients_fd[i + 1];
     }
     _clients_nb--;
+}
+
+void Server::disconnectClient(int fd)
+{
+	int i = 0;
+
+	while (i <=_clients_nb && _clients_fd[i].fd != fd)
+		i++;
+	handleClientDeconnection(i);
 }
 
 void Server::closeFds(void)
@@ -158,13 +171,20 @@ void Server::interrupt(void)
 	throw (crashException());
 }
 
-void Server::sendMessage(int client, std::string message) // a remplacer et a mettre dans les clients !
+void Server::sendMessage(int client, std::string message)
 {
 	if (send(client, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
 }
 
-Server::Server(uint16_t port, std::string password) : _port(port), _password(password) {
+std::string Server::getServerLog(void) {
+	std::stringstream ss;
+
+	ss << BOLD << + "[SERVER] " << RESET;
+	return (ss.str());
+}
+
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients) {
 	try {
 		prepare();
 	} catch (std::exception &e)

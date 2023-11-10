@@ -3,57 +3,103 @@
 // canonical
 Channel::Channel(void) {}
 
-Channel::Channel(const std::string& name) {}
-
-Channel::Channel(const Channel &parent)
+Channel::Channel(const std::string& name, const std::string& password, Client *client) : _name(name), _password(password)
 {
-	(*this) = parent;
-}
-
-Channel& Channel::operator=(const Channel &parent)//const ?
-{
-	if (this != &parent) {
-		// for (std::map<Client, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		// 	parent.addClient(it->first, it->second);
-		// 	// parent._clients.insert(std::pair<Client, bool>(it->first, it->second));
-		// }
-	}
-	return (*this);
+	addClient(client, 1);
 }
 
 Channel::~Channel(void) {}
 
-// map
-// void Channel::addClient(const Client &client) {
-// 	_clients.insert(std::pair<Client, bool>(client, 0));
-// }
-
-void Channel::addClient(Client *client, bool isModerator) {
-	_clients.insert(std::pair<Client*, bool>(client, isModerator));
+// client map
+void Channel::addClient(Client *client, bool isOperator) {
+	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
+	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
-void Channel::removeClient(const std::string& username) {
-	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ) {
-		if (it->first->getUsername() == username) {
-			_clients.erase(it++);
-		} else {
-			++it;
+void Channel::removeClient(Client *client) {
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
+		if (it->first == client) {
+			_clients.erase(it);
+		break;
 		}
 	}
+}
+
+void Channel::setModerator(Client *client) {
+	_clients[client] = 1;
+}
+
+bool Channel::isMember(Client *client) {
+	std::map<Client*, bool>::iterator it = _clients.find(client);
+	if (it != _clients.end())
+		return true;
+return false;
+}
+
+bool Channel::isMember(const std::string &clientName) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->first->getUsername() == clientName)
+			return true;
+	}
+	return false;
+}
+
+bool Channel::isOperator(Client *client) {
+	std::map<Client*, bool>::iterator it = _clients.find(client);
+	if (it == _clients.end())
+		return false;
+	if (it->second)
+		return true;
+	return false;
 }
 
 void Channel::listClients() {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
-		bool isModerator = it->second;
-		std::cout << "Client: " << client->getUsername();
-		if (isModerator)
+		bool isOperator = it->second;
+		std::cout << "Client: " << client->getNickname();
+		if (isOperator)
 			std::cout << " Moderator" << std::endl;
 		else
 			std::cout << " Ordinary mortals" << std::endl;
 	}
 }
 
-void Channel::setModerator(Client *client) {
-	_clients[client] = 1;
+// invited vector
+void Channel::addInvited(Client *client) {
+	_invited.push_back(client);
+}
+
+void Channel::removeInvited(const std::string& username) {
+	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+		if ((*it)->getUsername() == username) {
+			_invited.erase(it);
+			break;
+		}
+	}
+}
+
+bool Channel::isInvited(const std::string& username) {
+	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+		if ((*it)->getUsername() == username) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void Channel::listInvited(void) {} //to do
+
+// getter
+std::string	Channel::getName(void) const { return _name; }
+std::string	Channel::getTopic(void) const { return _topic; }
+std::string	Channel::getPassword(void) const { return _password; }
+int			Channel::getLimit(void) const { return _limit; }
+
+// extra
+void	Channel::sendMessage(std::string message) const {}
+
+
+std::map<Client*, bool>& Channel::getClients(void) {
+	return (_clients);
 }
