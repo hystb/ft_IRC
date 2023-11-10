@@ -81,7 +81,15 @@ void	Client::doLogin(void)
 		RPL_MYINFO(*this);
 		RPL_ISUPPORT(*this);
 		RPL_MOTDSTART(*this);
-		RPL_MOTD(*this, "wow incroyable");
+		RPL_MOTD(*this, "La team rocket s'envole vers d'autres ciels !\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%        %%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%      %%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%%%\r\n");
 		RPL_ENDOFMOTD(*this);
 	}
 }

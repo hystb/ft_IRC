@@ -10,18 +10,19 @@ CommandHandler::~CommandHandler(void)
 
 void CommandHandler::commands(Command &cmd)
 {
-	std::string	commands[8] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC"};
-	void (CommandHandler::*functions[8])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic};
+	std::string	commands[9] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC", "PING"};
+	void (CommandHandler::*functions[9])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic, &CommandHandler::ping};
 
 	if (cmd.getCommand() == "CAP")
 		return ;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		if ((i > 0 && !cmd.getClient()->isPassWordUnlocked()) || (i > 3 && !cmd.getClient()->isConnected()))
 			return (ERR_NOTREGISTERED(*cmd.getClient()));
 		if (commands[i] == cmd.getCommand())
 			return ((this->*(functions[i]))(cmd));
 	}
+	return (ERR_UNKNOWNCOMMAND(*cmd.getClient()));
 }
 
 void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels, std::map<int, Client*> &clients)

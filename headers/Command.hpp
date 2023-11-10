@@ -52,8 +52,6 @@ void RPL_MOTDSTART(const Client &client);
 void RPL_MOTD(const Client &client, std::string motd);
 void RPL_ENDOFMOTD(const Client &client);
 
-
-
 void ERR_ALREADYREGISTERED(const Client &client);
 void ERR_NOTREGISTERED(const Client &client);
 void ERR_NEEDMOREPARAMS(const Client &client, std::string commandName);
@@ -61,5 +59,6 @@ void ERR_NICKNAMEINUSE(const Client &client, std::string nick);
 void ERR_NONICKNAMEGIVEN(const Client &client);
 void ERR_ERRONEUSNICKNAME(const Client &client, std::string nick);
 void ERR_PASSWDMISMATCH(const Client &client);
+void ERR_UNKNOWNCOMMAND(const Client &client);
 
 #endif

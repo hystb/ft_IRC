@@ -22,6 +22,8 @@ private:
 	void invite(Command& cmd);
 	void topic(Command& cmd);
 	void mode(Command& cmd);
+	void ping(Command& cmd);
+
 
 	/* vars */
 	std::string& 				_pass;

@@ -16,7 +16,7 @@ void CommandHandler::nick(Command& cmd)
 	if (param.size() == 0)
 		return (ERR_NONICKNAMEGIVEN(*client));
 	nickname = param.at(0);
-	if (nickname == "undefined")
+	if (nickname == "undefined" || nickname.length() > std::atoi(RULES_NICKLEN))
 		return (ERR_ERRONEUSNICKNAME(*client, nickname));
 	if (isInvalid(nickname))
 		return (ERR_ERRONEUSNICKNAME(*client, nickname));
@@ -33,7 +33,6 @@ void CommandHandler::nick(Command& cmd)
 	}
 	else
 	{
-		client->sendMessage("ebillon!@localhost NICK ebillon\r\n");
 		client->setNickname(nickname);
 		client->doLogin();
 	}

@@ -97,5 +97,9 @@ void RPL_MOTD(const Client &client, std::string motd) {
 }
 
 void RPL_ENDOFMOTD(const Client &client) {
-	client.sendMessage(":localhost 375 " + client.getNickname() + " :End of /MOTD command.\r\n");
+	client.sendMessage(":localhost 376 " + client.getNickname() + " :End of /MOTD command.\r\n");
+}
+
+void ERR_UNKNOWNCOMMAND(const Client &client) {
+	client.sendMessage(":localhost 421 " + client.getNickname() + " : Unknowm command\r\n");
 }
