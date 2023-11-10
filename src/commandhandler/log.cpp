@@ -98,8 +98,7 @@ void RPL_YOURHOST(const Client &client) {
 }
 
 void RPL_CREATED(const Client &client) {
-	// changer
-	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created before !\r\n");
+	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created 15th october 1996 !\r\n");
 }
 
 void RPL_MYINFO(const Client &client) {
