@@ -12,9 +12,9 @@ src/messages/Channel.cpp\
 src/messages/Client.cpp\
 src/commandhandler/CommandHandler.cpp\
 src/commandhandler/Command.cpp\
+src/commandhandler/log.cpp\
 src/commandhandler/commands/invite.cpp\
 src/commandhandler/commands/join.cpp\
-src/commandhandler/commands/log.cpp\
 src/commandhandler/commands/kick.cpp\
 src/commandhandler/commands/mode.cpp\
 src/commandhandler/commands/nick.cpp\

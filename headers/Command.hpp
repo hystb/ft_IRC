@@ -61,4 +61,24 @@ void ERR_ERRONEUSNICKNAME(const Client &client, std::string nick);
 void ERR_PASSWDMISMATCH(const Client &client);
 void ERR_UNKNOWNCOMMAND(const Client &client);
 
+void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
+void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
+void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
+void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
+void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command);
+void ERR_NOSUCHCHANNEL(const Client &client, const Channel *channel);
+void ERR_NOTONCHANNEL(const Client &client, const Channel *channel);
+void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel);
+void LOG_JOIN(const Client &client, const Channel *channel);
+void LOG_KICK(const Client &client, const Channel *channel);
+void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
+void RPL_NAMREPLY(const Client &client, const Channel *channel);
+void RPL_TOPIC(const Client &client, const Channel *channel);
+void ERR_USERONCHANNEL(const Client &client, const Channel *channel);
+void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
+void RPL_INVITING(const Client &client, const Channel *channel);
+
 #endif
+
+
+
