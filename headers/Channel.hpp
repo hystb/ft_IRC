@@ -36,10 +36,11 @@ class Channel
 		int			getLimit(void) const;
 
 		// extra
-		void	sendMessage(std::string message) const;
+		void	sendMessage(std::string message);
 
 		/* getters */
 		std::map<Client*, bool>& getClients(void);
+
 	private:
 		std::string 			_name;
 		std::string 			_topic;

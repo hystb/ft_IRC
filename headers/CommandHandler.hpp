@@ -23,6 +23,7 @@ private:
 	void topic(Command& cmd);
 	void mode(Command& cmd);
 	void ping(Command& cmd);
+	void privmsg(Command& cmd);
 
 	/* vars */
 	std::string& 				_pass;

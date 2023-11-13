@@ -19,11 +19,11 @@ int checkPort(std::string port)
 int main(int argc, char const *argv[])
 {
 	if (argc != 3)
-		std::cerr << RED <<  "Bad usage ! ./ircserv <port> <password>" << RESET << std::endl;
+		std::cerr << Server::getServerLog() << RED <<  "Bad usage ! ./ircserv <port> <password>" << RESET << std::endl;
 	else
 	{
 		if (checkPort(argv[1]) == -1)
-			return (std::cout << RED << "Error in port syntax (0 - 65 535) !" << RESET << std::endl, 1);
+			return (std::cout << Server::getServerLog() << RED << "Error in port syntax (0 - 65 535) !" << RESET << std::endl, 1);
 		if (checkPort(argv[1]) < 1025)
 			std::cout << YELLOW << "Warning ! This port might be reserved to a root access !" << RESET << std::endl;
 		try {

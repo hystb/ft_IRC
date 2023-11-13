@@ -97,9 +97,13 @@ std::string	Channel::getPassword(void) const { return _password; }
 int			Channel::getLimit(void) const { return _limit; }
 
 // extra
-void	Channel::sendMessage(std::string message) const {}
+void	Channel::sendMessage(std::string message) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		it->first->sendMessage(message);
+}
 
 
 std::map<Client*, bool>& Channel::getClients(void) {
 	return (_clients);
 }
+

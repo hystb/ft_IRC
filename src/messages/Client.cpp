@@ -85,16 +85,16 @@ void	Client::doLogin(void)
 		RPL_ISUPPORT(*this);
 		RPL_MOTDSTART(*this);
 		RPL_MOTD(*this, "La team rocket s'envole vers d'autres ciels !\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%        %%%%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%      %%%%%\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%\r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%%% \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%        %%%%%%% \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%     \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%      %%%%%     \r\n");
+		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%  \r\n");
 		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%%%\r\n");
 		RPL_ENDOFMOTD(*this);
-		std::cout << Server::getServerLog() << "Client " << YELLOW << BOLD << getUsername() << RESET << " successfuly log into the server as " << GREEN << BOLD << getNickname() << RESET << " (" << getSocket() << ")" << std::endl;  
+		std::cout << Server::getServerLog() << GRAY << "Client " << RESET << YELLOW << BOLD << getUsername() << RESET << GRAY << " successfuly log into the server as " << GREEN << BOLD << getNickname() << RESET << GRAY << " (" << getSocket() << ")" << std::endl;  
 	}
 }
 
