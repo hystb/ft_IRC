@@ -9,9 +9,8 @@ void CommandHandler::join(Command& cmd)
 	}
 	it = cmd.getChannels().find(cmd.getParameters().at(0));
 	if (it == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), it->second);
-		cmd.getChannels().insert(std::pair<std::string, Channel*>(cmd.getParameters().at(0), \
-		new Channel(cmd.getParameters().at(0), cmd.getParameters().at(1), cmd.getClient())));
+		ERR_NOSUCHCHANNEL(*cmd.getClient(), cmd.getParameters().at(0));
+		cmd.getChannels().insert(std::pair<std::string, Channel*>(cmd.getParameters().at(0), new Channel(cmd.getParameters().at(0), cmd.getParameters().at(1), cmd.getClient())));
 		return ;
 	}
 	else if (!(it->second->isInvited(cmd.getClient()->getUsername()))) {
