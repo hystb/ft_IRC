@@ -1,11 +1,14 @@
 # include <global.hpp>
 
+int Channel::_channel_nb = 0;
+
 // canonical
 Channel::Channel(void) {}
 
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
+	_channel_nb += 1;
 	addClient(client, 1);
-	std::cout << "Channel created" << std::endl;
+	std::cout << "Channel: constructor called" << std::endl;
 }
 
 Channel::~Channel(void) {}

@@ -34,6 +34,7 @@ class Channel
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		int			getLimit(void) const;
+		static int 				_channel_nb;
 
 		// setter
 		void	setPassword(const std::string& password);

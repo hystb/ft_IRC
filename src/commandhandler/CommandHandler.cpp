@@ -25,7 +25,7 @@ void CommandHandler::commands(Command &cmd)
 	return (ERR_UNKNOWNCOMMAND(*cmd.getClient()));
 }
 
-void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels, std::map<int, Client*> &clients)
+void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*> &channels, std::map<int, Client*> &clients)
 {
 	Command cmd = Command(input, client, channels, clients);
 	commands(cmd);

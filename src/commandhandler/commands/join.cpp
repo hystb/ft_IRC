@@ -16,18 +16,18 @@ void CommandHandler::join(Command& cmd)
 		cmd.listChannel();
 		return ;
 	}
-	else if (!(it->second->isInvited(cmd.getClient()->getUsername()))) {
-		ERR_INVITEONLYCHAN(*cmd.getClient(), it->second);
-		return ;
-	}
-	else if (it->second->getLimit() >= cmd.getChannels().size()) {
-		ERR_CHANNELISFULL(*cmd.getClient(), it->second);
-		return ;
-	}
-	else if (cmd.getParameters().at(1) != it->second->getPassword()) {
-		ERR_BADCHANNELKEY(*cmd.getClient(), it->second);
-		return ;
-	}
+	// else if (!(it->second->isInvited(cmd.getClient()->getUsername()))) {//et que le serveur est invite only
+	// 	ERR_INVITEONLYCHAN(*cmd.getClient(), it->second);
+	// 	return ;
+	// }
+	// else if (it->second->getLimit() >= cmd.getChannels().size()) {
+	// 	ERR_CHANNELISFULL(*cmd.getClient(), it->second);
+	// 	return ;
+	// }
+	// else if (cmd.getParameters().at(1) != it->second->getPassword()) {
+	// 	ERR_BADCHANNELKEY(*cmd.getClient(), it->second);
+	// 	return ;
+	// }
 	else {
 		LOG_JOIN(*cmd.getClient(), it->second);
 		RPL_TOPIC(*cmd.getClient(), it->second);
@@ -37,5 +37,3 @@ void CommandHandler::join(Command& cmd)
 		cmd.listChannel();
 	}
 }
-
-		// cmd.getChannels().insert(std::pair<std::string, Channel*>(cmd.getParameters().at(0), new Channel(cmd.getParameters().at(0), cmd.getParameters().at(1), cmd.getClient())));
