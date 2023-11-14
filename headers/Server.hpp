@@ -31,7 +31,7 @@ class Server
 		void prepare(void);
 		void start(void);
 
-		void handleClientDeconnection(int index);
+		void handleClientDeconnection(int index, int type);
 		void sendMessage(int client, std::string message);
 
 		/* exit and errors functions */
