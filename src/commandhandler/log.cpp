@@ -20,8 +20,8 @@ void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std:
 	client.sendMessage(client.getUsername() + " " + command +" :Not enough parameters\r\n");
 }
 
-void ERR_NOSUCHCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :No such channel\r\n");
+void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName) {
+	client.sendMessage(client.getUsername() + " " + channelName + " :No such channel\r\n");
 }
 
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {

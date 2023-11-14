@@ -111,7 +111,7 @@ void Server::start(void) {
 				value = getRawEntry(client);
 				if (value == -1)
 					handleClientDeconnection(i);
-				else if (value == 0)
+				else if (value == 0) 
 					continue;
 				else if (value == 1)
 				{

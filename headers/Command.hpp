@@ -31,10 +31,11 @@ public:
 	const std::vector<std::string>& 	getParameters(void) const;
 	std::string							getContent(void) const;
 
-	std::map<std::string, Channel*>&  	getChannels(void);
+	std::map<std::string, Channel*>&	getChannels(void);
 	std::map<int, Client*>&				getClients(void);
 	Client* 							getClient(void);
 
+	void	listChannel(void);
 
 	/* exceptions */
 	class invalidException : public std::exception {
@@ -72,7 +73,7 @@ void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
 void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command);
-void ERR_NOSUCHCHANNEL(const Client &client, const Channel *channel);
+void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName);
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel);
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel);
 void LOG_JOIN(const Client &client, const Channel *channel);

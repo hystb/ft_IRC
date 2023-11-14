@@ -10,7 +10,7 @@ void CommandHandler::invite(Command& cmd)
 	}
 	it = cmd.getChannels().find(cmd.getParameters().at(0));
 	if (it == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), it->second);
+		ERR_NOSUCHCHANNEL(*cmd.getClient(), cmd.getParameters().at(0));
 		return;
 	}
 	// if (channel is on invite only && !it->second->isOperator(cmd.getClient())) { //need to do mode
