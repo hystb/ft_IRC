@@ -6,9 +6,11 @@ int Channel::_channel_nb = 0;
 Channel::Channel(void) {}
 
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
-	_channel_nb += 1;
 	addClient(client, 1);
+	_inviteOnlyMode = 0;
+	_limit = 200;
 	std::cout << "Channel: constructor called" << std::endl;
+	_channel_nb += 1;//to delete
 }
 
 Channel::~Channel(void) {}
@@ -92,6 +94,10 @@ bool Channel::isInvited(const std::string& username) {
 }
 
 void Channel::listInvited(void) {} //to do
+
+bool	Channel::isInviteOnlyMode(void) {
+	return _inviteOnlyMode;
+}
 
 // getter
 std::string	Channel::getName(void) const { return _name; }

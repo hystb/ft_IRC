@@ -28,6 +28,7 @@ class Channel
 		void	removeInvited(const std::string& username);
 		void	listInvited(void);//for test only
 		bool	isInvited(const std::string& username);
+		bool	isInviteOnlyMode(void);
 
 		// getter
 		std::string	getName(void) const;
@@ -50,6 +51,7 @@ class Channel
 		std::string 			_topic;
 		std::string				_password;
 		int						_limit;
+		bool					_inviteOnlyMode;
 		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;
 
