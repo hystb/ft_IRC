@@ -98,8 +98,7 @@ void RPL_YOURHOST(const Client &client) {
 }
 
 void RPL_CREATED(const Client &client) {
-	// changer
-	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created before !\r\n");
+	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created 15th october 1996 !\r\n");
 }
 
 void RPL_MYINFO(const Client &client) {
@@ -126,4 +125,18 @@ void ERR_UNKNOWNCOMMAND(const Client &client) {
 	client.sendMessage(":localhost 421 " + client.getNickname() + " : Unknowm command\r\n");
 }
 
+void ERR_NOSUCHCHANNEL(const Client &client, std::string channel) {
+	client.sendMessage(":localhost 403 " + client.getNickname() + " " + channel + " :No such channel\r\n");
+}
 
+void ERR_NOSUCHNICK(const Client &client, std::string nick) {
+	client.sendMessage(":localhost 401 " + client.getNickname() + " " + nick + " :No such nick\r\n");
+}
+
+void ERR_NOTEXTTOSEND(const Client &client) {
+	client.sendMessage(":localhost 412 " + client.getNickname() + " :No text to send\r\n");
+}
+
+void ERR_CANNOTSENDTOCHAN(const Client &client, std::string target) {
+	client.sendMessage(":localhost 404 " + client.getNickname() + " " + target + " :Cannot send to channel\r\n");
+}

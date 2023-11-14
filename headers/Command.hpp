@@ -61,6 +61,12 @@ void ERR_NONICKNAMEGIVEN(const Client &client);
 void ERR_ERRONEUSNICKNAME(const Client &client, std::string nick);
 void ERR_PASSWDMISMATCH(const Client &client);
 void ERR_UNKNOWNCOMMAND(const Client &client);
+void ERR_NOSUCHNICK(const Client &client, std::string nick);
+void ERR_NOSUCHCHANNEL(const Client &client, std::string channel);
+void ERR_NOTEXTTOSEND(const Client &client);
+void ERR_CANNOTSENDTOCHAN(const Client &client, std::string target);
+
+
 
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
