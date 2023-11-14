@@ -33,6 +33,6 @@ public:
 	CommandHandler(std::string &pass);
 	~CommandHandler(void);
 
-	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*> channels, std::map<int, Client*> &clients);
+	void handleCommand(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*> &clients);
 };
 #endif
