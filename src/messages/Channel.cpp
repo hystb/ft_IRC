@@ -3,9 +3,9 @@
 // canonical
 Channel::Channel(void) {}
 
-Channel::Channel(const std::string& name, const std::string& password, Client *client) : _name(name), _password(password)
-{
+Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	addClient(client, 1);
+	std::cout << "Channel created" << std::endl;
 }
 
 Channel::~Channel(void) {}
@@ -95,6 +95,11 @@ std::string	Channel::getName(void) const { return _name; }
 std::string	Channel::getTopic(void) const { return _topic; }
 std::string	Channel::getPassword(void) const { return _password; }
 int			Channel::getLimit(void) const { return _limit; }
+
+// setter
+void	Channel::setPassword(const std::string& password) {
+	_password = password;
+}
 
 // extra
 void	Channel::sendMessage(std::string message) const {}

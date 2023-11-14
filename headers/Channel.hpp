@@ -9,7 +9,7 @@ class Channel
 {
 	public:
 		// canonical
-		Channel(const std::string& name, const std::string& password, Client *client);
+		Channel(const std::string& name, Client *client);
 		~Channel(void);
 		Channel& operator=(const Channel &parent);//const ?
 		Channel(const Channel &parent);
@@ -34,6 +34,9 @@ class Channel
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		int			getLimit(void) const;
+
+		// setter
+		void	setPassword(const std::string& password);
 
 		// extra
 		void	sendMessage(std::string message) const;

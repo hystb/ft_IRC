@@ -31,10 +31,11 @@ public:
 	const std::vector<std::string>& 	getParameters(void) const;
 	std::string							getContent(void) const;
 
-	std::map<std::string, Channel*>&  	getChannels(void);
+	std::map<std::string, Channel*>&	getChannels(void);
 	std::map<int, Client*>&				getClients(void);
 	Client* 							getClient(void);
 
+	void	listChannel(void);
 
 	/* exceptions */
 	class invalidException : public std::exception {

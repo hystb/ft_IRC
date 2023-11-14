@@ -69,3 +69,11 @@ Command::Command(std::string input, Client *client, std::map<std::string, Channe
 	_content = "\0";
 	parse();
 }
+
+void Command::listChannel(void) {
+	std::cout << "- CHANNEL LIST -" << std::endl;
+	for (std::map<std::string, Channel*>::const_iterator it = _channels.begin(); it != _channels.end(); ++it) {
+		const Channel* channel = it->second;
+		std::cout << "Channel: " << channel->getName() << std::endl;
+	}
+}
