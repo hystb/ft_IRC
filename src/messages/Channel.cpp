@@ -17,8 +17,17 @@ void Channel::addClient(Client *client, bool isOperator) {
 }
 
 void Channel::removeClient(Client *client) {
-	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first == client) {
+			_clients.erase(it);
+		break;
+		}
+	}
+}
+
+void Channel::removeClient(const std::string &nickname) {
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->first->getNickname() == nickname) {
 			_clients.erase(it);
 		break;
 		}
@@ -38,7 +47,7 @@ void Channel::removeInvited(const std::string& nickname) {
 	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
 		if ((*it)->getNickname() == nickname) {
 			_invited.erase(it);
-			break;
+		break;
 		}
 	}
 }
@@ -100,6 +109,7 @@ void	Channel::sendMessage(std::string message) {
 void Channel::listInvited(void) {} //to do
 
 void Channel::listClients() {
+	std::cout << "BEGIN - Client list in channel " << getName() << std::endl;
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
 		bool isOperator = it->second;
@@ -109,6 +119,7 @@ void Channel::listClients() {
 		else
 			std::cout << " is Ordinary mortals" << std::endl;
 	}
+	std::cout << "END -" << std::endl;
 }
 
 int Channel::_channel_nb = 0;

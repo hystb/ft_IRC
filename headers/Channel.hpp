@@ -14,6 +14,7 @@ class Channel
 		// clients map
 		void	addClient(Client *client, bool isOperator);
 		void	removeClient(Client *client);
+		void	removeClient(const std::string &nickname);
 		void	setModerator(Client *client);
 		
 		// invited vector

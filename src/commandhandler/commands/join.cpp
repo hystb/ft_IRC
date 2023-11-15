@@ -18,6 +18,7 @@ void CommandHandler::join(Command& cmd)
 		RPL_NAMREPLY(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
 		RPL_ENDOFNAMES(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
 		// cmd.listChannel();
+		cmd.getChannels()[cmd.getParameters().at(0)]->listClients();
 		return ;
 	}
 	else if (it->second->isMember(cmd.getClient()->getNickname())) {
@@ -37,11 +38,11 @@ void CommandHandler::join(Command& cmd)
 		return ;
 	}
 	else {
+		it->second->addClient(cmd.getClient(), 0);
 		LOG_JOIN(*cmd.getClient(), it->second);
 		RPL_TOPIC(*cmd.getClient(), it->second);
 		RPL_NAMREPLY(*cmd.getClient(), it->second);
 		RPL_ENDOFNAMES(*cmd.getClient(), it->second);
-		it->second->addClient(cmd.getClient(), 0);
 		// cmd.listChannel();
 	}
 }

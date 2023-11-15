@@ -36,8 +36,10 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName() + "\r\n");
 }
 
-void LOG_KICK(const Client &client, const Channel *channel) {//fait maison apres les deux points
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname) {
+	client.sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + nickname + "\r\n");
+	// client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+   // :WiZ!jto@tolsun.oulu.fi KICK #Finnish John
 }
 
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel) {
