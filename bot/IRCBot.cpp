@@ -31,13 +31,14 @@ std::string to_string(const T& value) {
 }
 
 void IRCBot::connectToServer() {
-	const std::string serverAddress = _server + ":" + to_string(_port);
-
 	if (_ircSocket != -1) {
 	    sendIRCMessage("NICK " + _nickname);
 	    sendIRCMessage("USER " + _nickname + " 0 0 :" + _nickname);
         sendIRCMessage("PASS " + _password);
-	    sendIRCMessage("JOIN " + _channel);
+        if (_channelPassword.empty())
+	        sendIRCMessage("JOIN " + _channel);
+        else
+            sendIRCMessage("JOIN " + _channel + " " + _channelPassword);
 	} 
 	else {
 	    throw ConnectionError();
@@ -103,7 +104,7 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
 }
 
 IRCBot::IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey)
-    : _server(server), _port(port), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey) {
+    : _server(server), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey) {
     _ircSocket = createSocket(server, port);
 }
 
@@ -115,7 +116,6 @@ void IRCBot::run() {
 	std::string received;
 	std::string response;
 	std::string message;
-    int         i;
     char buffer[1024];
     if (_ircSocket == -1) {
         throw ConnectionError();
@@ -161,6 +161,10 @@ void IRCBot::run() {
     }
 }
 
+void	IRCBot::setChannelPassword(std::string const & pass){
+    _channelPassword = pass;
+}
+
 const char* IRCBot::ConnectionError::what(void) const throw(){
-			return ("Connection to IRC server failed or was cancelled\0");
+	return ("Connection to IRC server failed or was cancelled\0");
 }

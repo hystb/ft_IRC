@@ -13,13 +13,13 @@
 
 class IRCBot{
 	private:
-		std::string _apiKey;
 	    std::string _server;
-	    uint16_t 	_port;
 	    std::string _channel;
 	    std::string _nickname;
 	    int 		_ircSocket;
 		std::string _password;
+		std::string _apiKey;
+		std::string	_channelPassword;
 
 	    int createSocket(const std::string& hostname, int port);
 	    void connectToServer();
@@ -32,6 +32,7 @@ class IRCBot{
 		public:
 			virtual const char* what() const throw();
 		};
+		void	setChannelPassword(std::string const & pass);
     	~IRCBot();
     	void run();
 };
@@ -39,5 +40,4 @@ class IRCBot{
 template <typename T>
 std::string to_string(const T& value);
 
-size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output);
 #endif
