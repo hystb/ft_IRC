@@ -8,43 +8,41 @@ class Client;
 class Channel
 {
 	public:
-		// canonical
 		Channel(const std::string& name, Client *client);
 		~Channel(void);
-		Channel& operator=(const Channel &parent);//const ?
-		Channel(const Channel &parent);
 
-		// client map
+		// clients map
 		void	addClient(Client *client, bool isOperator);
 		void	removeClient(Client *client);
 		void	setModerator(Client *client);
-		void	listClients(void);// for test only
-		bool 	isMember(Client *client);
-		bool 	isMember(const std::string &clientName);
-		bool	isOperator(Client *client);
-
+		
 		// invited vector
 		void	addInvited(Client *client);
-		void	removeInvited(const std::string& username);
-		void	listInvited(void);//for test only
-		bool	isInvited(const std::string& username);
-		bool	isInviteOnlyMode(void);
+		void	removeInvited(const std::string& nickname);
+		
+		// setters
+		void	setPassword(const std::string& password);
 
-		// getter
+		// getters
 		std::string	getName(void) const;
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		int			getLimit(void) const;
-		static int 				_channel_nb;
+		bool		isInviteOnlyMode(void);
+		std::map<Client*, bool>& getClients(void);
 
-		// setter
-		void	setPassword(const std::string& password);
+		bool 	isMember(Client *client);
+		bool 	isMember(const std::string &nickname);
+		bool	isOperator(Client *client);
+		bool	isInvited(const std::string& nickname);
 
-		// extra
+		// attributes
 		void	sendMessage(std::string message);
 
-		/* getters */
-		std::map<Client*, bool>& getClients(void);
+		// only for tests
+		void	listClients(void);
+		void	listInvited(void);
+		static int 				_channel_nb;
 
 	private:
 		std::string 			_name;
@@ -54,8 +52,6 @@ class Channel
 		bool					_inviteOnlyMode;
 		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;
-
-		Channel(void);
 };
 
 #endif

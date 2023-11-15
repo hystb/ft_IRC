@@ -16,11 +16,11 @@ void CommandHandler::join(Command& cmd)
 		cmd.listChannel();
 		return ;
 	}
-	else if (it->second->isMember(cmd.getClient()->getUsername())) {
+	else if (it->second->isMember(cmd.getClient()->getNickname())) {
 		std::cout << "tes deja membre frerot" << std::endl;
 		return ;
 	}
-	else if (it->second->isInviteOnlyMode() && !(it->second->isInvited(cmd.getClient()->getUsername()))) {
+	else if (it->second->isInviteOnlyMode() && !(it->second->isInvited(cmd.getClient()->getNickname()))) {
 		ERR_INVITEONLYCHAN(*cmd.getClient(), it->second);
 		return ;
 	}
