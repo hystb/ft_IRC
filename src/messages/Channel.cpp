@@ -3,7 +3,7 @@
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	addClient(client, 1);
 	_inviteOnlyMode = 0;
-	_limit = 200;
+	_limit = MAX_CLIENTS;
 	std::cout << "Channel: constructor called" << std::endl;
 	_channel_nb += 1;//to deleted
 }
