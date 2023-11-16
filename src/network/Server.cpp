@@ -151,11 +151,12 @@ void Server::handleClientDeconnection(int index, int type)
 		std::cout << Server::getServerLog() << GRAY << "Unlogged client disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 	_clients.erase(client->getSocket());
 	close(client->getSocket());
-	delete client;
     for (int i = index; i < _clients_nb; i++) {
         _clients_fd[i] = _clients_fd[i + 1];
     }
     _clients_nb--;
+	delete client;
+	std::cout << "J'ai fini la deconnection !" << std::endl;
 }
 
 void Server::disconnectClient(int fd)

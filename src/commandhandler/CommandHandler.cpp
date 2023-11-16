@@ -29,6 +29,7 @@ void CommandHandler::handleCommand(std::string input, Client *client, std::map<s
 {
 	Command cmd = Command(input, client, channels, clients);
 	commands(cmd);
+	std::cout << Server::getServerLog() << BLUE << cmd.getInput().substr(0, cmd.getInput().length() - 2) << RESET << GRAY << " (" << client->getSocket() << ")" << std::endl;
 	// debug only
 	// std::cout << "input : " << cmd.getInput();
 	// std::cout << "command : " << cmd.getCommand() << std::endl;

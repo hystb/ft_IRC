@@ -22,9 +22,9 @@ void Channel::addClient(Client *client, bool isOperator) {
 }
 
 void Channel::removeClient(Client *client) {
-	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ) {
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); it++) {
 		if (it->first == client) {
-			_clients.erase(it);
+			_clients.erase(it->first);
 		break;
 		}
 	}
