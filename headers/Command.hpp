@@ -77,7 +77,7 @@ void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName);
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel);
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel);
 void LOG_JOIN(const Client &client, const Channel *channel);
-void LOG_KICK(const Client &client, const Channel *channel);
+void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname);
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, const Channel *channel);
 void RPL_TOPIC(const Client &client, const Channel *channel);

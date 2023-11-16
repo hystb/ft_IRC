@@ -20,10 +20,6 @@ void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std:
 	client.sendMessage(":localhost 461 " + client.getUsername() + " " + command +" :Not enough parameters\r\n");
 }
 
-// void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName) {
-// 	client.sendMessage(client.getUsername() + " " + channelName + " :No such channel\r\n");
-// }
-
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 442 " + client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
 }
@@ -36,12 +32,14 @@ void ERR_USERONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 443 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
 }
 
-void LOG_JOIN(const Client &client, const Channel *channel) {//fait maison apres les deux points
-	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName() + "\r\n"); // c'est ça que j'ai fix
+void LOG_JOIN(const Client &client, const Channel *channel) {
+	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName() + "\r\n");
 }
 
-void LOG_KICK(const Client &client, const Channel *channel) {//fait maison apres les deux points
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname) {
+	client.sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + nickname + "\r\n");
+	// client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+   // :WiZ!jto@tolsun.oulu.fi KICK #Finnish John
 }
 
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel) {

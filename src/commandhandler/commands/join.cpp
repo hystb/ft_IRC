@@ -13,14 +13,19 @@ void CommandHandler::join(Command& cmd)
 		cmd.getChannels()[cmd.getParameters().at(0)] = new Channel(cmd.getParameters().at(0), cmd.getClient());
 		if (cmd.getParameters().size() > 1)
 			cmd.getChannels().at(cmd.getParameters().at(0))->setPassword(cmd.getParameters().at(1));
-		cmd.listChannel();
+		LOG_JOIN(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
+		RPL_TOPIC(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
+		RPL_NAMREPLY(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
+		RPL_ENDOFNAMES(*cmd.getClient(), cmd.getChannels()[cmd.getParameters().at(0)]);
+		// cmd.listChannel();
+		cmd.getChannels()[cmd.getParameters().at(0)]->listClients();
 		return ;
 	}
-	else if (it->second->isMember(cmd.getClient()->getUsername())) {
+	else if (it->second->isMember(cmd.getClient()->getNickname())) {
 		std::cout << "tes deja membre frerot" << std::endl;
 		return ;
 	}
-	else if (it->second->isInviteOnlyMode() && !(it->second->isInvited(cmd.getClient()->getUsername()))) {
+	else if (it->second->isInviteOnlyMode() && !(it->second->isInvited(cmd.getClient()->getNickname()))) {
 		ERR_INVITEONLYCHAN(*cmd.getClient(), it->second);
 		return ;
 	}
@@ -33,11 +38,11 @@ void CommandHandler::join(Command& cmd)
 		return ;
 	}
 	else {
+		it->second->addClient(cmd.getClient(), 0);
 		LOG_JOIN(*cmd.getClient(), it->second);
 		RPL_TOPIC(*cmd.getClient(), it->second);
 		RPL_NAMREPLY(*cmd.getClient(), it->second);
 		RPL_ENDOFNAMES(*cmd.getClient(), it->second);
-		it->second->addClient(cmd.getClient(), 0);
-		cmd.listChannel();
+		// cmd.listChannel();
 	}
 }

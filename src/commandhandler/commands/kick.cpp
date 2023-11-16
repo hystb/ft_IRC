@@ -4,7 +4,7 @@ void CommandHandler::kick(Command& cmd)
 {
 	std::map<std::string, Channel*>::iterator it;
 
-	if (cmd.getParameters().at(0).empty()) {
+	if (cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
 		ERR_NEEDMOREPARAMS(*cmd.getClient(), it->second, cmd.getCommand());
 		return ;
 	}
@@ -26,7 +26,8 @@ void CommandHandler::kick(Command& cmd)
 		return ;
 	}
 	else {
-		it->second->removeClient(cmd.getClient());
-		LOG_KICK(*cmd.getClient(), it->second);
+		it->second->removeClient(cmd.getParameters().at(1));
+		LOG_KICK(*cmd.getClient(), it->second, cmd.getParameters().at(1));
+		it->second->listClients();
 	}
 }
