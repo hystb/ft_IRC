@@ -39,6 +39,8 @@ class Channel
 
 		// attributes
 		void	sendMessage(std::string message);
+		void	sendMessageWithoutClient(std::string message, Client* without);
+
 
 		// only for tests
 		void	listClients(void);

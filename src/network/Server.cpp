@@ -101,7 +101,7 @@ void Server::start(void) {
 				close(socket_client);
 			}
 		}
-		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
+		for (int i = 1; i < _clients_nb + 1; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
@@ -156,7 +156,6 @@ void Server::handleClientDeconnection(int index, int type)
     }
     _clients_nb--;
 	delete client;
-	std::cout << "J'ai fini la deconnection !" << std::endl;
 }
 
 void Server::disconnectClient(int fd)

@@ -104,6 +104,14 @@ void	Channel::sendMessage(std::string message) {
 		it->first->sendMessage(message);
 }
 
+void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (it->first != without)
+			it->first->sendMessage(message);
+	}
+}
+
 // only for tests
 
 void Channel::listInvited(void) {} //to do
