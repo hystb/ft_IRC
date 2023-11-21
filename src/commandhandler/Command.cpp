@@ -44,7 +44,7 @@ void Command::parse(void)
 	_command = element.substr(0, i);
 	element = element.substr(i + 1, element.length());
 	
-	j = element.find_last_of(":");
+	j = element.find_first_of(":");
 	if (j != std::string::npos) // mean that there is :trailing ?
 	{
 		_content = element.substr(j + 1, element.length() - 1);
