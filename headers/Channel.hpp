@@ -40,9 +40,11 @@ class Channel
 		// attributes
 		void	sendMessage(std::string message);
 
+		std::string	listClients(void) const;
+
 		// only for tests
-		void	listClients(void);
-		void	listInvited(void);
+		void	TestListClients(void);
+		void	TestListInvited(void);
 		static int 				_channel_nb;
 
 	private:
