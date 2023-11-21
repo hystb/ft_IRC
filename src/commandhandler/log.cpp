@@ -43,15 +43,17 @@ void LOG_KICK(const Client &client, const Channel *channel, const std::string &n
 }
 
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 366 " + client.getUsername() + " " + channel->getName() + " :End of /NAMES list\r\n");
+	client.sendMessage(":localhost 366 " + channel->getName() + " :End of /NAMES list\r\n");
 }
 
 void RPL_INVITING(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 341 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
 }
 
-void RPL_NAMREPLY(const Client &client, const Channel *channel) {//to do
-	client.sendMessage(":localhost 353 " + client.getUsername() + " @ " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+void RPL_NAMREPLY(const Client &client, const Channel *channel) {	
+	client.sendMessage(":" + client.getNickname() +" 353 " + client.getUsername() + " = " + channel->getName() + " :@" + client.getUsername() + "\r\n");
+	
+	// std::string message = ":" + client.getNickname() +" 353 " + client.getUsername() + channel->getName() + " :";
 	//"<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 }
 
