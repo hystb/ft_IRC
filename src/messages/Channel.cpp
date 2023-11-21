@@ -112,7 +112,7 @@ std::string	Channel::listClients(void) {
 		bool isOperator = it->second;
 		if (isOperator == true)
 			message += "@";
-		message += client->getUsername();
+		message += client->getNickname();
 		message += " ";
 	}
 	return message;
