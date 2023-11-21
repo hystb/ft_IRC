@@ -28,19 +28,8 @@ void CommandHandler::commands(Command &cmd)
 void CommandHandler::handleCommand(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*> &clients)
 {
 	Command cmd = Command(input, client, channels, clients);
-	std::cout << Server::getServerLog() << BLUE << input << RESET << GRAY << " (" << client->getSocket() << ")" << std::endl;
+	std::string toPrint = input.substr(0, input.length() - 2);
+
+	std::cout << Server::getServerLog() << BLUE << "⬅️ " << toPrint << RESET << GRAY << " (" << client->getSocket() << ")" << RESET << std::endl;
 	commands(cmd);
-	// std::cout << Server::getServerLog() << BLUE << cmd.getInput().substr(0, cmd.getInput().length() - 2) << RESET << GRAY << " (" << client->getSocket() << ")" << std::endl;
-	// debug only
-	// std::cout << "input : " << cmd.getInput();
-	// std::cout << "command : " << cmd.getCommand() << std::endl;
-	// std::cout << "parameters : ";
-	// for (unsigned i = 0; i < cmd.getParameters().size(); i++)
-	// {
-		// std::cout << cmd.getParameters().at(i);
-		// if (i + 1 < cmd.getParameters().size())
-			// std::cout << ", ";
-	// }
-	// std::cout << std::endl;
-	// std::cout << "content : " << cmd.getContent() << std::endl;
 }

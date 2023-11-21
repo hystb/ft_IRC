@@ -94,7 +94,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
 				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
-				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << std::endl;
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << RESET << std::endl;
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -131,6 +131,9 @@ void Server::start(void) {
 			}
 		}
 	}
+	closeFds();
+	cleanChannels();
+	cleanClients();
 }
 
 void Server::handleClientDeconnection(int index, int type)
@@ -176,6 +179,8 @@ void Server::closeFds(void)
 void Server::interrupt(void)
 {
 	closeFds();
+	cleanChannels();
+	cleanClients();
 	std::cout << "Something bad happened !" << std::endl;
 	throw (crashException());
 }
@@ -202,5 +207,14 @@ Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::ma
 		std::cout << "-> " << e.what() << std::endl;
 		throw (e);
 	}
-	start();
+}
+
+void Server::cleanChannels(void) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (it->second);
+}
+
+void Server::cleanClients(void) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete (it->second);
 }

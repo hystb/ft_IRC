@@ -2,5 +2,9 @@
 
 void CommandHandler::mode(Command& cmd)
 {
-	(void) cmd;
+	// std::vector<std::string> 	param = cmd.getParameters();
+	// Client					 	*client = cmd.getClient();
+	// std::string					channelName;
+
+(void) cmd;
 }

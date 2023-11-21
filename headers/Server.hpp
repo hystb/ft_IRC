@@ -29,7 +29,6 @@ class Server
 
 		/* startup functions ! */
 		void prepare(void);
-		void start(void);
 
 		void handleClientDeconnection(int index, int type);
 		void sendMessage(int client, std::string message);
@@ -37,6 +36,8 @@ class Server
 		/* exit and errors functions */
 		void closeFds(void);
 		void interrupt(void);
+		void cleanChannels(void);
+		void cleanClients(void);
 
 		/* tools functions */
 		int 	getRawEntry(Client* client);
@@ -47,6 +48,7 @@ class Server
 
 		~Server(void);
 
+		void start(void);
 		void disconnectClient(int index);
 
 		static std::string getServerLog(void);
