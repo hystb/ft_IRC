@@ -40,7 +40,7 @@ class Channel
 		// attributes
 		void	sendMessage(std::string message);
 
-		std::string	listClients(void) const;
+		std::string	const listClients(void);
 
 		// only for tests
 		void	TestListClients(void);
