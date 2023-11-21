@@ -72,7 +72,6 @@ void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
-void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command);
 void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName);
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel);
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel);

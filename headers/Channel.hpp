@@ -28,7 +28,7 @@ class Channel
 		std::string	getName(void) const;
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
-		int			getLimit(void) const;
+		unsigned long getLimit(void) const;
 		bool		isInviteOnlyMode(void);
 		std::map<Client*, bool>& getClients(void);
 
@@ -51,7 +51,7 @@ class Channel
 		std::string 			_name;
 		std::string 			_topic;
 		std::string				_password;
-		int						_limit;
+		unsigned long			_limit;
 		bool					_inviteOnlyMode;
 		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;

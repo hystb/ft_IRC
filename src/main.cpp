@@ -33,7 +33,6 @@ int main(int argc, char const *argv[])
 			CommandHandler commandHandler = CommandHandler(password);
 			Server server = Server(checkPort(argv[1]), password, commandHandler, clients);
 		} catch (std::exception &e) {
-			perror("la : ");// faudra supprimer ça batard
 			std::cout << e.what() << std::endl;
 		}
 	}

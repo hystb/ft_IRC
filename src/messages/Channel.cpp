@@ -12,6 +12,7 @@ Channel::~Channel(void) {}
 
 // clients map
 void Channel::addClient(Client *client, bool isOperator) {
+	std::cout << "ici" << std::endl;
 	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
@@ -28,7 +29,7 @@ void Channel::removeClient(Client *client) {
 void Channel::removeClient(const std::string &nickname) {
 	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first->getNickname() == nickname) {
-			_clients.erase(it);
+			_clients.erase(it->first);
 		break;
 		}
 	}
@@ -44,7 +45,7 @@ void Channel::addInvited(Client *client) {
 }
 
 void Channel::removeInvited(const std::string& nickname) {
-	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+	for (std::vector<Client*>::iterator it = _invited.begin(); it != _invited.end(); ++it) {
 		if ((*it)->getNickname() == nickname) {
 			_invited.erase(it);
 		break;
@@ -62,7 +63,7 @@ std::string	Channel::getName(void) const { return _name; }
 std::string	Channel::getTopic(void) const { return _topic; }
 std::string	Channel::getPassword(void) const { return _password; }
 bool		Channel::isInviteOnlyMode(void) { return _inviteOnlyMode; }
-int			Channel::getLimit(void) const { return _limit; }
+unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
 
 bool Channel::isMember(Client *client) {

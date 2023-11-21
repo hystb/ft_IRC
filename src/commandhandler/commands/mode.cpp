@@ -2,5 +2,5 @@
 
 void CommandHandler::mode(Command& cmd)
 {
-
+	(void) cmd;
 }
