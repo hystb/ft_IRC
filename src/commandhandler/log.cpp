@@ -21,11 +21,11 @@ void RPL_ISUPPORT(const Client &client) {
 }
 
 void RPL_TOPIC(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 332 " + client.getUsername() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
 }
 
 void RPL_INVITING(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 341 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
+	client.sendMessage(":localhost 341 " + client.getNickname() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
 }
 
 void RPL_NAMREPLY(const Client &client, Channel *channel) {
@@ -81,15 +81,15 @@ void ERR_NICKNAMEINUSE(const Client &client, std::string nick) {
 }
 
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 441 " + client.getUsername() + " " + channel->getName() + " :They aren't on that channel\r\n");
+	client.sendMessage(":localhost 441 " + client.getNickname() + " " + channel->getName() + " :They aren't on that channel\r\n");
 }
 
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 442 " + client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
+	client.sendMessage(":localhost 442 " + client.getNickname() + " " + channel->getName() + " :You're not on that channel\r\n");
 }
 
 void ERR_USERONCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 443 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
+	client.sendMessage(":localhost 443 " + client.getNickname() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
 }
 
 void ERR_NOTREGISTERED(const Client &client) {
@@ -109,19 +109,19 @@ void ERR_PASSWDMISMATCH(const Client &client) {
 }
 
 void ERR_CHANNELISFULL(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 471 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+l)\r\n");
+	client.sendMessage(":localhost 471 " + client.getNickname() + " " + channel->getName() + " :Cannot join channel (+l)\r\n");
 }
 
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 473 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
+	client.sendMessage(":localhost 473 " + client.getNickname() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
 }
 
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 475 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+k)\r\n");
+	client.sendMessage(":localhost 475 " + client.getNickname() + " " + channel->getName() + " :Cannot join channel (+k)\r\n");
 }
 
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 482 " + client.getUsername() + " " + channel->getName() + " :You're not channel operator\r\n");
+	client.sendMessage(":localhost 482 " + client.getNickname() + " " + channel->getName() + " :You're not channel operator\r\n");
 }
 
 void LOG_JOIN(const Client &client, const Channel *channel) {

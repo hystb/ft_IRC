@@ -25,10 +25,7 @@ void CommandHandler::join(Command& cmd)
 			cmd.getChannels().at(channelName)->setPassword(cmd.getParameters().at(1));
 		LOG_JOIN(*cmd.getClient(), cmd.getChannels()[channelName]);
 		RPL_TOPIC(*cmd.getClient(), cmd.getChannels()[channelName]);
-		RPL_NAMREPLY(*cmd.getClient(), cmd.getChannels()[channelName]);
-		RPL_ENDOFNAMES(*cmd.getClient(), cmd.getChannels()[channelName]);
-		// cmd.listChannel();//test
-		cmd.getChannels()[channelName]->listClients();//test
+		cmd.getChannels()[channelName]->actualiseClientsList();
 		return ;
 	}
 	else if (channelIt->second->isMember(cmd.getClient()->getNickname())) {
@@ -51,8 +48,6 @@ void CommandHandler::join(Command& cmd)
 		channelIt->second->addClient(cmd.getClient(), 0);
 		LOG_JOIN(*cmd.getClient(), channelIt->second);
 		RPL_TOPIC(*cmd.getClient(), channelIt->second);
-		RPL_NAMREPLY(*cmd.getClient(), channelIt->second);
-		RPL_ENDOFNAMES(*cmd.getClient(), channelIt->second);
-		// cmd.listChannel();
+		cmd.getChannels()[channelName]->actualiseClientsList();
 	}
 }

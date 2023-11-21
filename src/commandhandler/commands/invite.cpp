@@ -13,21 +13,21 @@ void CommandHandler::invite(Command& cmd)
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), cmd.getParameters().at(0));
 		return;
 	}
-	// if (channel is on invite only && !it->second->isOperator(cmd.getClient())) { //need to do mode
-	// 	ERR_CHANOPRIVSNEEDED(*cmd.getClient(), it->second);
-	// 	return ;
-	// }
-	// if (celui qui est invité est deja sur le channel) { // probleme dans la commande INVITE on donne le nickname
-	// 	ERR_USERONCHANNEL(*cmd.getClient(), it->second);
-		// return ;
-	// }
-	if (!(it->second->isMember(cmd.getClient()))) { //celui qui veut inviter n'est pas sur le channel
+	if (it->second->isInviteOnlyMode() && !it->second->isOperator(cmd.getClient())) {
+		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), it->second);
+		return ;
+	}
+	if (it->second->isMember(cmd.getParameters().at(1))) {
+		ERR_USERONCHANNEL(*cmd.getClient(), it->second);
+		return ;
+	}
+	if (!(it->second->isMember(cmd.getClient()))) {
 		ERR_NOTONCHANNEL(*cmd.getClient(), it->second);
 		return ;
 	}
 	else {
-		RPL_INVITING(*cmd.getClient(), it->second);
-		// it->second->addInvited()
 		// log ici
+		RPL_INVITING(*cmd.getClient(), it->second);
+		// it->second->addInvited()//pb il me faut le ptr sur le perso quon veut ajouter alors que jai un nickname
 	}
 }

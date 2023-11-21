@@ -126,6 +126,14 @@ void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
   }
 }
 
+void Channel::actualiseClientsList(void) {
+	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
+		const Client* client = it->first;
+		RPL_NAMREPLY(*client, this);
+		RPL_ENDOFNAMES(*client, this);
+	}
+}
+
 // only for tests
 
 void Channel::TestListInvited(void) {} //to do

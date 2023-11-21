@@ -41,13 +41,16 @@ class Channel
 		void	sendMessage(std::string message);
 		void	sendMessageWithoutClient(std::string message, Client* without);
 
-
 		std::string listClients(void);
 
 		// only for tests
 		void	TestListClients(void);
 		void	TestListInvited(void);
 		static int 				_channel_nb;
+
+	
+		void actualiseClientsList(void);
+
 
 	private:
 		std::string 			_name;
