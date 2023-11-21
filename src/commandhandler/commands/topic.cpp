@@ -2,5 +2,5 @@
 
 void CommandHandler::topic(Command& cmd)
 {
-
+	(void) cmd;
 }

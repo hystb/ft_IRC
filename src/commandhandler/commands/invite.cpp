@@ -5,7 +5,7 @@ void CommandHandler::invite(Command& cmd)
 	std::map<std::string, Channel*>::iterator it;
 
 	if (cmd.getParameters().at(0).empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), it->second, cmd.getCommand());
+		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
 		return ;
 	}
 	it = cmd.getChannels().find(cmd.getParameters().at(0));

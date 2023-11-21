@@ -16,10 +16,6 @@ void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 473 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
 }
 
-void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command) {
-	client.sendMessage(":localhost 461 " + client.getUsername() + " " + command +" :Not enough parameters\r\n");
-}
-
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 442 " + client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
 }
@@ -50,11 +46,8 @@ void RPL_INVITING(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 341 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
 }
 
-void RPL_NAMREPLY(const Client &client, const Channel *channel) {	
-	client.sendMessage(":" + client.getNickname() +" 353 " + client.getUsername() + " = " + channel->getName() + " :@" + client.getUsername() + "\r\n");
-	
-	// std::string message = ":" + client.getNickname() +" 353 " + client.getUsername() + channel->getName() + " :";
-	//"<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
+void RPL_NAMREPLY(const Client &client, Channel *channel) {
+	client.sendMessage(":" + client.getNickname() +" 353 " + client.getUsername() + " = " + channel->getName() + " :" + channel->listClients() + "\r\n");
 }
 
 void RPL_TOPIC(const Client &client, const Channel *channel) {

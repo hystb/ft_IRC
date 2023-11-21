@@ -6,7 +6,7 @@ void CommandHandler::join(Command& cmd)
 	const std::string	&channelName = cmd.getParameters().at(0);
 
 	if (channelName.empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), channelIt->second, cmd.getCommand());
+		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
 		return ;
 	}
 	channelIt = cmd.getChannels().find(channelName);
