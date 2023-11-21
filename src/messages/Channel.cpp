@@ -18,7 +18,7 @@ void Channel::addClient(Client *client, bool isOperator) {
 }
 
 void Channel::removeClient(Client *client) {
-	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first == client) {
 			_clients.erase(it->first);
 		break;
@@ -27,7 +27,7 @@ void Channel::removeClient(Client *client) {
 }
 
 void Channel::removeClient(const std::string &nickname) {
-	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first->getNickname() == nickname) {
 			_clients.erase(it->first);
 		break;
@@ -91,7 +91,7 @@ bool Channel::isOperator(Client *client) {
 }
 
 bool Channel::isInvited(const std::string& nickname) {
-	for (std::vector<Client*>::const_iterator it = _invited.begin(); it != _invited.end(); ++it) {
+	for (std::vector<Client*>::iterator it = _invited.begin(); it != _invited.end(); ++it) {
 		if ((*it)->getNickname() == nickname) {
 			return true;
 		}
@@ -105,21 +105,36 @@ void	Channel::sendMessage(std::string message) {
 		it->first->sendMessage(message);
 }
 
+std::string	const Channel::listClients(void) {
+	std::string message;
+
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		const Client* client = it->first;
+		bool isOperator = it->second;
+		if (isOperator == true)
+			message += "@";
+		message += client->getUsername();
+		message += " ";
+	}
+	// message.pop_back();
+	return message;
+}
+
 void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
 		if (it->first != without)
 			it->first->sendMessage(message);
-	}
+  }
 }
 
 // only for tests
 
-void Channel::listInvited(void) {} //to do
+void Channel::TestListInvited(void) {} //to do
 
-void Channel::listClients() {
+void Channel::TestListClients() {
 	std::cout << "BEGIN - Client list in channel " << getName() << std::endl;
-	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		const Client* client = it->first;
 		bool isOperator = it->second;
 		std::cout << "Client: " << client->getNickname();
