@@ -10,6 +10,7 @@
 # include <sstream>
 # include <algorithm>
 # include <cstdio>
+# include <map>
 
 class IRCBot{
 	private:
@@ -20,12 +21,15 @@ class IRCBot{
 		std::string _password;
 		std::string _apiKey;
 		std::string	_channelPassword;
+		std::map<std::string, std::string>	_types;
 
-	    int createSocket(const std::string& hostname, int port);
-	    void connectToServer();
-	    void sendIRCMessage(const std::string& message);
-	    void receiveIRCMessage(char* buffer, size_t bufferSize);
-		std::string generateGPTResponse(const std::string& apiKey, const std::string& question);
+	    int			createSocket(const std::string& hostname, int port);
+	    void		connectToServer();
+	    void		sendIRCMessage(const std::string& message);
+	    void		receiveIRCMessage(char* buffer, size_t bufferSize);
+		void		setTypes(void);
+		std::string parseCmd(std::string const &msg);
+		std::string	generateGPTResponse(const std::string& apiKey, const std::string& question, const std::string& type);
 	public :
 		IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey);
 		class ConnectionError : public std::exception{
