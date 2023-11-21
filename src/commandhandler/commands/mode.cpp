@@ -16,5 +16,5 @@ void CommandHandler::mode(Command& cmd)
 
 	}
 	else
-		return ();
+		return ;
 }
