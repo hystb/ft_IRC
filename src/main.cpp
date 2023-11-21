@@ -9,6 +9,8 @@ int checkPort(std::string port)
 		return (-1);
 	if (port.length() > 5)
 		return (-1);
+	if (port.length() == 0)
+		return (-1);
 	ss >> value;
 	if (value > 65535)
 		return (-1);
@@ -30,6 +32,8 @@ int main(int argc, char const *argv[])
 			std::map<int, Client*> 	clients;
 			std::string				password = argv[2];
 
+			if (password.length() == 0)
+				return (std::cout << Server::getServerLog() << RED << "Password can't be empty !" << RESET << std::endl, 1);
 			CommandHandler commandHandler = CommandHandler(password);
 			Server server = Server(checkPort(argv[1]), password, commandHandler, clients);
 		} catch (std::exception &e) {

@@ -94,7 +94,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
 				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
-				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << std::endl;
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << RESET << std::endl;
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
