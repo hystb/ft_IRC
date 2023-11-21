@@ -10,12 +10,12 @@ CommandHandler::~CommandHandler(void)
 
 void CommandHandler::commands(Command &cmd)
 {
-	std::string	commands[10] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC", "PING", "PRIVMSG"};
-	void (CommandHandler::*functions[10])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic, &CommandHandler::ping, &CommandHandler::privmsg};
+	std::string	commands[11] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC", "PING", "PRIVMSG", "PART"};
+	void (CommandHandler::*functions[11])(Command& cmd) = {&CommandHandler::pass, &CommandHandler::nick, &CommandHandler::user, &CommandHandler::quit, &CommandHandler::invite, &CommandHandler::join, &CommandHandler::kick, &CommandHandler::topic, &CommandHandler::ping, &CommandHandler::privmsg, &CommandHandler::part};
 
 	if (cmd.getCommand() == "CAP")
 		return ;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 11; i++)
 	{
 		if ((i > 0 && !cmd.getClient()->isPassWordUnlocked()) || (i > 3 && !cmd.getClient()->isConnected()))
 			return (ERR_NOTREGISTERED(*cmd.getClient()));

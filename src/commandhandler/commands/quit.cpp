@@ -6,7 +6,6 @@ void Client::warnOthersLeaving(Client *client, std::string reason, std::map<std:
 		client->broadcastFromClient(channels, client, Client::getClientID(*client) + " QUIT :" + reason + "\r\n");
 }
 
-
 void CommandHandler::quit(Command& cmd)
 {
 	Client* client = cmd.getClient();

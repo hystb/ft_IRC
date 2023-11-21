@@ -82,6 +82,3 @@ void LOG_JOIN(const Client &client, const Channel *channel);
 void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname);
 
 #endif
-
-
-
