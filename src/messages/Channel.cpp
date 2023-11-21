@@ -105,7 +105,7 @@ void	Channel::sendMessage(std::string message) {
 		it->first->sendMessage(message);
 }
 
-std::string	const Channel::listClients(void) {
+std::string	Channel::listClients(void) {
 	std::string message;
 
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
@@ -116,7 +116,6 @@ std::string	const Channel::listClients(void) {
 		message += client->getUsername();
 		message += " ";
 	}
-	// message.pop_back();
 	return message;
 }
 
