@@ -75,7 +75,7 @@ void	Client::doLogin(void)
 	}
 }
 
-Client* Client::getClientFromUserName(std::map<int, Client*>& clients, std::string nickname){
+Client* Client::getClientFromNickname(std::map<int, Client*>& clients, std::string nickname) {
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
 		if (it->second->getNickname() == nickname)
 			return (it->second);

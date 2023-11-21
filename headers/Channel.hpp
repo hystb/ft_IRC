@@ -15,7 +15,8 @@ class Channel
 		void	addClient(Client *client, bool isOperator);
 		void	removeClient(Client *client);
 		void	removeClient(const std::string &nickname);
-		void	setModerator(Client *client);
+		void	setOperator(Client *client);
+		void	unsetOperator(Client *client);
 		
 		// invited vector
 		void	addInvited(Client *client);
@@ -23,6 +24,10 @@ class Channel
 		
 		// setters
 		void	setPassword(const std::string& password);
+		void	setInviteOnlyMode(void);
+		void	unsetInviteOnlyMode(void);
+		void	setTopicRestriction(void);
+		void	unsetTopicRestriction(void);
 
 		// getters
 		std::string	getName(void) const;
@@ -58,6 +63,7 @@ class Channel
 		std::string				_password;
 		unsigned long			_limit;
 		bool					_inviteOnlyMode;
+		bool					_topicRestriction;
 		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;
 };
