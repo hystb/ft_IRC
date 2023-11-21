@@ -42,7 +42,7 @@ class Channel
 		void	sendMessageWithoutClient(std::string message, Client* without);
 
 
-		std::string	const listClients(void);
+		std::string listClients(void);
 
 		// only for tests
 		void	TestListClients(void);
