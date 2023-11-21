@@ -131,6 +131,9 @@ void Server::start(void) {
 			}
 		}
 	}
+	closeFds();
+	cleanChannels();
+	cleanClients();
 }
 
 void Server::handleClientDeconnection(int index, int type)
@@ -176,6 +179,8 @@ void Server::closeFds(void)
 void Server::interrupt(void)
 {
 	closeFds();
+	cleanChannels();
+	cleanClients();
 	std::cout << "Something bad happened !" << std::endl;
 	throw (crashException());
 }
@@ -202,5 +207,14 @@ Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::ma
 		std::cout << "-> " << e.what() << std::endl;
 		throw (e);
 	}
-	start();
+}
+
+void Server::cleanChannels(void) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (it->second);
+}
+
+void Server::cleanClients(void) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete (it->second);
 }
