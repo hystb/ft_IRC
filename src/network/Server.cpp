@@ -26,6 +26,7 @@ void Server::prepare(void) {
 	{
 		char ip[INET_ADDRSTRLEN];
 		inet_ntop(PF_INET, &(_sockaddr.sin_addr), ip, INET_ADDRSTRLEN);
+		std::cout << YELLOW << Server::getServerLog() << YELLOW << "Server is binded on " << BOLD << "INADDR_ANY" << RESET << YELLOW " !" << YELLOW << RESET << std::endl;
 		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
 		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
 	}
@@ -100,7 +101,7 @@ void Server::start(void) {
 				close(socket_client);
 			}
 		}
-		for (int i = 1; i <= _clients_nb; i++) // this is for the actual connected users !
+		for (int i = 1; i < _clients_nb + 1; i++) // this is for the actual connected users !
 		{
 			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
 			{
@@ -110,8 +111,8 @@ void Server::start(void) {
 
 				value = getRawEntry(client);
 				if (value == -1)
-					handleClientDeconnection(i);
-				else if (value == 0)
+					handleClientDeconnection(i, 1);
+				else if (value == 0) 
 					continue;
 				else if (value == 1)
 				{
@@ -125,28 +126,36 @@ void Server::start(void) {
 						messageReceived.clear();
 					}
 					if (client->isToDisconnect())
-						handleClientDeconnection(i);
+						handleClientDeconnection(i, 0);
 				}
 			}
 		}
 	}
 }
 
-void Server::handleClientDeconnection(int index)
+void Server::handleClientDeconnection(int index, int type)
 {
 	Client *client = _clients[_clients_fd[index].fd];
 
+	if (type)
+		Client::warnOthersLeaving(client, "Lost connection !", _channels);
 	if (client->getNickname() != "undefined" && client->getUsername() != "\0")
+	{
 		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
+		for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+			if (it->second->isMember(client->getNickname()))
+				it->second->removeClient(client);
+		}
+	}
 	else
 		std::cout << Server::getServerLog() << GRAY << "Unlogged client disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 	_clients.erase(client->getSocket());
 	close(client->getSocket());
-	delete client;
     for (int i = index; i < _clients_nb; i++) {
         _clients_fd[i] = _clients_fd[i + 1];
     }
     _clients_nb--;
+	delete client;
 }
 
 void Server::disconnectClient(int fd)
@@ -155,7 +164,7 @@ void Server::disconnectClient(int fd)
 
 	while (i <=_clients_nb && _clients_fd[i].fd != fd)
 		i++;
-	handleClientDeconnection(i);
+	handleClientDeconnection(i, 0);
 }
 
 void Server::closeFds(void)

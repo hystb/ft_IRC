@@ -1,64 +1,64 @@
 # include <global.hpp>
 
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Cannot join channel (+k)\r\n");
+	client.sendMessage(":localhost 475 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+k)\r\n");
 }
 
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :You're not channel operator\r\n");
+	client.sendMessage(":localhost 482 " + client.getUsername() + " " + channel->getName() + " :You're not channel operator\r\n");
 }
 
 void ERR_CHANNELISFULL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Cannot join channel (+l)\r\n");
+	client.sendMessage(":localhost 471 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+l)\r\n");
 }
 
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
+	client.sendMessage(":localhost 473 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
 }
 
 void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command) {
-	client.sendMessage(client.getUsername() + " " + command +" :Not enough parameters\r\n");
-}
-
-void ERR_NOSUCHCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :No such channel\r\n");
+	client.sendMessage(":localhost 461 " + client.getUsername() + " " + command +" :Not enough parameters\r\n");
 }
 
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
+	client.sendMessage(":localhost 442 " + client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
 }
 
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :They aren't on that channel\r\n");
+	client.sendMessage(":localhost 441 " + client.getUsername() + " " + channel->getName() + " :They aren't on that channel\r\n");
 }
 
 void ERR_USERONCHANNEL(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
+	client.sendMessage(":localhost 443 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + " :is already on channel\r\n");
 }
 
-void LOG_JOIN(const Client &client, const Channel *channel) {//fait maison apres les deux points
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Joined the server\r\n");
+void LOG_JOIN(const Client &client, const Channel *channel) {
+	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName() + "\r\n");
 }
 
-void LOG_KICK(const Client &client, const Channel *channel) {//fait maison apres les deux points
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname) {
+	client.sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + nickname + "\r\n");
+	// client.sendMessage(client.getUsername() + " " + channel->getName() + " :Kicked out of the server\r\n");
+   // :WiZ!jto@tolsun.oulu.fi KICK #Finnish John
 }
 
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :End of /NAMES list\r\n");
+	client.sendMessage(":localhost 366 " + channel->getName() + " :End of /NAMES list\r\n");
 }
 
 void RPL_INVITING(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
+	client.sendMessage(":localhost 341 " + client.getUsername() + " " + client.getNickname() + " " + channel->getName() + "\r\n");
 }
 
-void RPL_NAMREPLY(const Client &client, const Channel *channel) {//to do
-	client.sendMessage(client.getUsername() + " @ " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+void RPL_NAMREPLY(const Client &client, const Channel *channel) {	
+	client.sendMessage(":" + client.getNickname() +" 353 " + client.getUsername() + " = " + channel->getName() + " :@" + client.getUsername() + "\r\n");
+	
+	// std::string message = ":" + client.getNickname() +" 353 " + client.getUsername() + channel->getName() + " :";
 	//"<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 }
 
 void RPL_TOPIC(const Client &client, const Channel *channel) {
-	client.sendMessage(client.getUsername() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
+	client.sendMessage(":localhost 332 " + client.getUsername() + " " + channel->getName() + " :" + channel->getTopic() + "\r\n");
 }
 
 void ERR_ALREADYREGISTERED(const Client &client) {
@@ -98,8 +98,7 @@ void RPL_YOURHOST(const Client &client) {
 }
 
 void RPL_CREATED(const Client &client) {
-	// changer
-	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created before !\r\n");
+	client.sendMessage(":localhost 003 " + client.getNickname() + " :Your server was created 15th october 1996 !\r\n");
 }
 
 void RPL_MYINFO(const Client &client) {
@@ -126,4 +125,18 @@ void ERR_UNKNOWNCOMMAND(const Client &client) {
 	client.sendMessage(":localhost 421 " + client.getNickname() + " : Unknowm command\r\n");
 }
 
+void ERR_NOSUCHCHANNEL(const Client &client, std::string channel) {
+	client.sendMessage(":localhost 403 " + client.getNickname() + " " + channel + " :No such channel\r\n");
+}
 
+void ERR_NOSUCHNICK(const Client &client, std::string nick) {
+	client.sendMessage(":localhost 401 " + client.getNickname() + " " + nick + " :No such nick\r\n");
+}
+
+void ERR_NOTEXTTOSEND(const Client &client) {
+	client.sendMessage(":localhost 412 " + client.getNickname() + " :No text to send\r\n");
+}
+
+void ERR_CANNOTSENDTOCHAN(const Client &client, std::string target) {
+	client.sendMessage(":localhost 404 " + client.getNickname() + " " + target + " :Cannot send to channel\r\n");
+}

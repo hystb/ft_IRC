@@ -22,6 +22,7 @@ src/commandhandler/commands/pass.cpp\
 src/commandhandler/commands/quit.cpp\
 src/commandhandler/commands/topic.cpp\
 src/commandhandler/commands/user.cpp\
+src/commandhandler/commands/privmsg.cpp\
 src/commandhandler/commands/ping.cpp
 
 OBJ_DIR 	= .obj

@@ -2,34 +2,57 @@
 
 void CommandHandler::join(Command& cmd)
 {
-	std::map<std::string, Channel*>::iterator it;
+	std::map<std::string, Channel*>::iterator channelIt;
+	const std::string	&channelName = cmd.getParameters().at(0);
 
-	if (cmd.getParameters().at(0).empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), it->second, cmd.getCommand());
-	}
-	it = cmd.getChannels().find(cmd.getParameters().at(0));
-	if (it == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), it->second);
-		cmd.getChannels().insert(std::pair<std::string, Channel*>(cmd.getParameters().at(0), \
-		new Channel(cmd.getParameters().at(0), cmd.getParameters().at(1), cmd.getClient())));
+	if (channelName.empty()) {
+		ERR_NEEDMOREPARAMS(*cmd.getClient(), channelIt->second, cmd.getCommand());
 		return ;
 	}
-	else if (!(it->second->isInvited(cmd.getClient()->getUsername()))) {
-		ERR_INVITEONLYCHAN(*cmd.getClient(), it->second);
+	channelIt = cmd.getChannels().find(channelName);
+	if (channelName.at(0) != '#') {
+		std::cout << "et le # c'est pour les chiens ?" << std::endl;
 		return ;
 	}
-	else if (it->second->getLimit() >= cmd.getChannels().size()) {
-		ERR_CHANNELISFULL(*cmd.getClient(), it->second);
+	else if (channelName.find('#', 2) != std::string::npos) {
+		std::cout << "un # de trop..." << std::endl;
+		return ;
 	}
-	else if (cmd.getParameters().at(1) != it->second->getPassword()) {
-		ERR_BADCHANNELKEY(*cmd.getClient(), it->second);
+	else if (channelIt == cmd.getChannels().end()) {
+		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
+		cmd.getChannels()[channelName] = new Channel(channelName, cmd.getClient());
+		if (cmd.getParameters().size() > 1)
+			cmd.getChannels().at(channelName)->setPassword(cmd.getParameters().at(1));
+		LOG_JOIN(*cmd.getClient(), cmd.getChannels()[channelName]);
+		RPL_TOPIC(*cmd.getClient(), cmd.getChannels()[channelName]);
+		RPL_NAMREPLY(*cmd.getClient(), cmd.getChannels()[channelName]);
+		RPL_ENDOFNAMES(*cmd.getClient(), cmd.getChannels()[channelName]);
+		// cmd.listChannel();//test
+		cmd.getChannels()[channelName]->listClients();//test
+		return ;
+	}
+	else if (channelIt->second->isMember(cmd.getClient()->getNickname())) {
+		std::cout << "tes deja membre frerot" << std::endl;
+		return ;
+	}
+	else if (channelIt->second->isInviteOnlyMode() && !(channelIt->second->isInvited(cmd.getClient()->getNickname()))) {
+		ERR_INVITEONLYCHAN(*cmd.getClient(), channelIt->second);
+		return ;
+	}
+	else if (cmd.getChannels().size() >= channelIt->second->getLimit()) {
+		ERR_CHANNELISFULL(*cmd.getClient(), channelIt->second);
+		return ;
+	}
+	else if (!channelIt->second->getPassword().empty() && cmd.getParameters().at(1) != channelIt->second->getPassword()) {
+		ERR_BADCHANNELKEY(*cmd.getClient(), channelIt->second);
 		return ;
 	}
 	else {
-		LOG_JOIN(*cmd.getClient(), it->second);
-		RPL_TOPIC(*cmd.getClient(), it->second);
-		RPL_NAMREPLY(*cmd.getClient(), it->second);
-		RPL_ENDOFNAMES(*cmd.getClient(), it->second);
-		it->second->addClient(cmd.getClient(), 0);
+		channelIt->second->addClient(cmd.getClient(), 0);
+		LOG_JOIN(*cmd.getClient(), channelIt->second);
+		RPL_TOPIC(*cmd.getClient(), channelIt->second);
+		RPL_NAMREPLY(*cmd.getClient(), channelIt->second);
+		RPL_ENDOFNAMES(*cmd.getClient(), channelIt->second);
+		// cmd.listChannel();
 	}
 }

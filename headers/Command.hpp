@@ -31,10 +31,11 @@ public:
 	const std::vector<std::string>& 	getParameters(void) const;
 	std::string							getContent(void) const;
 
-	std::map<std::string, Channel*>&  	getChannels(void);
+	std::map<std::string, Channel*>&	getChannels(void);
 	std::map<int, Client*>&				getClients(void);
 	Client* 							getClient(void);
 
+	void	listChannel(void);
 
 	/* exceptions */
 	class invalidException : public std::exception {
@@ -60,17 +61,23 @@ void ERR_NONICKNAMEGIVEN(const Client &client);
 void ERR_ERRONEUSNICKNAME(const Client &client, std::string nick);
 void ERR_PASSWDMISMATCH(const Client &client);
 void ERR_UNKNOWNCOMMAND(const Client &client);
+void ERR_NOSUCHNICK(const Client &client, std::string nick);
+void ERR_NOSUCHCHANNEL(const Client &client, std::string channel);
+void ERR_NOTEXTTOSEND(const Client &client);
+void ERR_CANNOTSENDTOCHAN(const Client &client, std::string target);
+
+
 
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
 void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command);
-void ERR_NOSUCHCHANNEL(const Client &client, const Channel *channel);
+void ERR_NOSUCHCHANNEL(const Client &client, const std::string channelName);
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel);
 void ERR_USERNOTINCHANNEL(const Client &client, const Channel *channel);
 void LOG_JOIN(const Client &client, const Channel *channel);
-void LOG_KICK(const Client &client, const Channel *channel);
+void LOG_KICK(const Client &client, const Channel *channel, const std::string &nickname);
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, const Channel *channel);
 void RPL_TOPIC(const Client &client, const Channel *channel);
