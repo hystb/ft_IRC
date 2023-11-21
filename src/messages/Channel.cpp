@@ -12,7 +12,7 @@ Channel::~Channel(void) {}
 
 // clients map
 void Channel::addClient(Client *client, bool isOperator) {
-	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
+	sendMessage(":" + client->getUsername() + " JOIN " + this->_name + "\r\n");
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
