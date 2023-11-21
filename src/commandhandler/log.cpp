@@ -16,10 +16,6 @@ void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 473 " + client.getUsername() + " " + channel->getName() + " :Cannot join channel (+i)\r\n");
 }
 
-void ERR_NEEDMOREPARAMS(const Client &client, const Channel *channel, const std::string &command) {
-	client.sendMessage(":localhost 461 " + client.getUsername() + " " + command +" :Not enough parameters\r\n");
-}
-
 void ERR_NOTONCHANNEL(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 442 " + client.getUsername() + " " + channel->getName() + " :You're not on that channel\r\n");
 }

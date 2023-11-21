@@ -7,6 +7,16 @@ int isInvalid(std::string nickname)
 	return (0);
 }
 
+unsigned long ft_stoi(std::string e)
+{
+	unsigned long result;
+
+	std::istringstream iss(e);
+	iss >> result;
+
+	return (result);
+}
+
 void CommandHandler::nick(Command& cmd)
 {
 	std::vector<std::string> 	param = cmd.getParameters();
@@ -16,7 +26,7 @@ void CommandHandler::nick(Command& cmd)
 	if (param.size() == 0)
 		return (ERR_NONICKNAMEGIVEN(*client));
 	nickname = param.at(0);
-	if (nickname == "undefined" || nickname.length() > std::atoi(RULES_NICKLEN))
+	if (nickname == "undefined" || nickname.length() > ft_stoi(RULES_NICKLEN))
 		return (ERR_ERRONEUSNICKNAME(*client, nickname));
 	if (isInvalid(nickname))
 		return (ERR_ERRONEUSNICKNAME(*client, nickname));

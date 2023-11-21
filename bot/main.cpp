@@ -2,10 +2,10 @@
 
 int main(int argc, char const *argv[])
 {
-	if (argc == 6)
+	if (argc == 6 || argc == 7)
 	{	
-		size_t size;
-		std::string server = argv[1];
+		std::string channelPassword;
+		const std::string server = argv[1];
     	int port;
 		std::istringstream iss(argv[2]);
 		iss >> port;
@@ -13,9 +13,13 @@ int main(int argc, char const *argv[])
 		const std::string password = argv[4];
 		const std::string apikey = argv[5];
     	const std::string nickname = "RocketBot";
+		if (argc == 7)
+			 channelPassword = argv[6];
 		try
 		{
     		IRCBot bot(server, port, channel, nickname, password, apikey);
+			if (!channelPassword.empty())
+				bot.setChannelPassword(channelPassword);
     		bot.run();
 		}
 		catch (std::exception &e)
@@ -25,7 +29,7 @@ int main(int argc, char const *argv[])
 	}
 	else
 	{
-		std::cout << "Args needed as following <Server Address> <Port> <Channel> <Password> <ApiKey> <Channel Password>" << std::endl;
+		std::cout << "Args needed as following <Server Address> <Port> <Channel> <Password> <ApiKey> <Channel Password(optional)>" << std::endl;
 	}
 	return 0;
 }

@@ -15,12 +15,11 @@ void CommandHandler::privmsg(Command& cmd)
 	target = param.at(0);
 	if (target.find("#") == 0) // mean that it is a channel
 	{
-		target = target.substr(1, target.length());
 		if (channels.find(target) != channels.end())
 		{
 			std::map<Client*, bool> &clientsInside = channels.find(target)->second->getClients();
 			if (clientsInside.find(client) != clientsInside.end()) // mean that he is in the channel
-				channels.find(target)->second->sendMessage(Client::getClientID(*client) + " PRIVMSG " + "#" + target + " :" + cmd.getContent() + "\r\n");
+				channels.find(target)->second->sendMessageWithoutClient(Client::getClientID(*client) + " PRIVMSG " + target + " :" + cmd.getContent() + "\r\n", client);
 			else
 				return (ERR_CANNOTSENDTOCHAN(*client, target));
 		}

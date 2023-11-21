@@ -12,6 +12,7 @@ Channel::~Channel(void) {}
 
 // clients map
 void Channel::addClient(Client *client, bool isOperator) {
+	std::cout << "ici" << std::endl;
 	sendMessage(":" + client->getUsername() + " JOIN #" + this->_name);
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
@@ -62,7 +63,7 @@ std::string	Channel::getName(void) const { return _name; }
 std::string	Channel::getTopic(void) const { return _topic; }
 std::string	Channel::getPassword(void) const { return _password; }
 bool		Channel::isInviteOnlyMode(void) { return _inviteOnlyMode; }
-int			Channel::getLimit(void) const { return _limit; }
+unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
 
 bool Channel::isMember(Client *client) {
@@ -117,6 +118,14 @@ std::string	const Channel::listClients(void) {
 	}
 	// message.pop_back();
 	return message;
+}
+
+void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (it->first != without)
+			it->first->sendMessage(message);
+  }
 }
 
 // only for tests
