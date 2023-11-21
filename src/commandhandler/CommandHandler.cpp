@@ -30,6 +30,6 @@ void CommandHandler::handleCommand(std::string input, Client *client, std::map<s
 	Command cmd = Command(input, client, channels, clients);
 	std::string toPrint = input.substr(0, input.length() - 2);
 
-	std::cout << Server::getServerLog() << BLUE << "⬅️ " << toPrint << RESET << GRAY << " (" << client->getSocket() << ")" << RESET << std::endl;
+	std::cout << Server::getServerLog() << CYAN << "⬅️ " << toPrint << RESET << GRAY << " (" << client->getSocket() << ")" << RESET << std::endl;
 	commands(cmd);
 }
