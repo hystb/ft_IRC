@@ -3,6 +3,7 @@
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	addClient(client, 1);
 	_inviteOnlyMode = 0;
+	_topicRestriction = 0;// A VERIFIER
 	_limit = MAX_CLIENTS;
 	std::cout << "Channel: constructor called" << std::endl;
 	_channel_nb += 1;//to deleted
@@ -34,8 +35,12 @@ void Channel::removeClient(const std::string &nickname) {
 	}
 }
 
-void Channel::setModerator(Client *client) {
+void Channel::setOperator(Client *client) {
 	_clients[client] = 1;
+}
+
+void Channel::unsetOperator(Client *client) {
+	_clients[client] = 0;
 }
 
 // invited vector
@@ -53,9 +58,11 @@ void Channel::removeInvited(const std::string& nickname) {
 }
 
 // setters
-void	Channel::setPassword(const std::string& password) {
-	_password = password;
-}
+void	Channel::setPassword(const std::string& password) { _password = password; }
+void	Channel::setInviteOnlyMode(void) { _inviteOnlyMode = 1; }
+void	Channel::unsetInviteOnlyMode(void) { _inviteOnlyMode = 0; }
+void	Channel::setTopicRestriction(void) { _topicRestriction = 1; }
+void	Channel::unsetTopicRestriction(void) { _topicRestriction = 0; }
 
 // getters
 std::string	Channel::getName(void) const { return _name; }
@@ -145,7 +152,7 @@ void Channel::TestListClients() {
 		bool isOperator = it->second;
 		std::cout << "Client: " << client->getNickname();
 		if (isOperator)
-			std::cout << " is Moderator" << std::endl;
+			std::cout << " is Operator" << std::endl;
 		else
 			std::cout << " is Ordinary mortals" << std::endl;
 	}
