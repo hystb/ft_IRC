@@ -19,7 +19,7 @@ void CommandHandler::privmsg(Command& cmd)
 		{
 			std::map<Client*, bool> &clientsInside = channels.find(target)->second->getClients();
 			if (clientsInside.find(client) != clientsInside.end()) // mean that he is in the channel
-				channels.find(target)->second->sendMessageWithoutClient(Client::getClientID(*client) + " PRIVMSG " + target + " :" + cmd.getContent() + "\r\n", client);
+				channels.find(target)->second->sendMessageWithoutClient(Client::getClientID(*client) + " PRIVMSG " + target + " :" + cmd.getContent(), client);
 			else
 				return (ERR_CANNOTSENDTOCHAN(*client, target));
 		}
@@ -30,7 +30,7 @@ void CommandHandler::privmsg(Command& cmd)
 		for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			if (it->second->getNickname() == target) {
-				it->second->sendMessage(Client::getClientID(*client) + " PRIVMSG " + it->second->getNickname() + " :" + cmd.getContent() + "\r\n");
+				it->second->sendMessage(Client::getClientID(*client) + " PRIVMSG " + it->second->getNickname() + " :" + cmd.getContent());
 				return ;
 			}
 		}

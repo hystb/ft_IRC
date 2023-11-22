@@ -14,7 +14,7 @@ void CommandHandler::part(Command& cmd) {
 	channel = cmd.getChannels().find(channelName)->second;
 	if (channel->isMember(client))
 	{
-		channel->sendMessage(Client::getClientID(*client) + " PART " + channelName + "\r\n");
+		channel->sendMessage(Client::getClientID(*client) + " PART " + channelName);
 		channel->removeClient(client);
 	}
 	else

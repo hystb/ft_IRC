@@ -26,8 +26,8 @@ void CommandHandler::kick(Command& cmd)
 		return ;
 	}
 	else {
+		it->second->sendMessage(Client::getClientID(*cmd.getClient()) + " KICK " + it->second->getName() + " " + cmd.getParameters().at(1) + + " :" + cmd.getContent());
 		it->second->removeClient(cmd.getParameters().at(1));
-		LOG_KICK(*cmd.getClient(), it->second, cmd.getParameters().at(1));
 		it->second->listClients();
 	}
 }

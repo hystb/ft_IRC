@@ -37,8 +37,8 @@ void CommandHandler::nick(Command& cmd)
 	}
 	if (client->getNickname() != "undefined")
 	{
-		client->sendMessage(":" + client->getNickname() + " NICK " + nickname +"\r\n");
-		Client::broadcastFromClient(cmd.getChannels(), client, ":" + client->getNickname() + " NICK " + nickname + "\r\n");
+		client->sendMessage(":" + client->getNickname() + " NICK " + nickname);
+		Client::broadcastFromClient(cmd.getChannels(), client, ":" + client->getNickname() + " NICK " + nickname);
 		client->setNickname(nickname);
 	}
 	else

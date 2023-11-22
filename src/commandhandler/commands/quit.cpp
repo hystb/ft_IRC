@@ -3,7 +3,7 @@
 void Client::warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels)
 {
 	if (client->isConnected())
-		client->broadcastFromClient(channels, client, Client::getClientID(*client) + " QUIT :" + reason + "\r\n");
+		client->broadcastFromClient(channels, client, Client::getClientID(*client) + " QUIT :" + reason);
 }
 
 void CommandHandler::quit(Command& cmd)
