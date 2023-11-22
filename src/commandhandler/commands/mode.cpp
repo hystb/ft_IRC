@@ -18,6 +18,7 @@ bool	checkModestring(std::string modestring) {
 		return (1);
 	if (modestring[1] != 'o' && modestring[1] != 'i' && modestring[1] != 't' && modestring[1] != 'k' && modestring[1] != 'l')
 		return (1);
+	return (0); // pour compiler mais jsp si c'ets bon
 }
 
 //USER
@@ -62,11 +63,15 @@ void	topicFlag(Channel *channelPtr, char action, std::string modeArgument) {
 void	keyFlag(Channel *channelPtr, char action, std::string modeArgument) {
 	if (modeArgument.empty())
 		return ;
+	(void) action;
+	(void) channelPtr;
 }
 
 void	limitFlag(Channel *channelPtr, char action, std::string modeArgument) {
 	if (modeArgument.empty())
 		return ;
+	(void) action;
+	(void) channelPtr;
 }
 
 void CommandHandler::mode(Command& cmd)
