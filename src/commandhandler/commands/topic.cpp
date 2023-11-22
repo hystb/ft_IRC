@@ -23,7 +23,7 @@ void CommandHandler::topic(Command& cmd)
 						RPL_TOPIC(*it->first, channel);
 				}
 			}
-			else // Mean that there isn't <topic> -> reading !
+			else
 				return (RPL_TOPIC(*client, channel));
 		}
 		else 
