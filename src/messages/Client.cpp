@@ -27,9 +27,10 @@ void	Client::setRealname(std::string realname) { _realname = realname; }
 // attributes
 void 	Client::sendMessage(std::string message) const 
 {
-	std::string toPrint = message.substr(0, message.length() - 2);
-	std::cout << Server::getServerLog() << GREEN << "➡️ " << toPrint << RESET << GRAY << "(" << getSocket() << ")" << RESET << std::endl;
-	if (send(_socketFd, message.c_str(), message.length(), 0) < 0)
+	std::string toSend = message + "\r\n";
+	std::cout << Server::getServerLog() << GREEN << "➡️ " << message << RESET << GRAY << "(" << getSocket() << ")" << RESET << std::endl;
+	
+	if (send(_socketFd, toSend.c_str(), toSend.length(), 0) < 0)
 		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
 }
 

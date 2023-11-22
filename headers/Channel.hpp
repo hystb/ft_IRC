@@ -28,13 +28,15 @@ class Channel
 		void	unsetInviteOnlyMode(void);
 		void	setTopicRestriction(void);
 		void	unsetTopicRestriction(void);
+		void	setTopic(const std::string& topic);
 
 		// getters
 		std::string	getName(void) const;
 		std::string	getPassword(void) const;
 		std::string	getTopic(void) const;
 		unsigned long getLimit(void) const;
-		bool		isInviteOnlyMode(void);
+		bool		isInviteOnlyMode(void) const;
+		bool 		isTopicRestriction(void) const;
 		std::map<Client*, bool>& getClients(void);
 
 		bool 	isMember(Client *client);
