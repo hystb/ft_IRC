@@ -13,6 +13,7 @@
 # include <exception> 
 # include <sstream>
 # include <map>
+# include <stdlib.h>
 
 # include <Client.hpp>
 # include <Channel.hpp>

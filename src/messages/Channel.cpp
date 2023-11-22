@@ -59,6 +59,7 @@ void Channel::removeInvited(const std::string& nickname) {
 
 // setters
 void	Channel::setPassword(const std::string& password) { _password = password; }
+void	Channel::setLimit(unsigned long limit) { _limit = limit; }
 void	Channel::setInviteOnlyMode(void) { _inviteOnlyMode = 1; }
 void	Channel::unsetInviteOnlyMode(void) { _inviteOnlyMode = 0; }
 void	Channel::setTopicRestriction(void) { _topicRestriction = 1; }
@@ -66,11 +67,11 @@ void	Channel::unsetTopicRestriction(void) { _topicRestriction = 0; }
 void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 
 // getters
-std::string	Channel::getName(void) const { return _name; }
-std::string	Channel::getTopic(void) const { return _topic; }
-std::string	Channel::getPassword(void) const { return _password; }
-bool		Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
-bool 		Channel::isTopicRestriction(void) const { return _topicRestriction; }
+std::string		Channel::getName(void) const { return _name; }
+std::string		Channel::getTopic(void) const { return _topic; }
+std::string		Channel::getPassword(void) const { return _password; }
+bool			Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
+bool 			Channel::isTopicRestriction(void) const { return _topicRestriction; }
 unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
 

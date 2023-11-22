@@ -24,6 +24,7 @@ class Channel
 		
 		// setters
 		void	setPassword(const std::string& password);
+		void	setLimit(unsigned long limit);
 		void	setInviteOnlyMode(void);
 		void	unsetInviteOnlyMode(void);
 		void	setTopicRestriction(void);
@@ -31,12 +32,12 @@ class Channel
 		void	setTopic(const std::string& topic);
 
 		// getters
-		std::string	getName(void) const;
-		std::string	getPassword(void) const;
-		std::string	getTopic(void) const;
-		unsigned long getLimit(void) const;
-		bool		isInviteOnlyMode(void) const;
-		bool 		isTopicRestriction(void) const;
+		std::string		getName(void) const;
+		std::string		getPassword(void) const;
+		std::string		getTopic(void) const;
+		unsigned long	getLimit(void) const;
+		bool			isInviteOnlyMode(void) const;
+		bool 			isTopicRestriction(void) const;
 		std::map<Client*, bool>& getClients(void);
 
 		bool 	isMember(Client *client);
@@ -47,6 +48,7 @@ class Channel
 		// attributes
 		void	sendMessage(std::string message);
 		void	sendMessageWithoutClient(std::string message, Client* without);
+		void 	actualiseClientsList(void);
 
 		std::string listClients(void);
 
@@ -54,10 +56,6 @@ class Channel
 		void	TestListClients(void);
 		void	TestListInvited(void);
 		static int 				_channel_nb;
-
-	
-		void actualiseClientsList(void);
-
 
 	private:
 		std::string 			_name;
