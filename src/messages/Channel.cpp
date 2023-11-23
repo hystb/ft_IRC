@@ -70,10 +70,28 @@ void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 std::string		Channel::getName(void) const { return _name; }
 std::string		Channel::getTopic(void) const { return _topic; }
 std::string		Channel::getPassword(void) const { return _password; }
-bool			Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
-bool 			Channel::isTopicRestriction(void) const { return _topicRestriction; }
 unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
+bool			Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
+bool 			Channel::isTopicRestriction(void) const { return _topicRestriction; }
+
+void addMode(std::string& modes, bool condition, char modeChar) {
+    modes += (condition ? '+' : '-');
+    modes += modeChar;
+	if (modeChar != 'l')
+		modes += ' ';
+}
+
+std::string	Channel::getModes(void) const {
+    std::string modes;
+
+    addMode(modes, isInviteOnlyMode(), 'i');
+    addMode(modes, isTopicRestriction(), 't');
+    addMode(modes, !_password.empty(), 'k');
+    addMode(modes, _limit != MAX_CLIENTS, 'l');
+
+    return modes;
+}
 
 bool Channel::isMember(Client *client) {
 	std::map<Client*, bool>::iterator it = _clients.find(client);

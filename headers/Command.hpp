@@ -49,6 +49,9 @@ void RPL_YOURHOST(const Client &client);
 void RPL_CREATED(const Client &client);
 void RPL_MYINFO(const Client &client);
 void RPL_ISUPPORT(const Client &client);
+void RPL_CHANNELMODEIS(const Client &client, const Channel *channel);
+void RPL_CREATIONTIME(const Client &client, const Channel *channel);
+void RPL_UMODEIS(const Client &client);
 void RPL_TOPIC(const Client &client, const Channel *channel);
 void RPL_INVITING(const Client &client, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, Channel *channel);
@@ -77,6 +80,7 @@ void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
+void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
 

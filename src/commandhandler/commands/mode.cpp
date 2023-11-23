@@ -11,9 +11,13 @@ Channel	*getChannel(Command& cmd, std::string	target) {
 	return channelIt->second;
 }
 
-bool	checkModestring(std::string modestring) {
-	if (modestring.empty() || !modestring[0] || !modestring[1] || modestring[2])
-		return (1);
+bool	checkModestring(Command& cmd, Channel *channelPtr, std::string modestring) {
+	if (modestring.empty()) {
+		RPL_CHANNELMODEIS(*cmd.getClient(), channelPtr);
+		// RPL_CREATIONTIME(*cmd.getClient(), channelPtr);
+	}
+	if (!modestring[0] || !modestring[1] || modestring[2])
+		return (1);// log ?? on liberia ubuntu server -> "MODE :Not enough parameters"
 	if (modestring[0] != '-' && modestring[0] != '+')
 		return (1);
 	if (modestring[1] != 'o' && modestring[1] != 'i' && modestring[1] != 't' && modestring[1] != 'k' && modestring[1] != 'l')
@@ -39,7 +43,7 @@ void	operatorFlag(Command& cmd, Channel *channelPtr, char action, std::string mo
 		return ;
 	}
 	if (action == '+')
-		channelPtr->setOperator(client);//log?
+		channelPtr->setOperator(client);
 	else
 		channelPtr->unsetOperator(client);
 }
@@ -96,18 +100,22 @@ void CommandHandler::mode(Command& cmd)
 	char				flag = cmd.getParameters().at(1).at(1);
 	Channel 			*channelPtr;
 	
-	if (!cmd.getParameters().at(3).empty())// si trop darg
+	if (!cmd.getParameters().at(3).empty())
 		return ;
-	if (channelName.empty()) { // a verifier si on dois le mettre dans mode
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
+	// if (channelName.empty()) { // a verifier si on dois le mettre dans mode
+	// 	ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
+	// 	return ;
+	// }
+ 	channelPtr = getChannel(cmd, cmd.getParameters().at(0));
+	if (channelPtr == NULL) {
+		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
 		return ;
 	}
- 	channelPtr = getChannel(cmd, cmd.getParameters().at(0));//channel existe pas
-	if (channelPtr == NULL)
+	if (!channelPtr->isOperator(cmd.getClient())) {
+		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), channelPtr);
 		return ;
-	if (!channelPtr->isOperator(cmd.getClient())) //si il est pas operator, LOG A RAJOUTER
-		return ;
-	if (checkModestring(cmd.getParameters().at(1))) //pas bon format pour modestring
+	}
+	if (checkModestring(cmd, channelPtr, cmd.getParameters().at(1)))
 		return ;
 	if (flag == 'o') {
 		operatorFlag(cmd, channelPtr, action, modeArgument);
