@@ -3,6 +3,7 @@
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	addClient(client, 1);
 	_inviteOnlyMode = 0;
+	_topicRestriction = 0;// A VERIFIER
 	_limit = MAX_CLIENTS;
 	std::cout << "Channel: constructor called" << std::endl;
 	_channel_nb += 1;//to deleted
@@ -12,7 +13,7 @@ Channel::~Channel(void) {}
 
 // clients map
 void Channel::addClient(Client *client, bool isOperator) {
-	sendMessage(":" + client->getUsername() + " JOIN " + this->_name + "\r\n");
+	sendMessage(":" + client->getNickname() + " JOIN " + this->_name);
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
@@ -34,8 +35,12 @@ void Channel::removeClient(const std::string &nickname) {
 	}
 }
 
-void Channel::setModerator(Client *client) {
+void Channel::setOperator(Client *client) {
 	_clients[client] = 1;
+}
+
+void Channel::unsetOperator(Client *client) {
+	_clients[client] = 0;
 }
 
 // invited vector
@@ -53,17 +58,40 @@ void Channel::removeInvited(const std::string& nickname) {
 }
 
 // setters
-void	Channel::setPassword(const std::string& password) {
-	_password = password;
-}
+void	Channel::setPassword(const std::string& password) { _password = password; }
+void	Channel::setLimit(unsigned long limit) { _limit = limit; }
+void	Channel::setInviteOnlyMode(void) { _inviteOnlyMode = 1; }
+void	Channel::unsetInviteOnlyMode(void) { _inviteOnlyMode = 0; }
+void	Channel::setTopicRestriction(void) { _topicRestriction = 1; }
+void	Channel::unsetTopicRestriction(void) { _topicRestriction = 0; }
+void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 
 // getters
-std::string	Channel::getName(void) const { return _name; }
-std::string	Channel::getTopic(void) const { return _topic; }
-std::string	Channel::getPassword(void) const { return _password; }
-bool		Channel::isInviteOnlyMode(void) { return _inviteOnlyMode; }
+std::string		Channel::getName(void) const { return _name; }
+std::string		Channel::getTopic(void) const { return _topic; }
+std::string		Channel::getPassword(void) const { return _password; }
 unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
+bool			Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
+bool 			Channel::isTopicRestriction(void) const { return _topicRestriction; }
+
+void addMode(std::string& modes, bool condition, char modeChar) {
+    modes += (condition ? '+' : '-');
+    modes += modeChar;
+	if (modeChar != 'l')
+		modes += ' ';
+}
+
+std::string	Channel::getModes(void) const {
+    std::string modes;
+
+    addMode(modes, isInviteOnlyMode(), 'i');
+    addMode(modes, isTopicRestriction(), 't');
+    addMode(modes, !_password.empty(), 'k');
+    addMode(modes, _limit != MAX_CLIENTS, 'l');
+
+    return modes;
+}
 
 bool Channel::isMember(Client *client) {
 	std::map<Client*, bool>::iterator it = _clients.find(client);
@@ -112,7 +140,7 @@ std::string	Channel::listClients(void) {
 		bool isOperator = it->second;
 		if (isOperator == true)
 			message += "@";
-		message += client->getUsername();
+		message += client->getNickname();
 		message += " ";
 	}
 	return message;
@@ -126,6 +154,14 @@ void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
   }
 }
 
+void Channel::actualiseClientsList(void) {
+	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
+		const Client* client = it->first;
+		RPL_NAMREPLY(*client, this);
+		RPL_ENDOFNAMES(*client, this);
+	}
+}
+
 // only for tests
 
 void Channel::TestListInvited(void) {} //to do
@@ -137,7 +173,7 @@ void Channel::TestListClients() {
 		bool isOperator = it->second;
 		std::cout << "Client: " << client->getNickname();
 		if (isOperator)
-			std::cout << " is Moderator" << std::endl;
+			std::cout << " is Operator" << std::endl;
 		else
 			std::cout << " is Ordinary mortals" << std::endl;
 	}

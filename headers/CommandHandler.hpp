@@ -24,6 +24,7 @@ private:
 	void mode(Command& cmd);
 	void ping(Command& cmd);
 	void privmsg(Command& cmd);
+	void part(Command& cmd);
 
 	/* vars */
 	std::string& 				_pass;

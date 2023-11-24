@@ -15,7 +15,8 @@ class Channel
 		void	addClient(Client *client, bool isOperator);
 		void	removeClient(Client *client);
 		void	removeClient(const std::string &nickname);
-		void	setModerator(Client *client);
+		void	setOperator(Client *client);
+		void	unsetOperator(Client *client);
 		
 		// invited vector
 		void	addInvited(Client *client);
@@ -23,26 +24,34 @@ class Channel
 		
 		// setters
 		void	setPassword(const std::string& password);
+		void	setLimit(unsigned long limit);
+		void	setInviteOnlyMode(void);
+		void	unsetInviteOnlyMode(void);
+		void	setTopicRestriction(void);
+		void	unsetTopicRestriction(void);
+		void	setTopic(const std::string& topic);
 
 		// getters
-		std::string	getName(void) const;
-		std::string	getPassword(void) const;
-		std::string	getTopic(void) const;
-		unsigned long getLimit(void) const;
-		bool		isInviteOnlyMode(void);
-		std::map<Client*, bool>& getClients(void);
+		std::string					getName(void) const;
+		std::string					getPassword(void) const;
+		std::string					getTopic(void) const;
+		unsigned long				getLimit(void) const;
+		std::string					getModes(void) const;
+		std::map<Client*, bool>& 	getClients(void);
 
+		bool	isInviteOnlyMode(void) const;
+		bool 	isTopicRestriction(void) const;
 		bool 	isMember(Client *client);
 		bool 	isMember(const std::string &nickname);
 		bool	isOperator(Client *client);
 		bool	isInvited(const std::string& nickname);
 
 		// attributes
-		void	sendMessage(std::string message);
-		void	sendMessageWithoutClient(std::string message, Client* without);
-
-
+		void		sendMessage(std::string message);
+		void		sendMessageWithoutClient(std::string message, Client* without);
+		void 		actualiseClientsList(void);
 		std::string listClients(void);
+
 
 		// only for tests
 		void	TestListClients(void);
@@ -55,6 +64,7 @@ class Channel
 		std::string				_password;
 		unsigned long			_limit;
 		bool					_inviteOnlyMode;
+		bool					_topicRestriction;
 		std::vector<Client*>	_invited;
 		std::map<Client*, bool>	_clients;
 };

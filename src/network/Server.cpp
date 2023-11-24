@@ -1,5 +1,7 @@
 # include <global.hpp>
 
+Server* Server::instance = NULL;
+
 Server::~Server(void) {}
 
 /* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
@@ -30,6 +32,10 @@ void Server::prepare(void) {
 		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
 		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
 	}
+}
+
+void	Server::SetEnd(void){
+	_end = true;
 }
 
 /* this function get a full entry in a std::string until it reach \r\n */
@@ -80,7 +86,8 @@ void Server::start(void) {
 
 	_clients_fd[0].fd = _fd_sock;
 	_clients_fd[0].events = POLLIN;
-	while (1) {
+	manageSig();
+	while (_end == false) {
 		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
 		if (poll_value < 0)
 			interrupt();
@@ -94,7 +101,7 @@ void Server::start(void) {
 				_clients_fd[_clients_nb + 1].revents = 0;
 				_clients_nb++;
 				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
-				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << std::endl;
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << RESET << std::endl;
 			}
 			else {  // here refuse the client cause server is full
 				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
@@ -131,6 +138,9 @@ void Server::start(void) {
 			}
 		}
 	}
+	closeFds();
+	cleanChannels();
+	cleanClients();
 }
 
 void Server::handleClientDeconnection(int index, int type)
@@ -176,6 +186,8 @@ void Server::closeFds(void)
 void Server::interrupt(void)
 {
 	closeFds();
+	cleanChannels();
+	cleanClients();
 	std::cout << "Something bad happened !" << std::endl;
 	throw (crashException());
 }
@@ -193,7 +205,34 @@ std::string Server::getServerLog(void) {
 	return (ss.str());
 }
 
-Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients) {
+void	Server::manageSig(void)
+{
+	struct sigaction	sig;
+
+	sig.sa_handler =  &Server::handleSignal;
+	instance = this;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGINT not define" << std::endl;
+	if (sigaction(SIGQUIT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGQUIT not define" << std::endl;
+}
+
+void	Server::handleSignal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		std::cout << "lets go bg" << std::endl;
+		Server::instance->SetEnd();			
+	}
+	if (sig == SIGQUIT)
+	{
+		return ;
+	}
+}
+
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
 	try {
 		prepare();
 	} catch (std::exception &e)
@@ -202,5 +241,14 @@ Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::ma
 		std::cout << "-> " << e.what() << std::endl;
 		throw (e);
 	}
-	start();
+}
+
+void Server::cleanChannels(void) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (it->second);
+}
+
+void Server::cleanClients(void) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete (it->second);
 }

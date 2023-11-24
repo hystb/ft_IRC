@@ -27,8 +27,10 @@ void	Client::setRealname(std::string realname) { _realname = realname; }
 // attributes
 void 	Client::sendMessage(std::string message) const 
 {
-	std::cout << RED << "-> " << message << getSocket() << RESET << std::endl;
-	if (send(_socketFd, message.c_str(), message.length(), 0) < 0)
+	std::string toSend = message + "\r\n";
+	std::cout << Server::getServerLog() << GREEN << "➡️ " << message << RESET << GRAY << "(" << getSocket() << ")" << RESET << std::endl;
+	
+	if (send(_socketFd, toSend.c_str(), toSend.length(), 0) < 0)
 		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
 }
 
@@ -60,16 +62,24 @@ void	Client::doLogin(void)
 		RPL_MYINFO(*this);
 		RPL_ISUPPORT(*this);
 		RPL_MOTDSTART(*this);
-		RPL_MOTD(*this, "La team rocket s'envole vers d'autres ciels !\r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%%% \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%        %%%%%%% \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%     \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%      %%%%%     \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%  \r\n");
-		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%%%\r\n");
+		RPL_MOTD(*this, "La team rocket s'envole vers d'autres ciels !");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   ");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%%% ");
+		RPL_MOTD(*this, "\t\t%%%%%        %%%%%%% ");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%%%   ");
+		RPL_MOTD(*this, "\t\t%%%%%%%%%%%%%%%%     ");
+		RPL_MOTD(*this, "\t\t%%%%%      %%%%%     ");
+		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%  ");
+		RPL_MOTD(*this, "\t\t%%%%%       %%%%%%%%%");
 		RPL_ENDOFMOTD(*this);
-		std::cout << Server::getServerLog() << GRAY << "Client " << RESET << YELLOW << BOLD << getUsername() << RESET << GRAY << " successfuly log into the server as " << GREEN << BOLD << getNickname() << RESET << GRAY << " (" << getSocket() << ")" << std::endl;  
+		std::cout << Server::getServerLog() << GRAY << "Client " << RESET << YELLOW << BOLD << getUsername() << RESET << GRAY << " successfuly log into the server as " << GREEN << BOLD << getNickname() << RESET << GRAY << " (" << getSocket() << ")" << RESET << std::endl;  
 	}
+}
+
+Client* Client::getClientFromNickname(std::map<int, Client*>& clients, std::string nickname) {
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (it->second->getNickname() == nickname)
+			return (it->second);
+	}
+	return (NULL);
 }

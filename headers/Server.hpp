@@ -26,10 +26,10 @@ class Server
 		CommandHandler&					_commandHandler;
 		std::map<int, Client*>&			_clients;
 		std::map<std::string, Channel*>	_channels;
+		bool							_end;
 
 		/* startup functions ! */
 		void prepare(void);
-		void start(void);
 
 		void handleClientDeconnection(int index, int type);
 		void sendMessage(int client, std::string message);
@@ -37,19 +37,31 @@ class Server
 		/* exit and errors functions */
 		void closeFds(void);
 		void interrupt(void);
+		void cleanChannels(void);
+		void cleanClients(void);
 
 		/* tools functions */
 		int 	getRawEntry(Client* client);
 		int		extractEntry(std::string del, std::string& dest, Client* client);
 
 	public:
+
+		static Server* instance; 
+
 		Server(uint16_t port, std::string password, CommandHandler& cmd_handler, std::map<int, Client*>& clients);	
 
 		~Server(void);
 
+		void start(void);
 		void disconnectClient(int index);
 
 		static std::string getServerLog(void);
+
+		void	SetEnd(void);
+
+		static void	handleSignal(int sig);
+
+		void	manageSig(void);
 
 		/* exceptions */
 		class initSocketException : public std::exception {

@@ -37,6 +37,7 @@ class Client
 		static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
 		static void warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels);
 		static std::string getClientID(const Client &client);
+		static Client* getClientFromNickname(std::map<int, Client*>& clients, std::string nickname);
 		
 	private:
 		std::string	_nickname;

@@ -1,7 +1,7 @@
 #---------------------------------------------------#
-CC 			= c++
+CC 			= clang++
 
-CFLAGS 		= -g3 -fsanitize=address -Wall -Wextra -Werror -std=c++98
+CFLAGS 		= -Wall -Wextra -Werror -std=c++98
 
 NAME 		= ircserv
 #---------------------------------------------------#
@@ -23,7 +23,8 @@ src/commandhandler/commands/quit.cpp\
 src/commandhandler/commands/topic.cpp\
 src/commandhandler/commands/user.cpp\
 src/commandhandler/commands/privmsg.cpp\
-src/commandhandler/commands/ping.cpp
+src/commandhandler/commands/ping.cpp\
+src/commandhandler/commands/part.cpp
 
 OBJ_DIR 	= .obj
 
