@@ -13,6 +13,7 @@
 # include <exception> 
 # include <sstream>
 # include <map>
+# include <stdlib.h>
 # include <signal.h>
 
 # include <Client.hpp>
@@ -34,7 +35,5 @@
 
 void	handle_signal(int sig);
 void	manageSig(Server *ptr);
-
-
 
 #endif

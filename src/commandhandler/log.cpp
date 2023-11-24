@@ -20,6 +20,21 @@ void RPL_ISUPPORT(const Client &client) {
 	client.sendMessage(":localhost 005 " + client.getNickname() + " NICKLEN=" + RULES_NICKLEN + " CHANNELEN=" + RULES_CHANELLEN + " TOPICLEN=" + RULES_TOPICLEN + " :are supported by this server");
 }
 
+// void RPL_UMODEIS(const Client &client) {
+// 	client.sendMessage(":localhost 221 " + client.getNickname() + " +c");
+// }
+
+void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {
+	client.sendMessage(":localhost 324 " + client.getNickname() + " " + channel->getName() + " " + channel->getModes());
+ 	//"<client> <channel> <modestring> <mode arguments>..."
+}
+
+// void RPL_CREATIONTIME(const Client &client, const Channel *channel) {
+// 	client.sendMessage(":localhost 329 " + client.getNickname() + " " + channel->getName() + " 1633648400");
+//   	//"<client> <channel> <creationtime>"
+// 	//1633648400" est le timestamp représentant la date de création du canal. Ce timestamp est généralement au format UNIX, qui compte les secondes écoulées depuis le 1er janvier 1970 à 00:00:00 UTC.
+// }
+
 void RPL_TOPIC(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic());
 }
@@ -124,6 +139,11 @@ void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 482 " + client.getNickname() + " " + channel->getName() + " :You're not channel operator");
 }
 
+void ERR_UMODEUNKNOWNFLAG(const Client &client) {
+	client.sendMessage(":localhost 501 " + client.getNickname() + "  :Unknown MODE flag");
+}
+
 void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
 }
+
