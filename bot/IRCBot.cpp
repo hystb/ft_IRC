@@ -32,9 +32,9 @@ std::string to_string(const T& value) {
 
 void IRCBot::connectToServer() {
 	if (_ircSocket != -1) {
+        sendIRCMessage("PASS " + _password);
 	    sendIRCMessage("NICK " + _nickname);
 	    sendIRCMessage("USER " + _nickname + " 0 0 :" + _nickname);
-        sendIRCMessage("PASS " + _password);
         if (_channelPassword.empty())
 	        sendIRCMessage("JOIN " + _channel);
         else
@@ -92,8 +92,8 @@ std::string exec(const char* cmd) {
     return result;
 }
 
-std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::string& question){
-    std::string jsonPayload = "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"You answer must be rude and insulting, but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + question + "\"}]}";
+std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::string& question, const std::string& type){
+    std::string jsonPayload = "{\"model\":\"gpt-3.5-turbo-16k\",\"messages\":[{\"role\": \"system\",\"content\": \"" + type + ", but you can answer only 500 caracters maximum\"},{\"role\":\"user\",\"content\":\"" + question + "\"}]}";
     std::string command = "curl -s https://api.openai.com/v1/chat/completions \
         -H \"Content-Type: application/json\" \
         -H \"Authorization: Bearer " + apiKey + "\" \
@@ -103,19 +103,43 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
     return output;
 }
 
+void    IRCBot::setTypes(void){
+    _types["lust"] = "You are an actor and you play the role of lust the personification of this seven deadly sins, so devilness";
+    _types["gluttony"] = "You are an actor and you play the role of gluttony the personification of this seven deadly sins, so devilness";
+    _types["greed"] = "You are an actor and you play the role of greed the personification of this seven deadly sins, so devilness";
+    _types["sloth"] = "You are an actor and you play the role of sloth the personification of this seven deadly sins, so devilness";
+    _types["wrath"] = "You are an actor and you play the role of wrath the personification of this seven deadly sins, so devilness";
+    _types["envy"] = "You are an actor and you play the role of envy the personification of this seven deadly sins, so devilness";
+    _types["pride"] = "You are an actor and you play the role of pride the personification of this seven deadly sins, so devilness";
+    _types["mad"] = "You answer must be rude and insulting";
+}
+
 IRCBot::IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey)
     : _server(server), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey) {
     _ircSocket = createSocket(server, port);
+    setTypes();
 }
 
 IRCBot::~IRCBot() {
     close(_ircSocket);
 }
 
+std::string IRCBot::parseCmd(std::string const &msg){
+
+    size_t i = msg.find_first_of(':', 1);
+    size_t k = msg.find_first_of('!', i);
+    size_t j = msg.find_first_of(' ', k);
+    if (i == std::string::npos || j == std::string::npos || k == std::string::npos)
+        return ("Not a Cmd");
+    return (msg.substr(k + 1, j - k - 1));
+}
+
+
 void IRCBot::run() {
 	std::string received;
 	std::string response;
 	std::string message;
+    std::string type;
     char buffer[1024];
     if (_ircSocket == -1) {
         throw ConnectionError();
@@ -127,7 +151,11 @@ void IRCBot::run() {
         receiveIRCMessage(buffer, sizeof(buffer));
 		received = buffer;
 
-    	if (received.find("!gpt") != std::string::npos) {
+    	if (received.find("!help") != std::string::npos) {
+            sendIRCMessage("PRIVMSG " + _channel +  " :" + "This is the list of commands : pride greed wrath envy lust gluttony sloth");
+        }
+        else if (_types.find(parseCmd(received)) != _types.end()) {
+            type = _types[parseCmd(received)];
 			if (std::string(buffer).length() > 43)
 			{
 				message = &buffer[41];
@@ -140,11 +168,11 @@ void IRCBot::run() {
                     else 
                         i++;
                 }                
-				response = generateGPTResponse(_apiKey, message);
+				response = generateGPTResponse(_apiKey, message, type);
                 std::cout << "response : " << response << std::endl;
                 for (size_t i = 0; i < response.length(); ) {
                     char c = response[i];
-                    if ((c >=  0 && c < 32) || c == 34)
+                    if ((c >=  0 && c < 32) || c == 34 || c == '\n')
                     { 
                         std::cout << static_cast<int> (response[i]) << response[i] << std::endl;
                         response.erase(i, 1);
@@ -156,7 +184,7 @@ void IRCBot::run() {
     	    	sendIRCMessage("PRIVMSG " + _channel +  " :" + response);
 			}
 			else
-				sendIRCMessage("PRIVMSG #help :Correct to use !gpt + your message");
+				sendIRCMessage("PRIVMSG " + _channel +  " :" + "Correct to use !gpt + your message");
     	}
     }
 }
@@ -166,5 +194,5 @@ void	IRCBot::setChannelPassword(std::string const & pass){
 }
 
 const char* IRCBot::ConnectionError::what(void) const throw(){
-	return ("Connection to IRC server failed or was cancelled\0");
+	return ("Connection to IRC server failed or was cancelled");
 }
