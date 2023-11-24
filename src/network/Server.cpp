@@ -138,9 +138,7 @@ void Server::start(void) {
 			}
 		}
 	}
-	closeFds();
-	cleanChannels();
-	cleanClients();
+	interrupt();
 }
 
 void Server::handleClientDeconnection(int index, int type)
@@ -188,8 +186,13 @@ void Server::interrupt(void)
 	closeFds();
 	cleanChannels();
 	cleanClients();
-	std::cout << "Something bad happened !" << std::endl;
-	throw (crashException());
+	if (!_end)
+	{
+		std::cout << "Something bad happened !" << std::endl;
+		throw (crashException());
+	}
+	else
+		throw (stopException());
 }
 
 void Server::sendMessage(int client, std::string message)
@@ -223,7 +226,6 @@ void	Server::handleSignal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		std::cout << "lets go bg" << std::endl;
 		Server::instance->SetEnd();			
 	}
 	if (sig == SIGQUIT)

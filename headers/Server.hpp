@@ -78,5 +78,10 @@ class Server
 			public:
 				virtual const char * what() const throw() { return ("Error during the execution of the server !"); };
 		};
+
+		class stopException : public std::exception {
+			public:
+				virtual const char * what() const throw() { return ("Signal to stop the server received !"); };
+		};
 };
 #endif
