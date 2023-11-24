@@ -1,5 +1,7 @@
 # include <global.hpp>
 
+Server* Server::instance = NULL;
+
 Server::~Server(void) {}
 
 /* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
@@ -84,6 +86,7 @@ void Server::start(void) {
 
 	_clients_fd[0].fd = _fd_sock;
 	_clients_fd[0].events = POLLIN;
+	manageSig();
 	while (_end == false) {
 		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
 		if (poll_value < 0)
@@ -202,6 +205,7 @@ void	Server::manageSig(void)
 	struct sigaction	sig;
 
 	sig.sa_handler =  &Server::handleSignal;
+	instance = this;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sig, NULL) == -1)
@@ -214,7 +218,8 @@ void	Server::handleSignal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		_end = true;			
+		std::cout << "lets go bg" << std::endl;
+		Server::instance->SetEnd();			
 	}
 	if (sig == SIGQUIT)
 	{

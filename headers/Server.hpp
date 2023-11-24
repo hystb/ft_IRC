@@ -44,6 +44,9 @@ class Server
 		int		extractEntry(std::string del, std::string& dest, Client* client);
 
 	public:
+
+		static Server* instance; 
+
 		Server(uint16_t port, std::string password, CommandHandler& cmd_handler, std::map<int, Client*>& clients);	
 
 		~Server(void);
@@ -54,7 +57,7 @@ class Server
 
 		void	SetEnd(void);
 
-		void	handleSignal(int sig);
+		static void	handleSignal(int sig);
 
 		void	manageSig(void);
 
