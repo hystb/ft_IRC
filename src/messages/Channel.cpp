@@ -170,6 +170,8 @@ void Channel::actualiseMode(const Client &target, char action, char symbol) {
 			else if (symbol == 'k' && action == '+') {
 				LOG_MODE3(this,  *client, action, symbol, _password);
 			}
+			else if (symbol == 'l')
+				LOG_MODE4(this,  *client, action, symbol, _limit);
 			else //t i -k{
 			{
 				LOG_MODE2(this,  *client, action, symbol);

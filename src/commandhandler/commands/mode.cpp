@@ -11,16 +11,12 @@ Channel	*getChannel(Command& cmd, std::string	target) {
 	return channelIt->second;
 }
 
-bool	checkModestring(Command& cmd, Channel *channelPtr, std::string modestring) {
-	if (modestring.empty()) {
-		RPL_CHANNELMODEIS(*cmd.getClient(), channelPtr);
-		// RPL_CREATIONTIME(*cmd.getClient(), channelPtr);
-	}
-	if (!modestring[0] || !modestring[1] || modestring[2])
+bool	checkModestring(std::string modeString) {
+	if (!modeString[0] || !modeString[1] || modeString[2])
 		return (1);// log ?? on liberia ubuntu server -> "MODE :Not enough parameters"
-	if (modestring[0] != '-' && modestring[0] != '+')
+	if (modeString[0] != '-' && modeString[0] != '+')
 		return (1);
-	if (modestring[1] != 'o' && modestring[1] != 'i' && modestring[1] != 't' && modestring[1] != 'k' && modestring[1] != 'l')
+	if (modeString[1] != 'o' && modeString[1] != 'i' && modeString[1] != 't' && modeString[1] != 'k' && modeString[1] != 'l')
 		return (1);
 	return (0);
 }
@@ -95,16 +91,18 @@ void	keyFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArg
 	}
 }
 
-void	limitFlag(Channel *channelPtr, char action, std::string modeArgument) {
+void	limitFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (action == '+') {
 		if (modeArgument.empty() || isStringNumeric(modeArgument) == false)
 			return ;
 		channelPtr->setLimit(std::atoi(modeArgument.c_str()));
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'l');
 	}
 	else {
 		if (!modeArgument.empty())
 			return ;
 		channelPtr->setLimit(MAX_CLIENTS);
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'l');
 	}
 }
 
@@ -113,6 +111,10 @@ bool	getArg(Command& cmd, std::string &channelName, char &action, char &flag, st
 		return (1);
 	if (cmd.getParameters().size() >= 1)
 		channelName = cmd.getParameters().at(0);
+	if (channelName.empty()) {
+		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
+		return (1);
+	}
 	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2) {
 		action = cmd.getParameters().at(1).at(0);
 		flag = cmd.getParameters().at(1).at(1);
@@ -132,11 +134,11 @@ void CommandHandler::mode(Command& cmd)
 
 	if (getArg(cmd, channelName, action, flag, modeArgument))
 		return ;
-	// if (channelName.empty()) { // a verifier si on dois le mettre dans mode
-	// 	ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
-	// 	return ;
-	// }
  	channelPtr = getChannel(cmd, channelName);
+	if (cmd.getParameters().size() == 1) {
+		RPL_CHANNELMODEIS(*cmd.getClient(), channelPtr);
+		// RPL_CREATIONTIME(*cmd.getClient(), channelPtr);
+	}
 	if (channelPtr == NULL) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
 		return ;
@@ -145,18 +147,15 @@ void CommandHandler::mode(Command& cmd)
 		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), channelPtr);
 		return ;
 	}
-	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2)
-		if (checkModestring(cmd, channelPtr, cmd.getParameters().at(1)))
+	if (flag && action) {
+		if (checkModestring(cmd.getParameters().at(1)))
 			return ;
-	if (flag == 'o') {
-		operatorFlag(cmd, channelPtr, action, modeArgument);
 	}
-	else {
-		if (flag == 'i') { inviteFlag(cmd, channelPtr, action, modeArgument); }
-		else if (flag == 't') { topicFlag(cmd, channelPtr, action, modeArgument); }
-		else if (flag == 'k') { keyFlag(cmd, channelPtr, action, modeArgument); }
-		else if (flag == 'l') { limitFlag(channelPtr, action, modeArgument); }
-	}
+	if (flag == 'o') { operatorFlag(cmd, channelPtr, action, modeArgument); }
+	else if (flag == 'i') { inviteFlag(cmd, channelPtr, action, modeArgument); }
+	else if (flag == 't') { topicFlag(cmd, channelPtr, action, modeArgument); }
+	else if (flag == 'k') { keyFlag(cmd, channelPtr, action, modeArgument); }
+	else if (flag == 'l') { limitFlag(cmd, channelPtr, action, modeArgument); }
 }
 
 //USER

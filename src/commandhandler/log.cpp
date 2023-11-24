@@ -163,3 +163,9 @@ void LOG_MODE2(const Channel *channel, const Client &client, char action, char s
 void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
 		client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + key);
 }
+
+void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit) {
+	std::stringstream strstream;
+	strstream << limit;
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + strstream.str());
+}
