@@ -39,8 +39,8 @@ void RPL_TOPIC(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic());
 }
 
-void RPL_INVITING(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 341 " + client.getNickname() + " " + client.getNickname() + " " + channel->getName());
+void RPL_INVITING(const Client &client, const Client &invited, const Channel *channel) {
+	client.sendMessage(":localhost 341 " + client.getNickname() + " " + invited.getNickname() + " " + channel->getName());
 }
 
 void RPL_NAMREPLY(const Client &client, Channel *channel) {

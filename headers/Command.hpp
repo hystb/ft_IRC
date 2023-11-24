@@ -53,7 +53,7 @@ void RPL_CHANNELMODEIS(const Client &client, const Channel *channel);
 void RPL_CREATIONTIME(const Client &client, const Channel *channel);
 void RPL_UMODEIS(const Client &client);
 void RPL_TOPIC(const Client &client, const Channel *channel);
-void RPL_INVITING(const Client &client, const Channel *channel);
+void RPL_INVITING(const Client &client, const Client &invited, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, Channel *channel);
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_MOTDSTART(const Client &client);
