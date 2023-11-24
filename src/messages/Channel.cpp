@@ -165,7 +165,15 @@ void Channel::actualiseClientsList(void) {
 void Channel::actualiseMode(const Client &target, char action, char symbol) {
 	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
 			const Client* client = it->first;
-			LOG_MODE(this, *client, target, action, symbol);
+			if (symbol == 'o')
+				LOG_MODE(this, *client, target, action, symbol);
+			else if (symbol == 'k' && action == '+') {
+				LOG_MODE3(this,  *client, action, symbol, _password);
+			}
+			else //t i -k{
+			{
+				LOG_MODE2(this,  *client, action, symbol);
+			}
 	}
 }
 

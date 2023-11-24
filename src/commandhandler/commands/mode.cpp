@@ -54,34 +54,44 @@ void	operatorFlag(Command& cmd, Channel *channelPtr, char action, std::string mo
 	}
 }
 
-void	inviteFlag(Channel *channelPtr, char action, std::string modeArgument) {
+void	inviteFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (!modeArgument.empty())
 		return ;
-	if (action == '+')
+	if (action == '+') {
 		channelPtr->setInviteOnlyMode();
-	else
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'i');
+	}
+	else {
 		channelPtr->unsetInviteOnlyMode();	
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'i');
+	}
 }
 
-void	topicFlag(Channel *channelPtr, char action, std::string modeArgument) {
+void	topicFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (!modeArgument.empty())
 		return ;
-	if (action == '+')
+	if (action == '+') {
 		channelPtr->setTopicRestriction();
-	else
+		channelPtr->actualiseMode(*cmd.getClient(), action, 't');
+	}
+	else {
 		channelPtr->unsetTopicRestriction();
+		channelPtr->actualiseMode(*cmd.getClient(), action, 't');
+	}
 }
 
-void	keyFlag(Channel *channelPtr, char action, std::string modeArgument) {
+void	keyFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (action == '+') {
 		if (modeArgument.empty())
 			return ;
 		channelPtr->setPassword(modeArgument);
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'k');
 	}
 	else {
 		if (!modeArgument.empty())
 			return ;
-		channelPtr->setPassword(NULL);
+		channelPtr->setPassword("");
+		channelPtr->actualiseMode(*cmd.getClient(), action, 'k');
 	}
 }
 
@@ -142,9 +152,9 @@ void CommandHandler::mode(Command& cmd)
 		operatorFlag(cmd, channelPtr, action, modeArgument);
 	}
 	else {
-		if (flag == 'i') { inviteFlag(channelPtr, action, modeArgument); }
-		else if (flag == 't') { topicFlag(channelPtr, action, modeArgument); }
-		else if (flag == 'k') { keyFlag(channelPtr, action, modeArgument); }
+		if (flag == 'i') { inviteFlag(cmd, channelPtr, action, modeArgument); }
+		else if (flag == 't') { topicFlag(cmd, channelPtr, action, modeArgument); }
+		else if (flag == 'k') { keyFlag(cmd, channelPtr, action, modeArgument); }
 		else if (flag == 'l') { limitFlag(channelPtr, action, modeArgument); }
 	}
 }

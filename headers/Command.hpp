@@ -85,5 +85,7 @@ void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol);
+void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol);
+void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key);
 
 #endif

@@ -153,6 +153,13 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
 	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
+	// :server_name MODE #nom_du_canal +o pseudo_utilisateur
 }
 
-// :server_name MODE #nom_du_canal +o pseudo_utilisateur
+void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol) {
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol);
+}
+
+void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
+		client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + key);
+}
