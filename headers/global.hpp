@@ -14,6 +14,7 @@
 # include <sstream>
 # include <map>
 # include <stdlib.h>
+# include <signal.h>
 
 # include <Client.hpp>
 # include <Channel.hpp>
@@ -31,5 +32,8 @@
 # define GRAY "\033[0;37m"
 # define RESET "\033[0m" 
 # define BOLD "\033[1m"
+
+void	handle_signal(int sig);
+void	manageSig(Server *ptr);
 
 #endif

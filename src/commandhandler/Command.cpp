@@ -33,7 +33,7 @@ Client*	Command::getClient(void) {
 void Command::parse(void) 
 {
 	size_t i, j = 0;
-	std::string element = _input.substr(0, _input.length() - 2); // to remove \n
+	std::string element = _input.substr(0, _input.length() - 2); // to remove \r\n
 	
 	i = element.find_first_of(" ");
 	if (i == std::string::npos)
@@ -53,6 +53,10 @@ void Command::parse(void)
 	while (1)
 	{
 		i = element.find_first_of(" ");
+		if (i == 0) {
+			element = element.substr(i + 1, element.length());
+			continue;
+		}
 		if (i == std::string::npos)
 			return (_parameters.push_back(element));
 		else
