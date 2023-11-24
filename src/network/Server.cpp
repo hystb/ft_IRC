@@ -32,6 +32,10 @@ void Server::prepare(void) {
 	}
 }
 
+void	Server::SetEnd(void){
+	_end = true;
+}
+
 /* this function get a full entry in a std::string until it reach \r\n */
 int Server::getRawEntry(Client* client)
 {
@@ -80,7 +84,7 @@ void Server::start(void) {
 
 	_clients_fd[0].fd = _fd_sock;
 	_clients_fd[0].events = POLLIN;
-	while (1) {
+	while (_end == false) {
 		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
 		if (poll_value < 0)
 			interrupt();
@@ -193,7 +197,32 @@ std::string Server::getServerLog(void) {
 	return (ss.str());
 }
 
-Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients) {
+void	Server::manageSig(void)
+{
+	struct sigaction	sig;
+
+	sig.sa_handler =  &Server::handleSignal;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGINT not define" << std::endl;
+	if (sigaction(SIGQUIT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGQUIT not define" << std::endl;
+}
+
+void	Server::handleSignal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		_end = true;			
+	}
+	if (sig == SIGQUIT)
+	{
+		return ;
+	}
+}
+
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
 	try {
 		prepare();
 	} catch (std::exception &e)

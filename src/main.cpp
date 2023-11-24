@@ -15,7 +15,6 @@ int checkPort(std::string port)
 	return (value);
 }
 
-
 int main(int argc, char const *argv[])
 {
 	if (argc != 3)

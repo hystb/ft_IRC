@@ -26,6 +26,7 @@ class Server
 		CommandHandler&					_commandHandler;
 		std::map<int, Client*>&			_clients;
 		std::map<std::string, Channel*>	_channels;
+		bool							_end;
 
 		/* startup functions ! */
 		void prepare(void);
@@ -50,6 +51,12 @@ class Server
 		void disconnectClient(int index);
 
 		static std::string getServerLog(void);
+
+		void	SetEnd(void);
+
+		void	handleSignal(int sig);
+
+		void	manageSig(void);
 
 		/* exceptions */
 		class initSocketException : public std::exception {
