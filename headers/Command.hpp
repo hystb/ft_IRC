@@ -59,6 +59,7 @@ void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_MOTDSTART(const Client &client);
 void RPL_MOTD(const Client &client, std::string motd);
 void RPL_ENDOFMOTD(const Client &client);
+void RPL_YOUREOPER(const Client &client);
 
 void ERR_NOSUCHNICK(const Client &client, std::string nick);
 void ERR_NOSUCHCHANNEL(const Client &client, std::string channel);
@@ -83,5 +84,6 @@ void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
+void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol);
 
 #endif

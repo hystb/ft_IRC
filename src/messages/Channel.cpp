@@ -162,6 +162,13 @@ void Channel::actualiseClientsList(void) {
 	}
 }
 
+void Channel::actualiseMode(const Client &target, char action, char symbol) {
+	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			const Client* client = it->first;
+			LOG_MODE(this, *client, target, action, symbol);
+	}
+}
+
 // only for tests
 
 void Channel::TestListInvited(void) {} //to do

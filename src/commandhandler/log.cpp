@@ -63,6 +63,10 @@ void RPL_ENDOFMOTD(const Client &client) {
 	client.sendMessage(":localhost 376 " + client.getNickname() + " :End of /MOTD command.");
 }
 
+void RPL_YOUREOPER(const Client &client) {
+	client.sendMessage(":localhost 381 " + client.getNickname() + " :You are now an IRC operator");
+}
+
 void ERR_NOSUCHNICK(const Client &client, std::string nick) {
 	client.sendMessage(":localhost 401 " + client.getNickname() + " " + nick + " :No such nick");
 }
@@ -147,3 +151,8 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
 }
 
+void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
+}
+
+// :server_name MODE #nom_du_canal +o pseudo_utilisateur

@@ -37,15 +37,21 @@ bool isStringNumeric(std::string& str) {
 void	operatorFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (modeArgument.empty())
 		return ;
-	Client *client = cmd.getClient()->getClientFromNickname(cmd.getClients(), modeArgument);
-	if (client == NULL) {
+	Client *targetClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), modeArgument);
+
+	if (targetClient == NULL) {
 		ERR_NOSUCHNICK(*cmd.getClient(), modeArgument);
 		return ;
 	}
-	if (action == '+')
-		channelPtr->setOperator(client);
-	else
-		channelPtr->unsetOperator(client);
+	if (action == '+') {
+		channelPtr->setOperator(targetClient);
+		RPL_YOUREOPER(*targetClient);
+		channelPtr->actualiseMode(*targetClient, action, 'o');
+	}
+	else {
+		channelPtr->unsetOperator(targetClient);
+		channelPtr->actualiseMode(*targetClient, action, 'o');
+	}
 }
 
 void	inviteFlag(Channel *channelPtr, char action, std::string modeArgument) {
