@@ -92,21 +92,35 @@ void	limitFlag(Channel *channelPtr, char action, std::string modeArgument) {
 	}
 }
 
+bool	getArg(Command& cmd, std::string &channelName, char &action, char &flag, std::string &modeArgument) {
+	if (cmd.getParameters().size() > 3)
+		return (1);
+	if (cmd.getParameters().size() >= 1)
+		channelName = cmd.getParameters().at(0);
+	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2) {
+		action = cmd.getParameters().at(1).at(0);
+		flag = cmd.getParameters().at(1).at(1);
+	}
+	if (cmd.getParameters().size() == 3)
+		modeArgument = cmd.getParameters().at(2);
+	return (0);
+}
+
 void CommandHandler::mode(Command& cmd)
 {
-	const std::string	&channelName = cmd.getParameters().at(0);
-	const std::string	&modeArgument = cmd.getParameters().at(2);
-	char				action = cmd.getParameters().at(1).at(0);
-	char				flag = cmd.getParameters().at(1).at(1);
-	Channel 			*channelPtr;
-	
-	if (!cmd.getParameters().at(3).empty())
+	std::string		channelName;
+	char			action;
+	char			flag;
+	std::string		modeArgument;
+	Channel 		*channelPtr;
+
+	if (getArg(cmd, channelName, action, flag, modeArgument))
 		return ;
 	// if (channelName.empty()) { // a verifier si on dois le mettre dans mode
 	// 	ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
 	// 	return ;
 	// }
- 	channelPtr = getChannel(cmd, cmd.getParameters().at(0));
+ 	channelPtr = getChannel(cmd, channelName);
 	if (channelPtr == NULL) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
 		return ;
@@ -115,8 +129,9 @@ void CommandHandler::mode(Command& cmd)
 		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), channelPtr);
 		return ;
 	}
-	if (checkModestring(cmd, channelPtr, cmd.getParameters().at(1)))
-		return ;
+	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2)
+		if (checkModestring(cmd, channelPtr, cmd.getParameters().at(1)))
+			return ;
 	if (flag == 'o') {
 		operatorFlag(cmd, channelPtr, action, modeArgument);
 	}
