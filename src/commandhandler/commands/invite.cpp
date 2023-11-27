@@ -1,50 +1,52 @@
 # include <global.hpp>
 
-bool	getArg(Command& cmd, Client*& invitedClient, std::string& clientName, std::string& channelName) {
+bool	getArguments(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {
 	if (cmd.getParameters().size() > 2)
-		return (1);
+		return false;
 	else if (cmd.getParameters().size() != 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
 		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
-		return (1);
+		return false;
 	}
-	clientName = cmd.getParameters().at(0);
+	clientNick = cmd.getParameters().at(0);
 	channelName = cmd.getParameters().at(1);
-	invitedClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), clientName);
+	invitedClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), clientNick);
 	if (invitedClient == NULL)
-		return (1);//no such client on server, log ?
-	return (0);
+		return false;//no such client on server, log ?
+	return true;
 }
 
 void CommandHandler::invite(Command& cmd)
 {
-	std::map<std::string, Channel*>::iterator	channelIt;
-	Client										*invitedClient = NULL;
-	std::string									clientName;
-	std::string									channelName;
+	Client*			invitingClient = cmd.getClient();
+	Client*			invitedClient = NULL;
+	Channel*		channel = NULL;
+	std::string		clientNick;
+	std::string		channelName;
 
-	if (getArg(cmd, invitedClient, clientName, channelName))
+	if (!getArguments(cmd, invitedClient, clientNick, channelName))
 		return ;
-	channelIt = cmd.getChannels().find(channelName);
+
+	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
 	if (channelIt == cmd.getChannels().end()) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(),channelName);
 		return ;
 	}
-	if (!cmd.getClient()->getClientFromNickname(cmd.getClients(), clientName))
+	channel = channelIt->second;
+	if (!invitingClient->getClientFromNickname(cmd.getClients(), clientNick))
 		return ;
-	if (channelIt->second->isInviteOnlyMode() && !channelIt->second->isOperator(cmd.getClient())) {
-		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), channelIt->second);
-		return ;
-	}
-	if (channelIt->second->isMember(clientName)) {
-		ERR_USERONCHANNEL(*cmd.getClient(), channelIt->second);
+	if (channel->isInviteOnlyMode() && !channel->isOperator(invitingClient)) {
+		ERR_CHANOPRIVSNEEDED(*invitingClient, channel);
 		return ;
 	}
-	if (!(channelIt->second->isMember(cmd.getClient()))) {
-		ERR_NOTONCHANNEL(*cmd.getClient(), channelIt->second);
+	if (channel->isMember(clientNick)) {
+		ERR_USERONCHANNEL(*invitingClient, channel);
 		return ;
 	}
-	else {
-		RPL_INVITING(*cmd.getClient(), *invitedClient, channelIt->second);
-		channelIt->second->addInvited(invitedClient);
+	if (!(channel->isMember(invitingClient))) {
+		ERR_NOTONCHANNEL(*invitingClient, channel);
+		return ;
 	}
+	
+	RPL_INVITING(*invitingClient, *invitedClient, channel);
+	channel->addInvited(invitedClient);
 }
