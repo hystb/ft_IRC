@@ -55,7 +55,9 @@ class Channel
 		void		sendMessage(std::string message);
 		void		sendMessageWithoutClient(std::string message, Client* without);
 		void 		actualiseClientsList(void);
+		void		actualiseMode(const Client &target, char action, char symbol);
 		std::string listClients(void);
+
 
 
 		// only for tests
