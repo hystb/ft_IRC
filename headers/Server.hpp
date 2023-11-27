@@ -1,15 +1,26 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <global.hpp>
+# include <vector>
+# include <iostream>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# include <poll.h>
+# include <fcntl.h>
+# include <exception> 
+# include <sstream>
+# include <map>
+# include <stdlib.h>
+# include <signal.h>
 
-# define MAX_CLIENTS 1000
-# define NETWORK_NAME "Team Rocket"
-# define SERVER_NAME "ft_irc"
-# define SERVER_VERSION "1.0"
-# define RULES_NICKLEN "10"
-# define RULES_CHANELLEN "50"
-# define RULES_TOPICLEN "200"
+# include <CommandHandler.hpp>
+# include <Client.hpp>
+# include <config.hpp>
+
+class CommandHandler;
 
 class Server
 {
@@ -78,5 +89,12 @@ class Server
 			public:
 				virtual const char * what() const throw() { return ("Error during the execution of the server !"); };
 		};
+
+		class stopException : public std::exception {
+			public:
+				virtual const char * what() const throw() { return ("Signal to stop the server received !"); };
+		};
 };
+
+
 #endif

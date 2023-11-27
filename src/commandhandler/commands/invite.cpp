@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 bool	getArguments3(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {
 	if (cmd.getParameters().size() > 2)

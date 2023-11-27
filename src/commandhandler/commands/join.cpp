@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 bool	getArguments2(Command& cmd, Client*& client, std::string &channelName, std::string &password) {
 	if (cmd.getParameters().size() > 2)

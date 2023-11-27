@@ -1,13 +1,11 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
-CommandHandler::CommandHandler(std::string &pass) : _pass(pass)
-{
-}
+/* constructors */
+CommandHandler::CommandHandler(std::string &pass) : _pass(pass) { }
 
-CommandHandler::~CommandHandler(void)
-{
-}
+CommandHandler::~CommandHandler(void) { }
 
+/* functions */
 void CommandHandler::commands(Command &cmd)
 {
 	std::string	commands[12] = {"PASS", "NICK", "USER", "QUIT", "INVITE", "JOIN", "KICK", "TOPIC", "PING", "PRIVMSG", "PART", "MODE"};

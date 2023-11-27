@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 bool	getArguments1(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
 

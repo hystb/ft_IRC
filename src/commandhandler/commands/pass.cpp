@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 void refuseConnection(Client* client, std::string why, Command& cmd)
 {
@@ -21,7 +21,5 @@ void CommandHandler::pass(Command& cmd)
 	else if (param.at(0) != _pass)
 		refuseConnection(client, "FAIL", cmd);
 	else
-	{
 		client->setPassordUnlocked(1);
-	}
 }

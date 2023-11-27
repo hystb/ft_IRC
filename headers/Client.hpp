@@ -1,19 +1,20 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-# include <global.hpp>
+# include <map>
+# include <Channel.hpp>
+# include <Server.hpp>
 
-class Server;
 class Channel;
+
 class Client
 {
 	public:
-		Client(const std::string& username, int socket, Server& server);
+		Client(const std::string& username, int socket);
 		~Client(void);
 
 		// getters
 		int getSocket(void) const;
-		Server& getServer(void) const;
 		std::string& getBuffer(void);
 		std::string getUsername(void) const;
 		std::string getNickname(void) const;
@@ -49,7 +50,6 @@ class Client
 		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?
 		
 		std::string _buffer;
-		Server		&_server;
 };
 
 #endif

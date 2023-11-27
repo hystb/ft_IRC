@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <Command.hpp>
 
 void RPL_WELCOME(const Client &client) {
 	client.sendMessage(":localhost 001 " + client.getNickname() + " :Welcome to the " + NETWORK_NAME + " Network, " + client.getNickname() + "!" + client.getUsername() + "@localhost");
