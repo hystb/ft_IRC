@@ -5,7 +5,7 @@ Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	_inviteOnlyMode = 0;
 	_topicRestriction = 0;// A VERIFIER
 	_limit = MAX_CLIENTS;
-	std::cout << "Channel: constructor called" << std::endl;
+	// std::cout << "Channel: constructor called" << std::endl;
 	_channel_nb += 1;//to deleted
 }
 

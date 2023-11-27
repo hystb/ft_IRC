@@ -45,7 +45,7 @@ void CommandHandler::join(Command& cmd)
 		ERR_INVITEONLYCHAN(*cmd.getClient(), channelIt->second);
 		return ;
 	}
-	else if (cmd.getChannels().size() >= channelIt->second->getLimit()) {
+	else if (channelIt->second->getClients().size()  >= channelIt->second->getLimit()) {
 		ERR_CHANNELISFULL(*cmd.getClient(), channelIt->second);
 		return ;
 	}
