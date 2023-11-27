@@ -2,82 +2,23 @@
 
 Server* Server::instance = NULL;
 
+/* constructor & destructor */
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
+	try {
+		prepare();
+	} catch (std::exception &e)
+	{
+		std::cout << "Fatal : Server failed to initialized !" << std::endl;
+		std::cout << "-> " << e.what() << std::endl;
+		throw (e);
+	}
+}
+
 Server::~Server(void) {}
 
-/* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
-void Server::prepare(void) {
-	int opt = 1;
-	socklen_t addrlen_serv = sizeof(_sockaddr);
+/* functions */
 
-	_sockaddr.sin_port = htons(_port);
-	_sockaddr.sin_family = PF_INET;
-	_sockaddr.sin_addr.s_addr = INADDR_ANY;
-	_clients_nb = 0;
-
-	_fd_sock = socket(PF_INET, SOCK_STREAM, 0);
-	if (_fd_sock == -1)
-		throw (initSocketException());
-	if (setsockopt(_fd_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) < 0 || 
-		bind(_fd_sock, (sockaddr *) &_sockaddr, sizeof(_sockaddr)) == -1 || 
-		listen(_fd_sock, 128) == -1)
-	{
-		close(_fd_sock);
-		throw (initException());
-	}
-	if (getsockname(_fd_sock, (sockaddr *) &_sockaddr, &addrlen_serv) == 0)
-	{
-		char ip[INET_ADDRSTRLEN];
-		inet_ntop(PF_INET, &(_sockaddr.sin_addr), ip, INET_ADDRSTRLEN);
-		std::cout << YELLOW << Server::getServerLog() << YELLOW << "Server is binded on " << BOLD << "INADDR_ANY" << RESET << YELLOW " !" << YELLOW << RESET << std::endl;
-		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
-		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
-	}
-}
-
-void	Server::SetEnd(void){
-	_end = true;
-}
-
-/* this function get a full entry in a std::string until it reach \r\n */
-int Server::getRawEntry(Client* client)
-{
-	char 		c_buff[1024];
-	std::string &buff = client->getBuffer();
-	int 		i;
-	int			value;
-
-	i = 0;
-	while (i < 1024)
-		c_buff[i++] = 0;
-	value = recv(client->getSocket(), c_buff, 1023, 0);
-	if (value <= 0)
-		return (-1);
-	buff.append(c_buff);
-	return (1);
-}
-
-int Server::extractEntry(std::string del, std::string& dest, Client* client)
-{
-	std::string &buff = client->getBuffer();
-	
-	dest.clear();
-	if (client->isToDisconnect())
-		return (0);
-	if (buff.length() >= del.length() && buff.find(del) != std::string::npos)
-	{
-		int j = buff.find(del);
-		std::string toAdd;
-
-		toAdd.append(buff.substr(0, j + del.length()));
-		toAdd.append("\0");
-		dest.append(toAdd);
-
-		buff = buff.substr(j + del.length(), buff.length());
-		return (1);
-	}
-	return (0);
-}
-
+/* runner */
 void Server::start(void) {
 	struct sockaddr_in 	sockaddr_client;
 	int					socket_client;
@@ -141,6 +82,82 @@ void Server::start(void) {
 	interrupt();
 }
 
+/* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
+void Server::prepare(void) {
+	int opt = 1;
+	socklen_t addrlen_serv = sizeof(_sockaddr);
+
+	_sockaddr.sin_port = htons(_port);
+	_sockaddr.sin_family = PF_INET;
+	_sockaddr.sin_addr.s_addr = INADDR_ANY;
+	_clients_nb = 0;
+
+	_fd_sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (_fd_sock == -1)
+		throw (initSocketException());
+	if (setsockopt(_fd_sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) < 0 || 
+		bind(_fd_sock, (sockaddr *) &_sockaddr, sizeof(_sockaddr)) == -1 || 
+		listen(_fd_sock, 128) == -1)
+	{
+		close(_fd_sock);
+		throw (initException());
+	}
+	if (getsockname(_fd_sock, (sockaddr *) &_sockaddr, &addrlen_serv) == 0)
+	{
+		char ip[INET_ADDRSTRLEN];
+		inet_ntop(PF_INET, &(_sockaddr.sin_addr), ip, INET_ADDRSTRLEN);
+		std::cout << YELLOW << Server::getServerLog() << YELLOW << "Server is binded on " << BOLD << "INADDR_ANY" << RESET << YELLOW " !" << YELLOW << RESET << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "Server now listening on " << RESET << PURPLE << BOLD << ip << ":" << _port << RESET << std::endl;
+		std::cout << Server::getServerLog() << GRAY << "The password is : " << RESET << PURPLE << _password << RESET << std::endl;
+	}
+}
+
+/* parsing */
+/* this function get a full entry in a std::string until it reach \r\n */
+int Server::getRawEntry(Client* client)
+{
+	char 		c_buff[1024];
+	std::string &buff = client->getBuffer();
+	int 		i;
+	int			value;
+
+	i = 0;
+	while (i < 1024)
+		c_buff[i++] = 0;
+	value = recv(client->getSocket(), c_buff, 1023, 0);
+	if (value <= 0)
+		return (-1);
+	buff.append(c_buff);
+	return (1);
+}
+
+int Server::extractEntry(std::string del, std::string& dest, Client* client)
+{
+	std::string &buff = client->getBuffer();
+	
+	dest.clear();
+	if (client->isToDisconnect())
+		return (0);
+	if (buff.length() >= del.length() && buff.find(del) != std::string::npos)
+	{
+		int j = buff.find(del);
+		std::string toAdd;
+
+		toAdd.append(buff.substr(0, j + del.length()));
+		toAdd.append("\0");
+		dest.append(toAdd);
+
+		buff = buff.substr(j + del.length(), buff.length());
+		return (1);
+	}
+	return (0);
+}
+
+void	Server::SetEnd(void){
+	_end = true;
+}
+
+/* disconnections & errors */
 void Server::handleClientDeconnection(int index, int type)
 {
 	Client *client = _clients[_clients_fd[index].fd];
@@ -195,17 +212,22 @@ void Server::interrupt(void)
 		throw (stopException());
 }
 
+void Server::cleanChannels(void) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (it->second);
+}
+
+void Server::cleanClients(void) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete (it->second);
+}
+
+/* tools & signals*/
+
 void Server::sendMessage(int client, std::string message)
 {
 	if (send(client, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
-}
-
-std::string Server::getServerLog(void) {
-	std::stringstream ss;
-
-	ss << BOLD << + "[SERVER] " << RESET;
-	return (ss.str());
 }
 
 void	Server::manageSig(void)
@@ -234,23 +256,9 @@ void	Server::handleSignal(int sig)
 	}
 }
 
-Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
-	try {
-		prepare();
-	} catch (std::exception &e)
-	{
-		std::cout << "Fatal : Server failed to initialized !" << std::endl;
-		std::cout << "-> " << e.what() << std::endl;
-		throw (e);
-	}
-}
+std::string Server::getServerLog(void) {
+	std::stringstream ss;
 
-void Server::cleanChannels(void) {
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
-		delete (it->second);
-}
-
-void Server::cleanClients(void) {
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		delete (it->second);
+	ss << BOLD << + "[SERVER] " << RESET;
+	return (ss.str());
 }
