@@ -20,10 +20,8 @@ private:
 	std::map<std::string, Channel*>&	_channels;
 	std::map<int, Client*>&				_clients;
 
-	// mettre le client la !
-
 	void parse(void);
-
+	
 public:
 	/* canonical form */
 	~Command(void);
