@@ -127,10 +127,10 @@ bool	getArg(Command& cmd, std::string &channelName, char &action, char &flag, st
 void CommandHandler::mode(Command& cmd)
 {
 	std::string		channelName;
-	char			action;
-	char			flag;
+	char			action = '\0';
+	char			flag = '\0';
 	std::string		modeArgument;
-	Channel 		*channelPtr;
+	Channel 		*channelPtr = NULL;
 
 	if (getArg(cmd, channelName, action, flag, modeArgument))
 		return ;
