@@ -46,5 +46,5 @@ void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
-
+void LOG_INVITE(const Client &invitedClient, const Client &invitingClient, const Channel *channel);
 #endif 

@@ -143,6 +143,10 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
 }
 
+void LOG_INVITE(const Client &invitingClient, const Client &invitedClient, const Channel *channel) {
+	invitedClient.sendMessage(Client::getClientID(invitingClient) + " INVITE " + invitedClient.getNickname() + " " + channel->getName());
+}
+
 void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, std::string content) {
 	channel->sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + clientNick + + " :" + content);
 }
