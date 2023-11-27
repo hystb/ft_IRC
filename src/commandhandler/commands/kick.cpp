@@ -1,36 +1,47 @@
 # include <global.hpp>
 
-void CommandHandler::kick(Command& cmd)
-{
-	std::map<std::string, Channel*>::iterator it;
+bool	getArguments1(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
 
-	if (cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
-		return ;
+	if (cmd.getParameters().size() < 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
+		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());
+		return false;
 	}
-	it = cmd.getChannels().find(cmd.getParameters().at(0));
-	if (it == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), cmd.getParameters().at(0));
-		return;
-	}
-	else if (!it->second->isOperator(cmd.getClient())) {
-		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), it->second);
-		return ;
-	}
-	else if (!it->second->isMember(cmd.getParameters().at(1))) {
-		ERR_USERNOTINCHANNEL(*cmd.getClient(), it->second);
-		return ;
-	}
-	else if (!(it->second->isMember(cmd.getClient()))) {
-		ERR_NOTONCHANNEL(*cmd.getClient(), it->second);
-		return ;
-	}
-	else {
-		it->second->sendMessage(Client::getClientID(*cmd.getClient()) + " KICK " + it->second->getName() + " " + cmd.getParameters().at(1) + + " :" + cmd.getContent());
-		it->second->removeClient(cmd.getParameters().at(1));
-		it->second->listClients();
-	}
+	channelName = cmd.getParameters().at(0);
+	clientNick = cmd.getParameters().at(1);
+	return true;
 }
 
-// Ethan has kicked Ethatan from #sam ()
-// message apparu
+
+void CommandHandler::kick(Command& cmd)
+{
+	std::string		channelName;
+	std::string		clientNick;
+	Client*			client = cmd.getClient();
+	Channel*		channel = NULL;
+
+	if (!getArguments1(cmd, client, channelName, clientNick))
+		return ;
+
+	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
+	if (channelIt == cmd.getChannels().end()) {
+		ERR_NOSUCHCHANNEL(*client, channelName);
+		return;
+	}
+	channel = channelIt->second;
+	if (!channel->isOperator(client)) {
+		ERR_CHANOPRIVSNEEDED(*client, channel);
+		return ;
+	}
+	else if (!channel->isMember(clientNick)) {
+		ERR_USERNOTINCHANNEL(*client, channel);
+		return ;
+	}
+	else if (!(channel->isMember(client))) {
+		ERR_NOTONCHANNEL(*client, channel);
+		return ;
+	}
+
+	channel->sendMessage(Client::getClientID(*client) + " KICK " + channel->getName() + " " + clientNick + + " :" + cmd.getContent());
+	channel->removeClient(cmd.getParameters().at(1));
+	channel->listClients();
+}

@@ -1,6 +1,6 @@
 # include <global.hpp>
 
-bool	getArg(Command& cmd, Client*& client, std::string &channelName, std::string &password) {
+bool	getArguments2(Command& cmd, Client*& client, std::string &channelName, std::string &password) {
 	if (cmd.getParameters().size() > 2)
 		return false;
 	else if (cmd.getParameters().size() < 1 || cmd.getParameters().at(0).empty()) {
@@ -18,12 +18,12 @@ bool	getArg(Command& cmd, Client*& client, std::string &channelName, std::string
 
 void CommandHandler::join(Command& cmd)
 {
-	std::string									channelName;
-	std::string									password;
-	Client*										client = cmd.getClient();
-	Channel*									channel = NULL;
+	std::string		channelName;
+	std::string		password;
+	Client*			client = cmd.getClient();
+	Channel*		channel = NULL;
 	
-	if (!getArg(cmd, client, channelName, password))
+	if (!getArguments2(cmd, client, channelName, password))
 		return ;
 
 	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);

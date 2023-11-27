@@ -1,6 +1,6 @@
 # include <global.hpp>
 
-bool	getArguments(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {
+bool	getArguments3(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {
 	if (cmd.getParameters().size() > 2)
 		return false;
 	else if (cmd.getParameters().size() != 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
@@ -23,7 +23,7 @@ void CommandHandler::invite(Command& cmd)
 	std::string		clientNick;
 	std::string		channelName;
 
-	if (!getArguments(cmd, invitedClient, clientNick, channelName))
+	if (!getArguments3(cmd, invitedClient, clientNick, channelName))
 		return ;
 
 	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);

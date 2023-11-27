@@ -143,6 +143,10 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
 }
 
+void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, std::string content) {
+	channel->sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + clientNick + + " :" + content);
+}
+
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
 	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
 	// :server_name MODE #nom_du_canal +o pseudo_utilisateur
