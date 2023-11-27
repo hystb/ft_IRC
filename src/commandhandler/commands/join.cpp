@@ -57,10 +57,9 @@ void CommandHandler::join(Command& cmd)
 		ERR_BADCHANNELKEY(*client, channel);
 		return ;
 	}
-	else {
-		channel->addClient(client, 0);
-		LOG_JOIN(*client, channel);
-		RPL_TOPIC(*client, channel);
-		cmd.getChannels()[channelName]->actualiseClientsList();
-	}
+
+	channel->addClient(client, 0);
+	LOG_JOIN(*client, channel);
+	RPL_TOPIC(*client, channel);
+	channel->actualiseClientsList();
 }

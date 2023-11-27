@@ -20,10 +20,6 @@ void RPL_ISUPPORT(const Client &client) {
 	client.sendMessage(":localhost 005 " + client.getNickname() + " NICKLEN=" + RULES_NICKLEN + " CHANNELEN=" + RULES_CHANELLEN + " TOPICLEN=" + RULES_TOPICLEN + " :are supported by this server");
 }
 
-// void RPL_UMODEIS(const Client &client) {
-// 	client.sendMessage(":localhost 221 " + client.getNickname() + " +c");
-// }
-
 void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 324 " + client.getNickname() + " " + channel->getName() + " " + channel->getModes());
  	//"<client> <channel> <modestring> <mode arguments>..."
@@ -141,10 +137,6 @@ void ERR_BADCHANNELKEY(const Client &client, const Channel *channel) {
 
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 482 " + client.getNickname() + " " + channel->getName() + " :You're not channel operator");
-}
-
-void ERR_UMODEUNKNOWNFLAG(const Client &client) {
-	client.sendMessage(":localhost 501 " + client.getNickname() + "  :Unknown MODE flag");
 }
 
 void LOG_JOIN(const Client &client, const Channel *channel) {
