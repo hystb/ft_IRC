@@ -53,12 +53,13 @@ void RPL_CHANNELMODEIS(const Client &client, const Channel *channel);
 void RPL_CREATIONTIME(const Client &client, const Channel *channel);
 void RPL_UMODEIS(const Client &client);
 void RPL_TOPIC(const Client &client, const Channel *channel);
-void RPL_INVITING(const Client &client, const Channel *channel);
+void RPL_INVITING(const Client &client, const Client &invited, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, Channel *channel);
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_MOTDSTART(const Client &client);
 void RPL_MOTD(const Client &client, std::string motd);
 void RPL_ENDOFMOTD(const Client &client);
+void RPL_YOUREOPER(const Client &client);
 
 void ERR_NOSUCHNICK(const Client &client, std::string nick);
 void ERR_NOSUCHCHANNEL(const Client &client, std::string channel);
@@ -83,5 +84,9 @@ void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
+void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol);
+void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol);
+void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key);
+void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit);
 
 #endif

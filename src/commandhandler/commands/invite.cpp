@@ -3,7 +3,10 @@
 void CommandHandler::invite(Command& cmd)
 {
 	std::map<std::string, Channel*>::iterator it;
+	Client	*invited = cmd.getClient()->getClientFromNickname(cmd.getClients(), cmd.getParameters().at(1));
 
+	if (invited == NULL)
+		return ;//no such client on server, log ?
 	if (cmd.getParameters().at(0).empty()) {
 		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
 		return ;
@@ -26,8 +29,7 @@ void CommandHandler::invite(Command& cmd)
 		return ;
 	}
 	else {
-		// log ici
-		RPL_INVITING(*cmd.getClient(), it->second);
-		// it->second->addInvited()//pb il me faut le ptr sur le perso quon veut ajouter alors que jai un nickname
+		RPL_INVITING(*cmd.getClient(), *invited, it->second);
+		it->second->addInvited(invited);
 	}
 }

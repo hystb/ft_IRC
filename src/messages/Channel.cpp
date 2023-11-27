@@ -5,7 +5,7 @@ Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	_inviteOnlyMode = 0;
 	_topicRestriction = 0;// A VERIFIER
 	_limit = MAX_CLIENTS;
-	std::cout << "Channel: constructor called" << std::endl;
+	// std::cout << "Channel: constructor called" << std::endl;
 	_channel_nb += 1;//to deleted
 }
 
@@ -159,6 +159,23 @@ void Channel::actualiseClientsList(void) {
 		const Client* client = it->first;
 		RPL_NAMREPLY(*client, this);
 		RPL_ENDOFNAMES(*client, this);
+	}
+}
+
+void Channel::actualiseMode(const Client &target, char action, char symbol) {
+	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			const Client* client = it->first;
+			if (symbol == 'o')
+				LOG_MODE(this, *client, target, action, symbol);
+			else if (symbol == 'k' && action == '+') {
+				LOG_MODE3(this,  *client, action, symbol, _password);
+			}
+			else if (symbol == 'l')
+				LOG_MODE4(this,  *client, action, symbol, _limit);
+			else //t i -k{
+			{
+				LOG_MODE2(this,  *client, action, symbol);
+			}
 	}
 }
 

@@ -31,3 +31,6 @@ void CommandHandler::kick(Command& cmd)
 		it->second->listClients();
 	}
 }
+
+// Ethan has kicked Ethatan from #sam ()
+// message apparu

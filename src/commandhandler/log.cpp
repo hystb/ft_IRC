@@ -39,8 +39,8 @@ void RPL_TOPIC(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic());
 }
 
-void RPL_INVITING(const Client &client, const Channel *channel) {
-	client.sendMessage(":localhost 341 " + client.getNickname() + " " + client.getNickname() + " " + channel->getName());
+void RPL_INVITING(const Client &client, const Client &invited, const Channel *channel) {
+	client.sendMessage(":localhost 341 " + client.getNickname() + " " + invited.getNickname() + " " + channel->getName());
 }
 
 void RPL_NAMREPLY(const Client &client, Channel *channel) {
@@ -61,6 +61,10 @@ void RPL_MOTDSTART(const Client &client) {
 
 void RPL_ENDOFMOTD(const Client &client) {
 	client.sendMessage(":localhost 376 " + client.getNickname() + " :End of /MOTD command.");
+}
+
+void RPL_YOUREOPER(const Client &client) {
+	client.sendMessage(":localhost 381 " + client.getNickname() + " :You are now an IRC operator");
 }
 
 void ERR_NOSUCHNICK(const Client &client, std::string nick) {
@@ -147,3 +151,21 @@ void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
 }
 
+void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
+	// :server_name MODE #nom_du_canal +o pseudo_utilisateur
+}
+
+void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol) {
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol);
+}
+
+void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
+		client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + key);
+}
+
+void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit) {
+	std::stringstream strstream;
+	strstream << limit;
+	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + strstream.str());
+}
