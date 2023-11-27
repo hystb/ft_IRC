@@ -11,6 +11,8 @@
 # include <algorithm>
 # include <cstdio>
 # include <map>
+# include <signal.h>
+#include <cstdlib>
 
 class IRCBot{
 	private:
@@ -22,6 +24,7 @@ class IRCBot{
 		std::string _apiKey;
 		std::string	_channelPassword;
 		std::map<std::string, std::string>	_types;
+		bool								_end;
 
 	    int			createSocket(const std::string& hostname, int port);
 	    void		connectToServer();
@@ -31,12 +34,16 @@ class IRCBot{
 		std::string parseCmd(std::string const &msg);
 		std::string	generateGPTResponse(const std::string& apiKey, const std::string& question, const std::string& type);
 	public :
+		static IRCBot* instance;
+		static void	handleSignal(int sig);
 		IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey);
 		class ConnectionError : public std::exception{
 		public:
 			virtual const char* what() const throw();
 		};
 		void	setChannelPassword(std::string const & pass);
+		void	manageSig(void);
+		void	setEnd(void);
     	~IRCBot();
     	void run();
 };
