@@ -1,6 +1,7 @@
 #ifndef COMMANDHANDLER_HPP
 # define COMMANDHANDLER_HPP
 
+# include <log.hpp>
 # include <Command.hpp>
 # include <map>
 # include <Client.hpp>

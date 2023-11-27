@@ -5,11 +5,7 @@
 # include <Channel.hpp>
 # include <Server.hpp>
 
-class Server;
 class Channel;
-
-void	handle_signal(int sig);
-void	manageSig(Server *ptr);
 
 class Client
 {

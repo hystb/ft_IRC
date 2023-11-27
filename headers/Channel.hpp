@@ -5,6 +5,8 @@
 # include <map>
 # include <iostream>
 # include <Client.hpp>
+# include <config.hpp>
+# include <log.hpp>
 
 class Client;
 

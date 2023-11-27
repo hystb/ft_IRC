@@ -35,7 +35,9 @@ headers/Channel.hpp\
 headers/Client.hpp\
 headers/Command.hpp\
 headers/CommandHandler.hpp\
-headers/Server.hpp
+headers/Server.hpp\
+headers/config.hpp\
+headers/log.hpp
 
 #---------------------------------------------------#
 all:
