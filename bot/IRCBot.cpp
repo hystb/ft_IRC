@@ -1,5 +1,7 @@
 #include "IRCBot.hpp"
 
+IRCBot* IRCBot::instance = NULL;
+
 int IRCBot::createSocket(const std::string& hostname, int port) {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == -1) {
@@ -8,6 +10,7 @@ int IRCBot::createSocket(const std::string& hostname, int port) {
 
  	struct hostent* server = gethostbyname(hostname.c_str());
 	if (server == NULL) {
+        close(sock);
 	    throw ConnectionError();
 	}
 
@@ -17,6 +20,7 @@ int IRCBot::createSocket(const std::string& hostname, int port) {
 	memcpy(&serverAddress.sin_addr.s_addr, server->h_addr, server->h_length);
 
  	if (connect(sock, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
+        close(sock);
 	    throw ConnectionError();
 }
 
@@ -41,6 +45,7 @@ void IRCBot::connectToServer() {
             sendIRCMessage("JOIN " + _channel + " " + _channelPassword);
 	} 
 	else {
+        close(_ircSocket);
 	    throw ConnectionError();
 	}
 }
@@ -50,8 +55,8 @@ void IRCBot::sendIRCMessage(const std::string& message) {
         std::string ircMessage = message + "\r\n";
         send(_ircSocket, ircMessage.c_str(), ircMessage.length(), 0);
     } 
-	else 
-	{
+	else {
+        close(_ircSocket);
         throw ConnectionError();
     }
 }
@@ -60,14 +65,17 @@ void IRCBot::receiveIRCMessage(char* buffer, size_t bufferSize) {
     if (_ircSocket != -1) {
         int bytesRead = recv(_ircSocket, buffer, bufferSize - 1, 0);
         if (bytesRead == -1) {
+            close(_ircSocket);
             throw ConnectionError();
         } else if (bytesRead == 0) {
+            close(_ircSocket);
             throw ConnectionError();
         } else {
             buffer[bytesRead] = '\0';
         }
     } 
 	else {
+        close(_ircSocket);
         throw ConnectionError();
     }
 }
@@ -82,7 +90,6 @@ std::string exec(const char* cmd) {
     char buffer[128];
     std::string result;
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
-        std::cout << result << std::endl;
         result += buffer;
     }
 
@@ -99,7 +106,6 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
         -H \"Authorization: Bearer " + apiKey + "\" \
         -d '" + jsonPayload + "' | jq '.choices[].message.content'";
     std::string output = exec(command.c_str());
-    std::cout << "output : " << output << std::endl; 
     return output;
 }
 
@@ -115,7 +121,7 @@ void    IRCBot::setTypes(void){
 }
 
 IRCBot::IRCBot(const std::string& server, int port, const std::string& channel, const std::string& nickname, const std::string& password, const std::string& apiKey)
-    : _server(server), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey) {
+    : _server(server), _channel(channel), _nickname(nickname), _password(password), _apiKey(apiKey), _end(false) {
     _ircSocket = createSocket(server, port);
     setTypes();
 }
@@ -141,14 +147,17 @@ void IRCBot::run() {
 	std::string message;
     std::string type;
     char buffer[1024];
+    manageSig();
     if (_ircSocket == -1) {
         throw ConnectionError();
     }
 
     connectToServer();
 
-    while (true) {
+    while (_end == false) {
         receiveIRCMessage(buffer, sizeof(buffer));
+        if (_end == true)
+            break ;
 		received = buffer;
 
     	if (received.find("!help") != std::string::npos) {
@@ -169,14 +178,10 @@ void IRCBot::run() {
                         i++;
                 }                
 				response = generateGPTResponse(_apiKey, message, type);
-                std::cout << "response : " << response << std::endl;
                 for (size_t i = 0; i < response.length(); ) {
                     char c = response[i];
                     if ((c >=  0 && c < 32) || c == 34 || c == '\n')
-                    { 
-                        std::cout << static_cast<int> (response[i]) << response[i] << std::endl;
                         response.erase(i, 1);
-                    }
                     else 
                         i++;
                 }
@@ -191,6 +196,41 @@ void IRCBot::run() {
 
 void	IRCBot::setChannelPassword(std::string const & pass){
     _channelPassword = pass;
+}
+
+void	IRCBot::manageSig(void)
+{
+	struct sigaction	sig;
+
+	sig.sa_handler =  &IRCBot::handleSignal;
+	instance = this;
+    if (instance == NULL){
+        close (_ircSocket);
+        throw ConnectionError();
+    }
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGINT not define" << std::endl;
+	if (sigaction(SIGQUIT, &sig, NULL) == -1)
+		std::cerr << "Error, SIGQUIT not define" << std::endl;
+}
+
+void	IRCBot::handleSignal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		instance->setEnd();
+        close(instance->_ircSocket);
+	}
+	if (sig == SIGQUIT)
+	{
+		return ;
+	}
+}
+
+void    IRCBot::setEnd(void){
+    _end = true;
 }
 
 const char* IRCBot::ConnectionError::what(void) const throw(){
