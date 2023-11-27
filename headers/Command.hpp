@@ -1,7 +1,13 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
-# include <global.hpp>
+# include <map>
+# include <Client.hpp>
+# include <Channel.hpp>
+# include <exception>
+
+class Client;
+class Channel;
 
 class Command
 {

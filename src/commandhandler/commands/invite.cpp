@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 void CommandHandler::invite(Command& cmd)
 {

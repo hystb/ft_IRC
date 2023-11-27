@@ -1,7 +1,10 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-# include <global.hpp>
+# include <vector>
+# include <map>
+# include <iostream>
+# include <Client.hpp>
 
 class Client;
 

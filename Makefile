@@ -31,7 +31,6 @@ OBJ_DIR 	= .obj
 OBJS		= $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 
 HEADERS		= \
-headers/global.hpp\
 headers/Channel.hpp\
 headers/Client.hpp\
 headers/Command.hpp\

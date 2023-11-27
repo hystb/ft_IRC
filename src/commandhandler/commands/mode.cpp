@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 Channel	*getChannel(Command& cmd, std::string	target) {
 	std::map<std::string, Channel*>::iterator channelIt;

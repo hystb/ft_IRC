@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 CommandHandler::CommandHandler(std::string &pass) : _pass(pass)
 {

@@ -1,7 +1,10 @@
 #ifndef COMMANDHANDLER_HPP
 # define COMMANDHANDLER_HPP
 
-# include <global.hpp>
+# include <Command.hpp>
+# include <map>
+# include <Client.hpp>
+# include <Channel.hpp>
 
 class Command;
 

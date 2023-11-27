@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 void refuseConnection(Client* client, std::string why, Command& cmd)
 {
