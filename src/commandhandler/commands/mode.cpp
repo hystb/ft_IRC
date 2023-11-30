@@ -6,7 +6,7 @@
 /*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:40 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:12:20 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:29:49 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool isStringNumeric(std::string& str) {
 
 void	operatorFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (modeArgument.empty())
-		return ;
+		return (ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand()));
 	Client *targetClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), modeArgument);
 
 	if (targetClient == NULL) {
@@ -91,7 +91,7 @@ void	topicFlag(Command& cmd, Channel *channelPtr, char action, std::string modeA
 void	keyFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (action == '+') {
 		if (modeArgument.empty())
-			return ;
+			return (ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand()));
 		channelPtr->setPassword(modeArgument);
 		channelPtr->actualiseMode(*cmd.getClient(), action, 'k');
 	}
@@ -106,7 +106,7 @@ void	keyFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArg
 void	limitFlag(Command& cmd, Channel *channelPtr, char action, std::string modeArgument) {
 	if (action == '+') {
 		if (modeArgument.empty() || isStringNumeric(modeArgument) == false)
-			return ;
+			return (ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand()));
 		channelPtr->setLimit(std::atoi(modeArgument.c_str()));
 		channelPtr->actualiseMode(*cmd.getClient(), action, 'l');
 	}
@@ -126,9 +126,14 @@ bool	getArg(Command& cmd, std::string &channelName, char &action, char &flag, st
 		return false;
 	}
 	channelName = cmd.getParameters().at(0);
-	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2) {
-		action = cmd.getParameters().at(1).at(0);
-		flag = cmd.getParameters().at(1).at(1);
+	if (cmd.getParameters().size() >= 2)
+	{
+	    if (cmd.getParameters().at(1).size() == 2) {
+			action = cmd.getParameters().at(1).at(0);
+			flag = cmd.getParameters().at(1).at(1);
+		}
+		else
+			return (ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand()), false);
 	}
 	if (cmd.getParameters().size() == 3)
 		modeArgument = cmd.getParameters().at(2);
@@ -148,7 +153,6 @@ void CommandHandler::mode(Command& cmd)
  	channelPtr = getChannel(cmd, channelName);
 	if (cmd.getParameters().size() == 1) {
 		RPL_CHANNELMODEIS(*cmd.getClient(), channelPtr);
-		// RPL_CREATIONTIME(*cmd.getClient(), channelPtr);
 	}
 	if (channelPtr == NULL) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
