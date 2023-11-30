@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:51 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:55:52 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/11/30 16:19:34 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,18 +254,15 @@ void	Server::manageSig(void)
 		std::cerr << "Error, SIGINT not define" << std::endl;
 	if (sigaction(SIGQUIT, &sig, NULL) == -1)
 		std::cerr << "Error, SIGQUIT not define" << std::endl;
+	if (sigaction(SIGTSTP, &sig, NULL) == -1)
+		std::cerr << "Error, SIGTSTP not define" << std::endl;
 }
 
 void	Server::handleSignal(int sig)
 {
-	if (sig == SIGINT)
-	{
+	if (sig == SIGINT || sig == SIGQUIT || sig == SIGTSTP)
 		Server::instance->SetEnd();			
-	}
-	if (sig == SIGQUIT)
-	{
-		return ;
-	}
+	return ;
 }
 
 std::string Server::getServerLog(void) {
