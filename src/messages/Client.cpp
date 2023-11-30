@@ -29,11 +29,12 @@ void 	Client::sendMessage(std::string message) const
 	std::string toSend = message + "\r\n";
 	std::cout << Server::getServerLog() << GREEN << "➡️ " << message << RESET << GRAY << "(" << getSocket() << ")" << RESET << std::endl;
 	
-	if (send(_socketFd, toSend.c_str(), toSend.length(), O_NONBLOCK) < 0)
+	if (send(_socketFd, toSend.c_str(), toSend.length(), MSG_DONTWAIT + MSG_NOSIGNAL) < 0)
 		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
 }
 
-/* this functions will broadcast all others clients that are in the same channels that the target client */
+/* this functions will broadcast a
+ll others clients that are in the same channels that the target client */
 void Client::broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content)
 {
 	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
