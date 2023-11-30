@@ -10,8 +10,10 @@ bool	getArguments3(Command& cmd, Client*& invitedClient, std::string& clientNick
 	clientNick = cmd.getParameters().at(0);
 	channelName = cmd.getParameters().at(1);
 	invitedClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), clientNick);
-	if (invitedClient == NULL)
+	if (invitedClient == NULL) {
+	ERR_ERRONEUSNICKNAME(*cmd.getClient(), cmd.getCommand());
 		return false;//no such client on server, log ?
+	}
 	return true;
 }
 
@@ -46,7 +48,7 @@ void CommandHandler::invite(Command& cmd)
 		ERR_NOTONCHANNEL(*invitingClient, channel);
 		return ;
 	}
-	
+	LOG_INVITE(*invitingClient, *invitedClient, channel);
 	RPL_INVITING(*invitingClient, *invitedClient, channel);
 	channel->addInvited(invitedClient);
 }

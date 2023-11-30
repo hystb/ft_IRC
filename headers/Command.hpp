@@ -86,6 +86,7 @@ void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
+void LOG_INVITE(const Client &invitedClient, const Client &invitingClient, const Channel *channel);
 void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, std::string content);
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol);
 void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol);

@@ -10,7 +10,7 @@ bool	getArguments2(Command& cmd, Client*& client, std::string &channelName, std:
 	channelName = cmd.getParameters().at(0);
 	if (cmd.getParameters().size() == 2 && !cmd.getParameters().at(1).empty())
 		password = cmd.getParameters().at(1);
-	if (channelName.at(0) != '#' || channelName.find('#', 2) != std::string::npos) {
+	if (channelName.at(0) != '#' || channelName.size() < 2 || channelName.find('#', 2) != std::string::npos) {
 		return false;
 	}
 	return true;
