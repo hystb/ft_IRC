@@ -6,7 +6,7 @@
 /*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:47 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:18:17 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:50:18 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void CommandHandler::part(Command& cmd) {
 	if (channel->isMember(client))
 	{
 		channel->sendMessage(Client::getClientID(*client) + " PART " + channelName + " :" + cmd.getContent());
-		channel->removeClient(client);
+		channel->removeClient(client, cmd.getChannels());
 	}
 	else
 		return (ERR_NOTONCHANNEL(*client, channel));	

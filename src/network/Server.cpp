@@ -6,7 +6,7 @@
 /*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:51 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 16:19:34 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:49:44 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void Server::handleClientDeconnection(int index, int type)
 		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 		for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 			if (it->second->isMember(client->getNickname()))
-				it->second->removeClient(client);
+				it->second->removeClient(client, _channels);
 		}
 	}
 	else

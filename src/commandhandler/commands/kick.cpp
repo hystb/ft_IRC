@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:36 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:37 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/11/30 17:51:04 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ void CommandHandler::kick(Command& cmd)
 	}
 
 	channel->sendMessage(Client::getClientID(*client) + " KICK " + channel->getName() + " " + clientNick + + " :" + cmd.getContent());
-	channel->removeClient(cmd.getParameters().at(1));
+	channel->removeClient(Client::getClientFromNickname(cmd.getClients(), cmd.getParameters().at(1)), cmd.getChannels());
 	channel->listClients();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:32 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:33 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/11/30 17:58:29 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void CommandHandler::join(Command& cmd)
 	}
 	channel = channelIt->second;
 	if (channel->isMember(client->getNickname())) {
+		ERR_USERONCHANNEL(*client, channel);
 		return ;
 	}
 	else if (channel->isInviteOnlyMode() && !(channel->isInvited(client->getNickname()))) {

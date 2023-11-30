@@ -6,7 +6,7 @@
 /*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:35:13 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:51:38 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	_topicRestriction = 0;// A VERIFIER
 	_limit = MAX_CLIENTS;
 	// std::cout << "Channel: constructor called" << std::endl;
-	_channel_nb += 1;//to deleted
 }
 
 Channel::~Channel(void) {}
@@ -29,21 +28,17 @@ void Channel::addClient(Client *client, bool isOperator) {
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
-void Channel::removeClient(Client *client) {
+void Channel::removeClient(Client *client, std::map<std::string, Channel*>& channel_map) {
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first == client) {
 			_clients.erase(it->first);
 		break;
 		}
 	}
-}
-
-void Channel::removeClient(const std::string &nickname) {
-	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		if (it->first->getNickname() == nickname) {
-			_clients.erase(it->first);
-		break;
-		}
+	if (_clients.empty()) // to delete channel when there is nobody 
+	{
+		channel_map.erase(_name);
+		delete (this);
 	}
 }
 
@@ -190,23 +185,3 @@ void Channel::actualiseMode(const Client &target, char action, char symbol) {
 			}
 	}
 }
-
-// only for tests
-
-void Channel::TestListInvited(void) {} //to do
-
-void Channel::TestListClients() {
-	std::cout << "BEGIN - Client list in channel " << getName() << std::endl;
-	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		const Client* client = it->first;
-		bool isOperator = it->second;
-		std::cout << "Client: " << client->getNickname();
-		if (isOperator)
-			std::cout << " is Operator" << std::endl;
-		else
-			std::cout << " is Ordinary mortals" << std::endl;
-	}
-	std::cout << "END -" << std::endl;
-}
-
-int Channel::_channel_nb = 0;
