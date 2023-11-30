@@ -3,6 +3,8 @@ CC 			= c++
 
 CFLAGS 		= -Wall -Wextra -Werror -std=c++98
 
+BOTPATH = ./bot/
+
 NAME 		= ircserv
 #---------------------------------------------------#
 SRCS		= \
@@ -49,15 +51,19 @@ $(NAME): $(OBJS)
 $(OBJ_DIR)/%.o : %.cpp $(HEADERS)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -I headers/ -c $< -o $@
+bonus : all 
+	$(MAKE) -C $(BOTPATH)
 
 clean:
+	$(MAKE) -C $(BOTPATH) clean
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
+	$(MAKE) -C $(BOTPATH) fclean
 	rm -rf $(NAME)
 
 re:	fclean
 	$(MAKE) all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
 #---------------------------------------------------#
