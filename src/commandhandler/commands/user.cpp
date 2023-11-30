@@ -1,10 +1,9 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 void CommandHandler::user(Command& cmd)
 {
 	std::vector<std::string> 	param = cmd.getParameters();
 	Client					 	*client = cmd.getClient();
-	std::string					username;
 
 	if (client->isConnected())
 		return (ERR_ALREADYREGISTERED(*client));

@@ -1,62 +1,65 @@
-# include <global.hpp>
-	
-bool	getArg(Command& cmd, std::string &channelName, std::string &password) {
+# include <CommandHandler.hpp>
+
+bool	getArguments2(Command& cmd, Client*& client, std::string &channelName, std::string &password) {
 	if (cmd.getParameters().size() > 2)
-		return (1);
-	if (cmd.getParameters().size() >= 1)
-		channelName = cmd.getParameters().at(0);
-	else
-		return (1);
-	if (cmd.getParameters().size() >= 2)
+		return false;
+	else if (cmd.getParameters().size() < 1 || cmd.getParameters().at(0).empty()) {
+		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());
+		return false;
+	}
+	channelName = cmd.getParameters().at(0);
+	if (cmd.getParameters().size() == 2 && !cmd.getParameters().at(1).empty())
 		password = cmd.getParameters().at(1);
-	if (channelName.empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
-		return (1);
+	if (channelName.at(0) != '#' || channelName.size() < 2 || channelName.find('#', 2) != std::string::npos) {
+		return false;
 	}
-	if (channelName.at(0) != '#' || channelName.find('#', 2) != std::string::npos) {
-		return (1);
-	}
-	return (0);
+	return true;
 }
 
 void CommandHandler::join(Command& cmd)
 {
-	std::map<std::string, Channel*>::iterator	channelIt;
-	std::string									channelName;
-	std::string									password;
+	std::string		channelName;
+	std::string		password;
+	Client*			client = cmd.getClient();
+	Channel*		channel = NULL;
 	
-	if (getArg(cmd, channelName, password))
+	if (!getArguments2(cmd, client, channelName, password))
 		return ;
-	channelIt = cmd.getChannels().find(channelName);
+
+	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
 	if (channelIt == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
-		cmd.getChannels()[channelName] = new Channel(channelName, cmd.getClient());
-		if (!password.empty())
+		ERR_NOSUCHCHANNEL(*client, channelName);
+		cmd.getChannels()[channelName] = new Channel(channelName, client);
+		channel = cmd.getChannels()[channelName];
+		std::cout << password << std::endl;
+		if (!password.empty()) {
 			cmd.getChannels().at(channelName)->setPassword(password);
-		LOG_JOIN(*cmd.getClient(), cmd.getChannels()[channelName]);
-		RPL_TOPIC(*cmd.getClient(), cmd.getChannels()[channelName]);
-		cmd.getChannels()[channelName]->actualiseClientsList();
+			channel->actualiseMode(*cmd.getClient(), '+', 'k');
+		}
+		LOG_JOIN(*client, channel);
+		RPL_TOPIC(*client, channel);
+		channel->actualiseClientsList();
 		return ;
 	}
-	else if (channelIt->second->isMember(cmd.getClient()->getNickname())) {
+	channel = channelIt->second;
+	if (channel->isMember(client->getNickname())) {
 		return ;
 	}
-	else if (channelIt->second->isInviteOnlyMode() && !(channelIt->second->isInvited(cmd.getClient()->getNickname()))) {
-		ERR_INVITEONLYCHAN(*cmd.getClient(), channelIt->second);
+	else if (channel->isInviteOnlyMode() && !(channel->isInvited(client->getNickname()))) {
+		ERR_INVITEONLYCHAN(*client, channel);
 		return ;
 	}
-	else if (channelIt->second->getClients().size()  >= channelIt->second->getLimit()) {
-		ERR_CHANNELISFULL(*cmd.getClient(), channelIt->second);
+	else if (channel->getClients().size()  >= channel->getLimit()) {
+		ERR_CHANNELISFULL(*client, channel);
 		return ;
 	}
-	else if (!channelIt->second->getPassword().empty() && password != channelIt->second->getPassword()) {
-		ERR_BADCHANNELKEY(*cmd.getClient(), channelIt->second);
+	else if (!channel->getPassword().empty() && password != channel->getPassword()) {
+		ERR_BADCHANNELKEY(*client, channel);
 		return ;
 	}
-	else {
-		channelIt->second->addClient(cmd.getClient(), 0);
-		LOG_JOIN(*cmd.getClient(), channelIt->second);
-		RPL_TOPIC(*cmd.getClient(), channelIt->second);
-		cmd.getChannels()[channelName]->actualiseClientsList();
-	}
+
+	channel->addClient(client, 0);
+	LOG_JOIN(*client, channel);
+	RPL_TOPIC(*client, channel);
+	channel->actualiseClientsList();
 }

@@ -1,4 +1,4 @@
-#include <global.hpp>
+# include <CommandHandler.hpp>
 
 void CommandHandler::part(Command& cmd) {
 	std::vector<std::string> 	param = cmd.getParameters();

@@ -1,8 +1,86 @@
-# include <global.hpp>
+# include <Server.hpp>
 
 Server* Server::instance = NULL;
 
+/* constructor & destructor */
+Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
+	try {
+		prepare();
+	} catch (std::exception &e)
+	{
+		std::cout << "Fatal : Server failed to initialized !" << std::endl;
+		std::cout << "-> " << e.what() << std::endl;
+		throw (e);
+	}
+}
+
 Server::~Server(void) {}
+
+/* functions */
+
+/* runner */
+void Server::start(void) {
+	struct sockaddr_in 	sockaddr_client;
+	int					socket_client;
+	int					poll_value;
+	socklen_t 			addrlen_client = sizeof(_sockaddr);
+
+	_clients_fd[0].fd = _fd_sock;
+	_clients_fd[0].events = POLLIN;
+	manageSig();
+	while (_end == false) {
+		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
+		if (poll_value < 0)
+			interrupt();
+		if (_clients_fd[0].revents & POLLIN) {
+			socket_client = accept(_fd_sock, (sockaddr *) &sockaddr_client, &addrlen_client);
+			if (socket_client < 0)
+				interrupt();
+			if (_clients_nb < MAX_CLIENTS) { // mean that there is some place
+				_clients_fd[_clients_nb + 1].fd = socket_client;
+				_clients_fd[_clients_nb + 1].events = POLLIN;
+				_clients_fd[_clients_nb + 1].revents = 0;
+				_clients_nb++;
+				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client)));
+				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << RESET << std::endl;
+			}
+			else {  // here refuse the client cause server is full
+				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
+				close(socket_client);
+			}
+		}
+		for (int i = 1; i < _clients_nb + 1; i++) // this is for the actual connected users !
+		{
+			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
+			{
+				Client*		client = _clients[_clients_fd[i].fd];
+				std::string messageReceived = "";
+				int			value;
+
+				value = getRawEntry(client);
+				if (value == -1)
+					handleClientDeconnection(i, 1);
+				else if (value == 0) 
+					continue;
+				else if (value == 1)
+				{
+					while (extractEntry("\r\n", messageReceived, client))
+					{
+						try {
+							_commandHandler.handleCommand(messageReceived, client, _channels, _clients);
+						} catch (std::exception &e){
+							std::cout << "Error : " << e.what() << std::endl;
+						}
+						messageReceived.clear();
+					}
+					if (client->isToDisconnect())
+						handleClientDeconnection(i, 0);
+				}
+			}
+		}
+	}
+	interrupt();
+}
 
 /* this functions prepare the server to receive connections by creating the socket, bindind it and start listening ! */
 void Server::prepare(void) {
@@ -34,10 +112,7 @@ void Server::prepare(void) {
 	}
 }
 
-void	Server::SetEnd(void){
-	_end = true;
-}
-
+/* parsing */
 /* this function get a full entry in a std::string until it reach \r\n */
 int Server::getRawEntry(Client* client)
 {
@@ -78,71 +153,11 @@ int Server::extractEntry(std::string del, std::string& dest, Client* client)
 	return (0);
 }
 
-void Server::start(void) {
-	struct sockaddr_in 	sockaddr_client;
-	int					socket_client;
-	int					poll_value;
-	socklen_t 			addrlen_client = sizeof(_sockaddr);
-
-	_clients_fd[0].fd = _fd_sock;
-	_clients_fd[0].events = POLLIN;
-	manageSig();
-	while (_end == false) {
-		poll_value = poll(_clients_fd, _clients_nb + 1, -1);
-		if (poll_value < 0)
-			interrupt();
-		if (_clients_fd[0].revents & POLLIN) {
-			socket_client = accept(_fd_sock, (sockaddr *) &sockaddr_client, &addrlen_client);
-			if (socket_client < 0)
-				interrupt();
-			if (_clients_nb < MAX_CLIENTS) { // mean that there is some place
-				_clients_fd[_clients_nb + 1].fd = socket_client;
-				_clients_fd[_clients_nb + 1].events = POLLIN;
-				_clients_fd[_clients_nb + 1].revents = 0;
-				_clients_nb++;
-				_clients.insert(std::pair<int, Client*>(socket_client, new Client("undefined", socket_client, *this)));
-				std::cout << Server::getServerLog() << GRAY << "A new client successfuly connected to the server, waiting for loggin ! (" << socket_client << ")" << RESET << std::endl;
-			}
-			else {  // here refuse the client cause server is full
-				sendMessage(socket_client, "Sorry, the server is actually full !\n\0");
-				close(socket_client);
-			}
-		}
-		for (int i = 1; i < _clients_nb + 1; i++) // this is for the actual connected users !
-		{
-			if (_clients_fd[i].revents & POLLIN) // mean that there is data here from a client
-			{
-				Client*		client = _clients[_clients_fd[i].fd];
-				std::string messageReceived = "";
-				int			value;
-
-				value = getRawEntry(client);
-				if (value == -1)
-					handleClientDeconnection(i, 1);
-				else if (value == 0) 
-					continue;
-				else if (value == 1)
-				{
-					while (extractEntry("\r\n", messageReceived, client))
-					{
-						try {
-							_commandHandler.handleCommand(messageReceived, client, _channels, _clients);
-						} catch (std::exception &e){
-							std::cout << "Error : " << e.what() << std::endl;
-						}
-						messageReceived.clear();
-					}
-					if (client->isToDisconnect())
-						handleClientDeconnection(i, 0);
-				}
-			}
-		}
-	}
-	closeFds();
-	cleanChannels();
-	cleanClients();
+void	Server::SetEnd(void){
+	_end = true;
 }
 
+/* disconnections & errors */
 void Server::handleClientDeconnection(int index, int type)
 {
 	Client *client = _clients[_clients_fd[index].fd];
@@ -188,21 +203,31 @@ void Server::interrupt(void)
 	closeFds();
 	cleanChannels();
 	cleanClients();
-	std::cout << "Something bad happened !" << std::endl;
-	throw (crashException());
+	if (!_end)
+	{
+		std::cout << "Something bad happened !" << std::endl;
+		throw (crashException());
+	}
+	else
+		throw (stopException());
 }
+
+void Server::cleanChannels(void) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (it->second);
+}
+
+void Server::cleanClients(void) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete (it->second);
+}
+
+/* tools & signals*/
 
 void Server::sendMessage(int client, std::string message)
 {
 	if (send(client, message.c_str(), message.length(), 0) < 0)
 		std::cout << "Failed to send a message to the client !" << std::endl;	
-}
-
-std::string Server::getServerLog(void) {
-	std::stringstream ss;
-
-	ss << BOLD << + "[SERVER] " << RESET;
-	return (ss.str());
 }
 
 void	Server::manageSig(void)
@@ -223,7 +248,6 @@ void	Server::handleSignal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		std::cout << "lets go bg" << std::endl;
 		Server::instance->SetEnd();			
 	}
 	if (sig == SIGQUIT)
@@ -232,23 +256,9 @@ void	Server::handleSignal(int sig)
 	}
 }
 
-Server::Server(uint16_t port, std::string password, CommandHandler &cmd, std::map<int, Client*> &clients) : _port(port), _password(password), _commandHandler(cmd), _clients(clients), _end(false) {
-	try {
-		prepare();
-	} catch (std::exception &e)
-	{
-		std::cout << "Fatal : Server failed to initialized !" << std::endl;
-		std::cout << "-> " << e.what() << std::endl;
-		throw (e);
-	}
-}
+std::string Server::getServerLog(void) {
+	std::stringstream ss;
 
-void Server::cleanChannels(void) {
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
-		delete (it->second);
-}
-
-void Server::cleanClients(void) {
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
-		delete (it->second);
+	ss << BOLD << + "[SERVER] " << RESET;
+	return (ss.str());
 }

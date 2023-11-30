@@ -1,36 +1,47 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
+
+bool	getArguments1(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
+
+	if (cmd.getParameters().size() < 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
+		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());
+		return false;
+	}
+	channelName = cmd.getParameters().at(0);
+	clientNick = cmd.getParameters().at(1);
+	return true;
+}
+
 
 void CommandHandler::kick(Command& cmd)
 {
-	std::map<std::string, Channel*>::iterator it;
+	std::string		channelName;
+	std::string		clientNick;
+	Client*			client = cmd.getClient();
+	Channel*		channel = NULL;
 
-	if (cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
-		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
+	if (!getArguments1(cmd, client, channelName, clientNick))
 		return ;
-	}
-	it = cmd.getChannels().find(cmd.getParameters().at(0));
-	if (it == cmd.getChannels().end()) {
-		ERR_NOSUCHCHANNEL(*cmd.getClient(), cmd.getParameters().at(0));
+
+	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
+	if (channelIt == cmd.getChannels().end()) {
+		ERR_NOSUCHCHANNEL(*client, channelName);
 		return;
 	}
-	else if (!it->second->isOperator(cmd.getClient())) {
-		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), it->second);
+	channel = channelIt->second;
+	if (!channel->isOperator(client)) {
+		ERR_CHANOPRIVSNEEDED(*client, channel);
 		return ;
 	}
-	else if (!it->second->isMember(cmd.getParameters().at(1))) {
-		ERR_USERNOTINCHANNEL(*cmd.getClient(), it->second);
+	else if (!channel->isMember(clientNick)) {
+		ERR_USERNOTINCHANNEL(*client, channel);
 		return ;
 	}
-	else if (!(it->second->isMember(cmd.getClient()))) {
-		ERR_NOTONCHANNEL(*cmd.getClient(), it->second);
+	else if (!(channel->isMember(client))) {
+		ERR_NOTONCHANNEL(*client, channel);
 		return ;
 	}
-	else {
-		it->second->sendMessage(Client::getClientID(*cmd.getClient()) + " KICK " + it->second->getName() + " " + cmd.getParameters().at(1) + + " :" + cmd.getContent());
-		it->second->removeClient(cmd.getParameters().at(1));
-		it->second->listClients();
-	}
-}
 
-// Ethan has kicked Ethatan from #sam ()
-// message apparu
+	channel->sendMessage(Client::getClientID(*client) + " KICK " + channel->getName() + " " + clientNick + + " :" + cmd.getContent());
+	channel->removeClient(cmd.getParameters().at(1));
+	channel->listClients();
+}

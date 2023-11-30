@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 void Client::warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels)
 {

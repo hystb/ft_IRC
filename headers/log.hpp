@@ -1,52 +1,11 @@
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#ifndef LOG_HPP
+# define LOG_HPP
 
-# include <map>
 # include <Client.hpp>
 # include <Channel.hpp>
-# include <exception>
 
 class Client;
 class Channel;
-
-class Command
-{
-private:
-	std::string 						_input;
-	std::string 						_command;
-	std::vector<std::string>			_parameters;
-	std::string							_content;
-	Client* 							_client;
-	std::map<std::string, Channel*>&	_channels;
-	std::map<int, Client*>&				_clients;
-
-	void parse(void);
-	
-public:
-	/* canonical form */
-	~Command(void);
-
-	/* constructor */
-	Command(std::string input, Client *client, std::map<std::string, Channel*>& channels, std::map<int, Client*>& clients);
-
-	/* getters */
-	const std::string&			 		getInput(void) const;
-	const std::string& 					getCommand(void) const;
-	const std::vector<std::string>& 	getParameters(void) const;
-	std::string							getContent(void) const;
-
-	std::map<std::string, Channel*>&	getChannels(void);
-	std::map<int, Client*>&				getClients(void);
-	Client* 							getClient(void);
-
-	void	listChannel(void);
-
-	/* exceptions */
-	class invalidException : public std::exception {
-		public:
-			virtual const char * what() const throw() { return ("Invalid command syntax !"); };
-	};
-};
 
 void RPL_WELCOME(const Client &client);
 void RPL_YOURHOST(const Client &client);
@@ -55,14 +14,14 @@ void RPL_MYINFO(const Client &client);
 void RPL_ISUPPORT(const Client &client);
 void RPL_CHANNELMODEIS(const Client &client, const Channel *channel);
 void RPL_CREATIONTIME(const Client &client, const Channel *channel);
+void RPL_UMODEIS(const Client &client);
 void RPL_TOPIC(const Client &client, const Channel *channel);
-void RPL_INVITING(const Client &client, const Client &invited, const Channel *channel);
+void RPL_INVITING(const Client &client, const Channel *channel);
 void RPL_NAMREPLY(const Client &client, Channel *channel);
 void RPL_ENDOFNAMES(const Client &client, const Channel *channel);
 void RPL_MOTDSTART(const Client &client);
 void RPL_MOTD(const Client &client, std::string motd);
 void RPL_ENDOFMOTD(const Client &client);
-void RPL_YOUREOPER(const Client &client);
 
 void ERR_NOSUCHNICK(const Client &client, std::string nick);
 void ERR_NOSUCHCHANNEL(const Client &client, std::string channel);
@@ -84,13 +43,8 @@ void ERR_CHANNELISFULL(const Client &client, const Channel *channel);
 void ERR_INVITEONLYCHAN(const Client &client, const Channel *channel);
 void ERR_BADCHANNELKEY(const Client &client, const Channel *channel);
 void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel);
+void ERR_UMODEUNKNOWNFLAG(const Client &client);
 
 void LOG_JOIN(const Client &client, const Channel *channel);
 void LOG_INVITE(const Client &invitedClient, const Client &invitingClient, const Channel *channel);
-void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, std::string content);
-void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol);
-void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol);
-void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key);
-void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit);
-
-#endif
+#endif 
