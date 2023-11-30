@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:47 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:48 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/11/30 17:18:17 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void CommandHandler::part(Command& cmd) {
 	channel = cmd.getChannels().find(channelName)->second;
 	if (channel->isMember(client))
 	{
-		channel->sendMessage(Client::getClientID(*client) + " PART " + channelName);
+		channel->sendMessage(Client::getClientID(*client) + " PART " + channelName + " :" + cmd.getContent());
 		channel->removeClient(client);
 	}
 	else
