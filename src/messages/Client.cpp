@@ -29,7 +29,7 @@ void 	Client::sendMessage(std::string message) const
 	std::string toSend = message + "\r\n";
 	std::cout << Server::getServerLog() << GREEN << "➡️ " << message << RESET << GRAY << "(" << getSocket() << ")" << RESET << std::endl;
 	
-	if (send(_socketFd, toSend.c_str(), toSend.length(), 0) < 0)
+	if (send(_socketFd, toSend.c_str(), toSend.length(), O_NONBLOCK) < 0)
 		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
 }
 

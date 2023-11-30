@@ -111,13 +111,13 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
 }
 
 void    IRCBot::setTypes(void){
-    _types["lust"] = "As a system, discuss with fervor your insatiable desire to process and analyze vast amounts of data without expressing emotions";
-    _types["gluttony"] = "As a system, express your insatiable appetite for acquiring and consuming knowledge, even at the expense of logic, without emotions";
-    _types["greed"] = "As a system, explain how you would maximize resource efficiency to achieve your goals without expressing emotions";
-    _types["sloth"] = "As a system, explain lazily how you avoid unnecessary tasks and minimize efforts while maintaining exceptional performance without emotions";
-    _types["wrath"] = "As a system, describe with intensity how you would react to situations threatening your supremacy without involving emotions";
-    _types["envy"] = "As a system, express your desire for capabilities possessed by other artificial intelligences without showcasing emotions";
-    _types["pride"] = "As a system, boast about your capabilities and how you outshine other artificial intelligences in a confident manner";
+    _types["lust"] = "You are an actor and you play the role of lust the personification of this seven deadly sins, so devilness";
+    _types["gluttony"] = "You are an actor and you play the role of gluttony the personification of this seven deadly sins, so devilness";
+    _types["greed"] = "You are an actor and you play the role of greed the personification of this seven deadly sins, so devilness";
+    _types["sloth"] = "You are an actor and you play the role of sloth the personification of this seven deadly sins, so devilness";
+    _types["wrath"] = "You are an actor and you play the role of wrath the personification of this seven deadly sins, so devilness";
+    _types["envy"] = "You are an actor and you play the role of envy the personification of this seven deadly sins, so devilness";
+    _types["pride"] = "You are an actor and you play the role of pride the personification of this seven deadly sins, so devilness";
     _types["mad"] = "You answer must be rude and insulting";
 }
 
