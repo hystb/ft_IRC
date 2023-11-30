@@ -45,10 +45,12 @@ void Command::parse(void)
 		i = element.find_first_of(" ");
 		if (i == 0) {
 			element = element.substr(i + 1, element.length());
-			continue;
 		}
-		if (i == std::string::npos)
-			return (_parameters.push_back(element));
+		else if (i == std::string::npos) {
+			if (element.find_first_not_of(" ") != std::string::npos)
+				return (_parameters.push_back(element));
+			return ;
+		}
 		else
 		{
 			_parameters.push_back(element.substr(0, i));
