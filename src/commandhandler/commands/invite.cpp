@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   invite.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 15:54:28 by ebillon           #+#    #+#             */
+/*   Updated: 2023/11/30 15:54:29 by ebillon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include <CommandHandler.hpp>
 
 bool	getArguments3(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {

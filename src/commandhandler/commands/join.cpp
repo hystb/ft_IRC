@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   join.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 15:54:32 by ebillon           #+#    #+#             */
+/*   Updated: 2023/11/30 15:54:33 by ebillon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include <CommandHandler.hpp>
 
 bool	getArguments2(Command& cmd, Client*& client, std::string &channelName, std::string &password) {

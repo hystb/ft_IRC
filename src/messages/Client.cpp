@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 15:55:48 by ebillon           #+#    #+#             */
+/*   Updated: 2023/11/30 15:55:49 by ebillon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include <Client.hpp>
 
 Client::Client(const std::string& nickname, int socket) : _nickname(nickname), _username("\0"), _socketFd(socket), _passwordUnlocked(0),  _toDisconnect(0), _userConnected(0) {}

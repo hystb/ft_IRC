@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   kick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/30 15:54:36 by ebillon           #+#    #+#             */
+/*   Updated: 2023/11/30 15:54:37 by ebillon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include <CommandHandler.hpp>
 
 bool	getArguments1(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
