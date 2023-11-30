@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <CommandHandler.hpp>
 
 Channel	*getChannel(Command& cmd, std::string	target) {
 	std::map<std::string, Channel*>::iterator channelIt;
@@ -108,31 +108,30 @@ void	limitFlag(Command& cmd, Channel *channelPtr, char action, std::string modeA
 
 bool	getArg(Command& cmd, std::string &channelName, char &action, char &flag, std::string &modeArgument) {
 	if (cmd.getParameters().size() > 3)
-		return (1);
-	if (cmd.getParameters().size() >= 1)
-		channelName = cmd.getParameters().at(0);
-	if (channelName.empty()) {
+		return false;
+	else if (cmd.getParameters().size() < 1 || cmd.getParameters().at(0).empty()) {
 		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
-		return (1);
+		return false;
 	}
+	channelName = cmd.getParameters().at(0);
 	if (cmd.getParameters().size() >= 2 && cmd.getParameters().at(1).size() == 2) {
 		action = cmd.getParameters().at(1).at(0);
 		flag = cmd.getParameters().at(1).at(1);
 	}
 	if (cmd.getParameters().size() == 3)
 		modeArgument = cmd.getParameters().at(2);
-	return (0);
+	return true;
 }
 
 void CommandHandler::mode(Command& cmd)
 {
+	Channel 		*channelPtr = NULL;
 	std::string		channelName;
+	std::string		modeArgument;
 	char			action = '\0';
 	char			flag = '\0';
-	std::string		modeArgument;
-	Channel 		*channelPtr = NULL;
 
-	if (getArg(cmd, channelName, action, flag, modeArgument))
+	if (!getArg(cmd, channelName, action, flag, modeArgument))
 		return ;
  	channelPtr = getChannel(cmd, channelName);
 	if (cmd.getParameters().size() == 1) {

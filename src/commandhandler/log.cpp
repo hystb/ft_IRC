@@ -1,4 +1,4 @@
-# include <global.hpp>
+# include <Command.hpp>
 
 void RPL_WELCOME(const Client &client) {
 	client.sendMessage(":localhost 001 " + client.getNickname() + " :Welcome to the " + NETWORK_NAME + " Network, " + client.getNickname() + "!" + client.getUsername() + "@localhost");
@@ -19,10 +19,6 @@ void RPL_MYINFO(const Client &client) {
 void RPL_ISUPPORT(const Client &client) {
 	client.sendMessage(":localhost 005 " + client.getNickname() + " NICKLEN=" + RULES_NICKLEN + " CHANNELEN=" + RULES_CHANELLEN + " TOPICLEN=" + RULES_TOPICLEN + " :are supported by this server");
 }
-
-// void RPL_UMODEIS(const Client &client) {
-// 	client.sendMessage(":localhost 221 " + client.getNickname() + " +c");
-// }
 
 void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 324 " + client.getNickname() + " " + channel->getName() + " " + channel->getModes());
@@ -143,12 +139,16 @@ void ERR_CHANOPRIVSNEEDED(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 482 " + client.getNickname() + " " + channel->getName() + " :You're not channel operator");
 }
 
-void ERR_UMODEUNKNOWNFLAG(const Client &client) {
-	client.sendMessage(":localhost 501 " + client.getNickname() + "  :Unknown MODE flag");
-}
-
 void LOG_JOIN(const Client &client, const Channel *channel) {
 	client.sendMessage(Client::getClientID(client) + " JOIN " + channel->getName());
+}
+
+void LOG_INVITE(const Client &invitingClient, const Client &invitedClient, const Channel *channel) {
+	invitedClient.sendMessage(Client::getClientID(invitingClient) + " INVITE " + invitedClient.getNickname() + " " + channel->getName());
+}
+
+void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, std::string content) {
+	channel->sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + clientNick + + " :" + content);
 }
 
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
