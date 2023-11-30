@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   log.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:40 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:55:41 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/11/30 17:41:47 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,13 @@ void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 324 " + client.getNickname() + " " + channel->getName() + " " + channel->getModes());
 }
 
+void RPL_NOTOPIC(const Client &client, const Channel *channel) {
+	client.sendMessage(":localhost 331 " + client.getNickname() + " " + channel->getName() + " :No topic is set");
+}
+
 void RPL_TOPIC(const Client &client, const Channel *channel) {
+	if (channel->getTopic().empty())
+		return (RPL_NOTOPIC(client, channel));
 	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic());
 }
 

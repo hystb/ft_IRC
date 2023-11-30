@@ -6,7 +6,7 @@
 /*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:40 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:29:49 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 17:34:30 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void CommandHandler::mode(Command& cmd)
  	channelPtr = getChannel(cmd, channelName);
 	if (cmd.getParameters().size() == 1) {
 		RPL_CHANNELMODEIS(*cmd.getClient(), channelPtr);
+		return ;
 	}
 	if (channelPtr == NULL) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(), channelName);
