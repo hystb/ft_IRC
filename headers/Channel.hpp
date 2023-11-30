@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ethaaalpha <ethaaalpha@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:47 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:49:48 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 22:54:46 by ethaaalpha       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Channel
 
 		// clients map
 		void	addClient(Client *client, bool isOperator);
-		void	removeClient(Client *client, std::map<std::string, Channel*>& channel_map);
+		int		removeClient(Client *client, std::map<std::string, Channel*>& channel_map);
 		void	setOperator(Client *client);
 		void	unsetOperator(Client *client);
 		

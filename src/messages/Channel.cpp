@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ethaaalpha <ethaaalpha@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:51:38 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/11/30 22:54:36 by ethaaalpha       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void Channel::addClient(Client *client, bool isOperator) {
 	_clients.insert(std::pair<Client*, bool>(client, isOperator));
 }
 
-void Channel::removeClient(Client *client, std::map<std::string, Channel*>& channel_map) {
+int Channel::removeClient(Client *client, std::map<std::string, Channel*>& channel_map) {
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first == client) {
 			_clients.erase(it->first);
@@ -39,7 +39,9 @@ void Channel::removeClient(Client *client, std::map<std::string, Channel*>& chan
 	{
 		channel_map.erase(_name);
 		delete (this);
+		return (0);
 	}
+	return (1);
 }
 
 void Channel::setOperator(Client *client) {
