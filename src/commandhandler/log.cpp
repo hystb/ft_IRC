@@ -22,14 +22,7 @@ void RPL_ISUPPORT(const Client &client) {
 
 void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 324 " + client.getNickname() + " " + channel->getName() + " " + channel->getModes());
- 	//"<client> <channel> <modestring> <mode arguments>..."
 }
-
-// void RPL_CREATIONTIME(const Client &client, const Channel *channel) {
-// 	client.sendMessage(":localhost 329 " + client.getNickname() + " " + channel->getName() + " 1633648400");
-//   	//"<client> <channel> <creationtime>"
-// 	//1633648400" est le timestamp représentant la date de création du canal. Ce timestamp est généralement au format UNIX, qui compte les secondes écoulées depuis le 1er janvier 1970 à 00:00:00 UTC.
-// }
 
 void RPL_TOPIC(const Client &client, const Channel *channel) {
 	client.sendMessage(":localhost 332 " + client.getNickname() + " " + channel->getName() + " :" + channel->getTopic());
@@ -152,20 +145,20 @@ void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, st
 }
 
 void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
-	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
+	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
 	// :server_name MODE #nom_du_canal +o pseudo_utilisateur
 }
 
 void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol) {
-	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol);
+	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol);
 }
 
 void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
-		client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + key);
+		client.sendMessage(Client::getClientID(client) +" MODE " + channel->getName() + " " + action + symbol + " " + key);
 }
 
 void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit) {
 	std::stringstream strstream;
 	strstream << limit;
-	client.sendMessage(":localhost MODE " + channel->getName() + " " + action + symbol + " " + strstream.str());
+	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol + " " + strstream.str());
 }
