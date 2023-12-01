@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCBot.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:30 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:53:32 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/01 14:31:21 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ std::string IRCBot::generateGPTResponse(const std::string& apiKey, const std::st
         -H \"Authorization: Bearer " + apiKey + "\" \
         -d '" + jsonPayload + "' | jq '.choices[].message.content'";
     std::string output = exec(command.c_str());
-    std::cout << "response : " << command << std::endl; 
     return output;
 }
 
