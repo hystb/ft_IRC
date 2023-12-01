@@ -180,8 +180,10 @@ void Server::handleClientDeconnection(int index, int type)
 	{
 		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 		for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-			if (it->second->isMember(client->getNickname()))
-				it->second->removeClient(client, _channels);
+			if (it->second->isMember(client->getNickname())) {
+				if (!it->second->removeClient(client, _channels))
+					break;
+			}
 		}
 	}
 	else
