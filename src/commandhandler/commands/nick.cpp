@@ -6,7 +6,7 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:45 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 14:52:09 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int isInvalid(std::string nickname)
 {
-	if (nickname.find_first_of(" :#") != std::string::npos)
+	if (nickname.find_first_of(": #") != std::string::npos)
 		return (1);
 	return (0);
 }

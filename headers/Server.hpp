@@ -6,7 +6,7 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:22 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:23 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 13:50:24 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ class Server
 		~Server(void);
 
 		void start(void);
-		void disconnectClient(int index);
 
 		static std::string getServerLog(void);
 

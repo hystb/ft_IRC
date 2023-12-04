@@ -6,7 +6,7 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:30 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:55:31 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 14:45:12 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,5 @@ void Command::parse(void)
 			_parameters.push_back(element.substr(0, i));
 			element = element.substr(i + 1, element.length());
 		}
-	}
-}
-
-void Command::listChannel(void) {
-	std::cout << "- CHANNEL LIST -" << std::endl;
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
-		const Channel* channel = it->second;
-		std::cout << "Channel: " << channel->getName() << std::endl;
 	}
 }

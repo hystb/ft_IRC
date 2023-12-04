@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:51 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:49:44 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/04 14:40:59 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,15 +195,6 @@ void Server::handleClientDeconnection(int index, int type)
     }
     _clients_nb--;
 	delete client;
-}
-
-void Server::disconnectClient(int fd)
-{
-	int i = 0;
-
-	while (i <=_clients_nb && _clients_fd[i].fd != fd)
-		i++;
-	handleClientDeconnection(i, 0);
 }
 
 void Server::closeFds(void)

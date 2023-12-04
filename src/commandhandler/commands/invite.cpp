@@ -6,25 +6,18 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:28 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:54:29 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 15:13:06 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <CommandHandler.hpp>
 
-bool	getArguments3(Command& cmd, Client*& invitedClient, std::string& clientNick, std::string& channelName) {
+bool	checkArgsInvite(Command& cmd) {
 	if (cmd.getParameters().size() > 2)
 		return false;
 	else if (cmd.getParameters().size() != 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
 		ERR_NEEDMOREPARAMS(*cmd.getClient(), cmd.getCommand());
 		return false;
-	}
-	clientNick = cmd.getParameters().at(0);
-	channelName = cmd.getParameters().at(1);
-	invitedClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), clientNick);
-	if (invitedClient == NULL) {
-	ERR_ERRONEUSNICKNAME(*cmd.getClient(), cmd.getCommand());
-		return false;//no such client on server, log ?
 	}
 	return true;
 }
@@ -37,9 +30,13 @@ void CommandHandler::invite(Command& cmd)
 	std::string		clientNick;
 	std::string		channelName;
 
-	if (!getArguments3(cmd, invitedClient, clientNick, channelName))
+	if (!checkArgsInvite(cmd))
 		return ;
-
+	clientNick = cmd.getParameters().at(0);
+	channelName = cmd.getParameters().at(1);
+	invitedClient = cmd.getClient()->getClientFromNickname(cmd.getClients(), clientNick);
+	if (invitedClient == NULL)
+		return (ERR_ERRONEUSNICKNAME(*cmd.getClient(), cmd.getCommand()));
 	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
 	if (channelIt == cmd.getChannels().end()) {
 		ERR_NOSUCHCHANNEL(*cmd.getClient(),channelName);

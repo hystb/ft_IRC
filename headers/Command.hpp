@@ -6,7 +6,7 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:55 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:53:56 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 14:45:19 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ public:
 	std::map<std::string, Channel*>&	getChannels(void);
 	std::map<int, Client*>&				getClients(void);
 	Client* 							getClient(void);
-
-	void	listChannel(void);
 
 	/* exceptions */
 	class invalidException : public std::exception {
