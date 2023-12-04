@@ -6,13 +6,13 @@
 /*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:36 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 15:29:53 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 15:30:11 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <CommandHandler.hpp>
 
-bool	checkArgsKick(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
+bool	checkArgsKick(Command& cmd, Client* client, std::string &channelName, std::string &clientNick) {
 
 	if (cmd.getParameters().size() < 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
 		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());

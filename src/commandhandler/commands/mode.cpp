@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:40 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:34:30 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/04 15:42:55 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <CommandHandler.hpp>
 
-Channel	*getChannel(Command& cmd, std::string	target) {
+Channel	*getChannel(Command& cmd, std::string target) {
 	std::map<std::string, Channel*>::iterator channelIt;
 
 	channelIt = cmd.getChannels().find(target);
@@ -25,7 +25,7 @@ Channel	*getChannel(Command& cmd, std::string	target) {
 
 bool	checkModestring(std::string modeString) {
 	if (!modeString[0] || !modeString[1] || modeString[2])
-		return (1);// log ?? on liberia ubuntu server -> "MODE :Not enough parameters"
+		return (1);
 	if (modeString[0] != '-' && modeString[0] != '+')
 		return (1);
 	if (modeString[1] != 'o' && modeString[1] != 'i' && modeString[1] != 't' && modeString[1] != 'k' && modeString[1] != 'l')
@@ -163,10 +163,8 @@ void CommandHandler::mode(Command& cmd)
 		ERR_CHANOPRIVSNEEDED(*cmd.getClient(), channelPtr);
 		return ;
 	}
-	if (flag && action) {
-		if (checkModestring(cmd.getParameters().at(1)))
-			return ;
-	}
+	if (checkModestring(cmd.getParameters().at(1)))
+		return ;
 	if (flag == 'o') { operatorFlag(cmd, channelPtr, action, modeArgument); }
 	else if (flag == 'i') { inviteFlag(cmd, channelPtr, action, modeArgument); }
 	else if (flag == 't') { topicFlag(cmd, channelPtr, action, modeArgument); }
