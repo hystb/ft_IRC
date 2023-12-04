@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCBot.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:30 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/01 14:31:21 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/04 16:59:55 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,13 @@ int IRCBot::createSocket(const std::string& hostname, int port) {
  	struct sockaddr_in serverAddress;
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_port = htons(port);
-	memcpy(&serverAddress.sin_addr.s_addr, server->h_addr, server->h_length);
+	std::memcpy(&serverAddress.sin_addr.s_addr, server->h_addr, server->h_length);
 
  	if (connect(sock, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
         close(sock);
 	    throw ConnectionError();
-}
-
-return sock;
+	}
+	return sock;
 }
 
 template <typename T>
@@ -57,7 +56,6 @@ void IRCBot::connectToServer() {
             sendIRCMessage("JOIN " + _channel + " " + _channelPassword);
 	} 
 	else {
-        close(_ircSocket);
 	    throw ConnectionError();
 	}
 }
@@ -68,7 +66,6 @@ void IRCBot::sendIRCMessage(const std::string& message) {
         send(_ircSocket, ircMessage.c_str(), ircMessage.length(), 0);
     } 
 	else {
-        close(_ircSocket);
         throw ConnectionError();
     }
 }
@@ -87,7 +84,6 @@ void IRCBot::receiveIRCMessage(char* buffer, size_t bufferSize) {
         }
     } 
 	else {
-        close(_ircSocket);
         throw ConnectionError();
     }
 }
@@ -164,9 +160,7 @@ void IRCBot::run() {
     if (_ircSocket == -1) {
         throw ConnectionError();
     }
-
     connectToServer();
-
     while (_end == false) {
         receiveIRCMessage(buffer, sizeof(buffer));
         if (_end == true)
@@ -185,7 +179,7 @@ void IRCBot::run() {
                 for (size_t i = 0; i < message.length(); ) {
                     char c = message[i];
                     if (c < 32 || c >= 126) 
-                        message.erase(i, 1);
+                         message.erase(i, 1);
                     else if (c == 34 || c == 39)
                         message.replace(i, 1, 1, ' ');
                     else 
@@ -202,8 +196,6 @@ void IRCBot::run() {
                 std::cout << "response : " << response << std::endl;   
     	    	sendIRCMessage("PRIVMSG " + _channel +  " :" + response);
 			}
-			else
-				sendIRCMessage("PRIVMSG " + _channel +  " :" + "Correct to use !gpt + your message");
     	}
     }
 }
