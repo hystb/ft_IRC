@@ -29,7 +29,7 @@ void RPL_MYINFO(const Client &client) {
 }
 
 void RPL_ISUPPORT(const Client &client) {
-	client.sendMessage(":localhost 005 " + client.getNickname() + " NICKLEN=" + RULES_NICKLEN + " CHANNELEN=" + RULES_CHANELLEN + " TOPICLEN=" + RULES_TOPICLEN + " :are supported by this server");
+	client.sendMessage(":localhost 005 " + client.getNickname() + " NICKLEN=" + RULES_NICKLEN + " CHANNELEN=" + RULES_CHANELLEN + " :are supported by this server");
 }
 
 void RPL_CHANNELMODEIS(const Client &client, const Channel *channel) {

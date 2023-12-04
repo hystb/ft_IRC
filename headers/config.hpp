@@ -20,7 +20,6 @@
 # define SERVER_VERSION "1.0"
 # define RULES_NICKLEN "10"
 # define RULES_CHANELLEN "50"
-# define RULES_TOPICLEN "200"
 
 /* Colors */
 # define BLACK "\033[0;30m"
