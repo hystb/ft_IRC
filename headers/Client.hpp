@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:52 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 15:53:53 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 20:36:37 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,21 @@
 
 class Channel;
 
-class Client
-{
+class Client {
 	public:
 		Client(const std::string& username, int socket);
 		~Client(void);
 
 		// getters
-		int getSocket(void) const;
-		std::string& getBuffer(void);
-		std::string getUsername(void) const;
-		std::string getNickname(void) const;
-		std::string getRealname(void) const;
+		int 			getSocket(void) const;
+		std::string& 	getBuffer(void);
+		std::string 	getUsername(void) const;
+		std::string 	getNickname(void) const;
+		std::string 	getRealname(void) const;
+
+		static std::string 	getClientID(const Client &client);
+		static Client*		getClientFromNickname(std::map<int, Client*>& clients, std::string nickname);
+
 		bool isPassWordUnlocked(void) const;
 		bool isConnected(void) const;
 		bool isToDisconnect(void) const;
@@ -44,13 +47,11 @@ class Client
 		void setRealname(std::string  realname);
 
 		// attributes
-		void sendMessage(std::string message) const;
-		void doLogin(void);
+		void		sendMessage(std::string message) const;
+		void		doLogin(void);
+		static void	broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
 
-		static void broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content);
-		static void warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels);
-		static std::string getClientID(const Client &client);
-		static Client* getClientFromNickname(std::map<int, Client*>& clients, std::string nickname);
+		static void	warnOthersLeaving(Client *client, std::string reason, std::map<std::string, Channel*>& channels);
 		
 	private:
 		std::string	_nickname;
@@ -59,7 +60,7 @@ class Client
 		int			_socketFd;
 		bool		_passwordUnlocked;
 		bool		_toDisconnect;
-		bool		_userConnected;//status de la requete au serveur, utilisateur validé ou pas?
+		bool		_userConnected;
 		
 		std::string _buffer;
 };

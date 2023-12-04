@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:48 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 15:08:28 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/04 20:37:48 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ std::string		Client::getNickname(void) const { return _nickname; }
 std::string		Client::getUsername(void) const { return _username; }
 std::string		Client::getRealname(void) const { return _realname; }
 std::string		Client::getClientID(const Client &client) { return (":" + client.getNickname() + "!" + client.getUsername() + "@localhost"); }
+
+Client* Client::getClientFromNickname(std::map<int, Client*>& clients, std::string nickname) {
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
+		if (it->second->getNickname() == nickname)
+			return (it->second);
+	}
+	return (NULL);
+}
 
 bool	Client::isPassWordUnlocked(void) const { return _passwordUnlocked; }
 bool	Client::isConnected(void) const { return _userConnected; }
@@ -43,25 +51,6 @@ void 	Client::sendMessage(std::string message) const
 	
 	if (send(_socketFd, toSend.c_str(), toSend.length(), MSG_DONTWAIT + MSG_NOSIGNAL) < 0)
 		std::cout << Server::getServerLog() << RED << "Failed to send a message to the client" << RESET << std::endl;
-}
-
-/* this functions will broadcast a
-ll others clients that are in the same channels that the target client */
-void Client::broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content)
-{
-	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
-	{
-		Channel* actual = it->second;
-		std::map<Client*, bool> users = actual->getClients();
-
-		for (std::map<Client*, bool>::iterator jt = users.begin(); jt != users.end(); jt++)
-		{
-			Client* client = jt->first;
-
-			if (client != targetClient)
-				client->sendMessage(content);
-		}
-	}
 }
 
 void	Client::doLogin(void)
@@ -88,10 +77,20 @@ void	Client::doLogin(void)
 	}
 }
 
-Client* Client::getClientFromNickname(std::map<int, Client*>& clients, std::string nickname) {
-	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++) {
-		if (it->second->getNickname() == nickname)
-			return (it->second);
+/* this functions will broadcast all others clients that are in the same channels that the target client */
+void Client::broadcastFromClient(std::map<std::string, Channel*>& channels, Client* targetClient, std::string content)
+{
+	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		Channel* actual = it->second;
+		std::map<Client*, bool> users = actual->getClients();
+
+		for (std::map<Client*, bool>::iterator jt = users.begin(); jt != users.end(); jt++)
+		{
+			Client* client = jt->first;
+
+			if (client != targetClient)
+				client->sendMessage(content);
+		}
 	}
-	return (NULL);
 }

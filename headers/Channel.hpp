@@ -6,7 +6,7 @@
 /*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:47 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 20:27:39 by mdesmart         ###   ########lyon.fr   */
+/*   Updated: 2023/12/04 20:32:19 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 
 class Client;
 
-class Channel
-{
+class Channel {
 	public:
 		Channel(const std::string& name, Client *client);
 		~Channel(void);
