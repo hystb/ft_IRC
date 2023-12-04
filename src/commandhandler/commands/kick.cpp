@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:54:36 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 12:11:55 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/04 15:29:53 by ebillon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <CommandHandler.hpp>
 
-bool	getArguments1(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
+bool	checkArgsKick(Command& cmd, Client*& client, std::string &channelName, std::string &clientNick) {
 
 	if (cmd.getParameters().size() < 2 || cmd.getParameters().at(0).empty() || cmd.getParameters().at(1).empty()) {
 		ERR_NEEDMOREPARAMS(*client, cmd.getCommand());
@@ -31,7 +31,7 @@ void CommandHandler::kick(Command& cmd)
 	Client*			client = cmd.getClient();
 	Channel*		channel = NULL;
 
-	if (!getArguments1(cmd, client, channelName, clientNick))
+	if (!checkArgsKick(cmd, client, channelName, clientNick))
 		return ;
 
 	std::map<std::string, Channel*>::iterator channelIt = cmd.getChannels().find(channelName);
