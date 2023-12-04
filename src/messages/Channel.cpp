@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 12:11:32 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/04 20:27:23 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 Channel::Channel(const std::string& name, Client *client) : _name(name) {
 	addClient(client, 1);
 	_inviteOnlyMode = 0;
-	_topicRestriction = 0;// A VERIFIER
+	_topicRestriction = 0;
 	_limit = MAX_CLIENTS;
-	// std::cout << "Channel: constructor called" << std::endl;
 }
 
 Channel::~Channel(void) {}
@@ -35,8 +34,7 @@ int Channel::removeClient(Client *client, std::map<std::string, Channel*>& chann
 		break;
 		}
 	}
-	if (_clients.empty()) // to delete channel when there is nobody 
-	{
+	if (_clients.empty()) {
 		channel_map.erase(_name);
 		delete (this);
 		return (0);
@@ -77,8 +75,8 @@ void	Channel::setTopic(const std::string& topic) { _topic = topic; }
 
 // getters
 std::string		Channel::getName(void) const { return _name; }
-std::string		Channel::getTopic(void) const { return _topic; }
 std::string		Channel::getPassword(void) const { return _password; }
+std::string		Channel::getTopic(void) const { return _topic; }
 unsigned long	Channel::getLimit(void) const { return _limit; }
 std::map<Client*, bool>& Channel::getClients(void) { return (_clients); }
 bool			Channel::isInviteOnlyMode(void) const { return _inviteOnlyMode; }
@@ -141,20 +139,6 @@ void	Channel::sendMessage(std::string message) {
 		it->first->sendMessage(message);
 }
 
-std::string	Channel::listClients(void) {
-	std::string message;
-
-	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		const Client* client = it->first;
-		bool isOperator = it->second;
-		if (isOperator == true)
-			message += "@";
-		message += client->getNickname();
-		message += " ";
-	}
-	return message;
-}
-
 void	Channel::sendMessageWithoutClient(std::string message, Client* without) {
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
@@ -186,4 +170,18 @@ void Channel::actualiseMode(const Client &target, char action, char symbol) {
 				LOG_MODE2(this,  *client, action, symbol);
 			}
 	}
+}
+
+std::string	Channel::listClients(void) {
+	std::string message;
+
+	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		const Client* client = it->first;
+		bool isOperator = it->second;
+		if (isOperator == true)
+			message += "@";
+		message += client->getNickname();
+		message += " ";
+	}
+	return message;
 }

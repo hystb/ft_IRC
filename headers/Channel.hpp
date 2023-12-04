@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethaaalpha <ethaaalpha@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:53:47 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 22:54:46 by ethaaalpha       ###   ########.fr       */
+/*   Updated: 2023/12/04 20:27:39 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,6 @@ class Channel
 		void 		actualiseClientsList(void);
 		void		actualiseMode(const Client &target, char action, char symbol);
 		std::string listClients(void);
-
-
-
-		// only for tests
-		void	TestListClients(void);
-		void	TestListInvited(void);
-		static int 				_channel_nb;
 
 	private:
 		std::string 			_name;
