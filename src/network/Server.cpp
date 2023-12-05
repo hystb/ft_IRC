@@ -182,7 +182,7 @@ void Server::handleClientDeconnection(int index, int type)
 		for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 			if (it->second->isMember(client->getNickname())) {
 				if (!it->second->removeClient(client, _channels))
-					break;
+					continue;
 			}
 		}
 	}
