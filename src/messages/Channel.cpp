@@ -6,7 +6,7 @@
 /*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/05 10:46:33 by mdesmart         ###   ########lyon.fr   */
+/*   Updated: 2023/12/05 10:53:32 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,10 @@ void addMode(std::string& modes, bool condition, char modeChar) {
 
 std::string	Channel::getModes(void) const {
     std::string modes;
-
     addMode(modes, isInviteOnlyMode(), 'i');
     addMode(modes, isTopicRestriction(), 't');
     addMode(modes, !_password.empty(), 'k');
     addMode(modes, _limit != MAX_CLIENTS, 'l');
-
     return modes;
 }
 
