@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   log.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:40 by ebillon           #+#    #+#             */
-/*   Updated: 2023/11/30 17:41:47 by nmilan           ###   ########.fr       */
+/*   Updated: 2023/12/05 10:45:45 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,20 +162,19 @@ void LOG_KICK(const Client &client, Channel *channel, std::string clientNick, st
 	channel->sendMessage(Client::getClientID(client) + " KICK " + channel->getName() + " " + clientNick + + " :" + content);
 }
 
-void LOG_MODE(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
+void LOG_MODE_OPERATOR(const Channel *channel, const Client &client, const Client &target, char action, char symbol) {
 	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol + " " + target.getNickname());
-	// :server_name MODE #nom_du_canal +o pseudo_utilisateur
 }
 
-void LOG_MODE2(const Channel *channel, const Client &client, char action, char symbol) {
+void LOG_MODE_OTHERS(const Channel *channel, const Client &client, char action, char symbol) {
 	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol);
 }
 
-void LOG_MODE3(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
+void LOG_MODE_ADD_PASSWORD(const Channel *channel, const Client &client, char action, char symbol, std::string key) {
 		client.sendMessage(Client::getClientID(client) +" MODE " + channel->getName() + " " + action + symbol + " " + key);
 }
 
-void LOG_MODE4(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit) {
+void LOG_MODE_LIMIT(const Channel *channel, const Client &client, char action, char symbol, unsigned long limit) {
 	std::stringstream strstream;
 	strstream << limit;
 	client.sendMessage(Client::getClientID(client) + " MODE " + channel->getName() + " " + action + symbol + " " + strstream.str());

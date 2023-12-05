@@ -6,7 +6,7 @@
 /*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 20:27:23 by mdesmart         ###   ########lyon.fr   */
+/*   Updated: 2023/12/05 10:46:33 by mdesmart         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,15 +159,14 @@ void Channel::actualiseMode(const Client &target, char action, char symbol) {
 	for (std::map<Client*, bool>::iterator it = getClients().begin(); it != getClients().end(); ++it) {
 			const Client* client = it->first;
 			if (symbol == 'o')
-				LOG_MODE(this, *client, target, action, symbol);
+				LOG_MODE_OPERATOR(this, *client, target, action, symbol);
 			else if (symbol == 'k' && action == '+') {
-				LOG_MODE3(this,  *client, action, symbol, _password);
+				LOG_MODE_ADD_PASSWORD(this,  *client, action, symbol, _password);
 			}
 			else if (symbol == 'l')
-				LOG_MODE4(this,  *client, action, symbol, _limit);
-			else //t i -k{
-			{
-				LOG_MODE2(this,  *client, action, symbol);
+				LOG_MODE_LIMIT(this,  *client, action, symbol, _limit);
+			else {
+				LOG_MODE_OTHERS(this,  *client, action, symbol);
 			}
 	}
 }
