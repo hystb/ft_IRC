@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdesmart <mdesmart@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:44 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/05 10:53:32 by mdesmart         ###   ########lyon.fr   */
+/*   Updated: 2023/12/05 16:28:47 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int Channel::removeClient(Client *client, std::map<std::string, Channel*>& chann
 	for (std::map<Client*, bool>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->first == client) {
 			_clients.erase(it->first);
-		break;
+			break;
 		}
 	}
 	if (_clients.empty()) {
@@ -59,7 +59,7 @@ void Channel::removeInvited(const std::string& nickname) {
 	for (std::vector<Client*>::iterator it = _invited.begin(); it != _invited.end(); ++it) {
 		if ((*it)->getNickname() == nickname) {
 			_invited.erase(it);
-		break;
+			break;
 		}
 	}
 }

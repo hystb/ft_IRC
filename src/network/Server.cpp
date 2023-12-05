@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebillon <ebillon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nmilan <nmilan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 15:55:51 by ebillon           #+#    #+#             */
-/*   Updated: 2023/12/04 14:40:59 by ebillon          ###   ########.fr       */
+/*   Updated: 2023/12/05 16:26:05 by nmilan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ void	Server::SetEnd(void){
 void Server::handleClientDeconnection(int index, int type)
 {
 	Client *client = _clients[_clients_fd[index].fd];
+	std::vector<std::map<std::string, Channel*>::iterator> tmpIts;
 
 	if (type)
 		Client::warnOthersLeaving(client, "Lost connection !", _channels);
@@ -181,9 +182,11 @@ void Server::handleClientDeconnection(int index, int type)
 		std::cout << Server::getServerLog() << GREEN << BOLD << client->getNickname() << RESET << GRAY << " disconnected from the server (" << client->getSocket() << ")" << RESET << std::endl;
 		for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 			if (it->second->isMember(client->getNickname())) {
-				if (!it->second->removeClient(client, _channels))
-					continue;
+				tmpIts.push_back(it);
 			}
+		}
+		for (size_t i = 0; i < tmpIts.size(); i++){
+			tmpIts[i]->second->removeClient(client, _channels);
 		}
 	}
 	else
