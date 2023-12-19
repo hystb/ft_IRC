@@ -24,9 +24,6 @@
 - [🚀 Getting Started](#-getting-started)
     - [🔧 Installation](#-installation)
     - [🤖 Running ft_IRC](#-running-ft_IRC)
-    - [🧪 Tests](#-tests)
-- [🛣 Roadmap](#-roadmap)
-
 ---
 
 
