@@ -8,7 +8,6 @@
 <p align="center">
 
 </p>
-<img src="https://img.shields.io/github/license/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub license" />
 <img src="https://img.shields.io/github/last-commit/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="git-last-commit" />
 <img src="https://img.shields.io/github/commit-activity/m/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub commit activity" />
 <img src="https://img.shields.io/github/languages/top/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub top language" />
@@ -25,12 +24,6 @@
 - [🚀 Getting Started](#-getting-started)
     - [🔧 Installation](#-installation)
     - [🤖 Running ft_IRC](#-running-ft_IRC)
-    - [🧪 Tests](#-tests)
-- [🛣 Roadmap](#-roadmap)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [👏 Acknowledgments](#-acknowledgments)
-
 ---
 
 
