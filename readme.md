@@ -2,13 +2,12 @@
 <h1 align="center">
 <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
 <br>FT_IRC</h1>
-<h3>◦ Connect, collaborate, code – with ft_IRC!</h3>
+<h3>◦ Connect, collaborate, with ft_IRC!</h3>
 <h3>◦ Developed with the software and tools below.</h3>
 
 <p align="center">
 
 </p>
-<img src="https://img.shields.io/github/license/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub license" />
 <img src="https://img.shields.io/github/last-commit/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="git-last-commit" />
 <img src="https://img.shields.io/github/commit-activity/m/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub commit activity" />
 <img src="https://img.shields.io/github/languages/top/hystb/ft_IRC?style=flat-square&color=5D6D7E" alt="GitHub top language" />
@@ -27,9 +26,6 @@
     - [🤖 Running ft_IRC](#-running-ft_IRC)
     - [🧪 Tests](#-tests)
 - [🛣 Roadmap](#-roadmap)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [👏 Acknowledgments](#-acknowledgments)
 
 ---
 
@@ -45,13 +41,8 @@ The repository is an IRC (Internet Relay Chat) server program called ft_IRC. It 
 |    | Feature            | Description                                                                                                        |
 |----|--------------------|--------------------------------------------------------------------------------------------------------------------|
 | ⚙️ | **Architecture**   | The codebase follows a monolithic architecture. It consists of a server component that handles connections with clients, manages channels, and processes user commands. It also includes a bot component that connects to an IRC server, joins a channel, and responds to commands. The codebase has separate directories for headers, source files, and the bot. It follows a file-based organization where related files are grouped together.|
-| 📄 | **Documentation**  | The codebase lacks comprehensive documentation. Although some functions and classes have comments, there is no overall documentation describing the system's design, architecture, and usage. The lack of documentation makes it difficult for new developers to understand and contribute to the project. It is recommended to add detailed documentation to improve code understandability and maintainability.|
 | 🔗 | **Dependencies**   | The codebase has dependencies on external libraries such as socket programming libraries for network communication. It also relies on standard C++ libraries for file handling and string manipulation. Additionally, the codebase includes dependencies on other files within the project, such as header files and source files. These dependencies are managed through include statements and Makefile configurations.|
 | 🧩 | **Modularity**     | The codebase demonstrates some level of modularity by organizing related functionalities into separate components, directories, and files. The server component is organized into directories for headers, source files, and specific functionalities like command handling and network communication. The bot component is placed in a separate directory. However, there is room for improvement in terms of further breaking down the codebase into smaller, more interchangeable components.|
-| 🧪 | **Testing**        | The codebase does not have any testing strategies or tools implemented. There are no unit tests, integration tests, or automated testing frameworks included. Lack of testing can make it challenging to ensure code correctness and maintainability. It is recommended to introduce testing practices, such as unit tests for individual components and integration tests for the overall system, using frameworks like Google Test or Catch2.|
-| ⚡️  | **Performance**    | It is challenging to assess the system's performance without specific performance benchmarks or metrics. However, the codebase demonstrates efficient handling of network communication through socket programming. The use of C++ allows for low-level optimizations and efficient memory management. To evaluate performance accurately, it is recommended to conduct load testing and profiling using tools like Apache JMeter and Valgrind.|
-| 🔐 | **Security**       | The codebase does not demonstrate explicit security measures for data protection and maintaining functionality. It is recommended to implement secure coding practices, including input validation, proper handling of sensitive information, and protection against common security threats like injection attacks and unauthorized access. Additionally, incorporating encryption protocols like SSL/TLS for secure communication is advisable for an IRC server application.|
-| 🔀 | **Version Control**| The codebase does not provide any information about version control strategies or tools used. It is essential to use a version control system like Git to track changes, collaborate with other developers, and maintain a history of the project. Adopting Git and hosting the repository on platforms like GitHub or GitLab would
 
 ---
 
@@ -189,11 +180,7 @@ The repository is an IRC (Internet Relay Chat) server program called ft_IRC. It 
 
 Please ensure you have the following dependencies installed on your system:
 
-`- ℹ️ Dependency 1`
-
-`- ℹ️ Dependency 2`
-
-`- ℹ️ ...`
+`- ℹ️ jq if you want to run the bot`
 
 ### 🔧 Installation
 
@@ -209,81 +196,26 @@ cd ft_IRC
 
 3. Install the dependencies:
 ```sh
-g++ -o myapp main.cpp
+make
+```
+or to compile the bot
+```
+make bonus
 ```
 
-### 🤖 Running ft_IRC
+### 🖧 Running ft_IRC
 
 ```sh
-./myapp
+./ircserv <port> <password>
 ```
 
-### 🧪 Tests
+### 🤖 Running bot
+
 ```sh
-Insert test command.
+cd bot
+./rocketBot <Server Address> <Port> <Channel> <Password> <ApiKey> <Channel Password(optional)>
 ```
-
 ---
-
-
-## 🛣 Project Roadmap
-
-> - [X] `ℹ️  Task 1: Implement X`
-> - [ ] `ℹ️  Task 2: Implement Y`
-> - [ ] `ℹ️ ...`
-
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here are several ways you can contribute:
-
-- **[Submit Pull Requests](https://github.com/hystb/ft_IRC/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
-- **[Join the Discussions](https://github.com/hystb/ft_IRC/discussions)**: Share your insights, provide feedback, or ask questions.
-- **[Report Issues](https://github.com/hystb/ft_IRC/issues)**: Submit bugs found or log feature requests for HYSTB.
-
-#### *Contributing Guidelines*
-
-<details closed>
-<summary>Click to expand</summary>
-
-1. **Fork the Repository**: Start by forking the project repository to your GitHub account.
-2. **Clone Locally**: Clone the forked repository to your local machine using a Git client.
-   ```sh
-   git clone <your-forked-repo-url>
-   ```
-3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
-   ```sh
-   git checkout -b new-feature-x
-   ```
-4. **Make Your Changes**: Develop and test your changes locally.
-5. **Commit Your Changes**: Commit with a clear and concise message describing your updates.
-   ```sh
-   git commit -m 'Implemented new feature x.'
-   ```
-6. **Push to GitHub**: Push the changes to your forked repository.
-   ```sh
-   git push origin new-feature-x
-   ```
-7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
-
-Once your PR is reviewed and approved, it will be merged into the main branch.
-
-</details>
-
----
-
-## 📄 License
-
-
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-## 👏 Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
 
 [**Return**](#Top)
 
