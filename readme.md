@@ -42,7 +42,8 @@ The ft_IRC repository houses a comprehensive IRC server and client system design
 
 ## 📦 Features
 
-HTTPStatus Exception: 429
+Using sockets to make a server
+Using Open AI API to make a bot with multiple personality
 
 ---
 
@@ -180,11 +181,7 @@ HTTPStatus Exception: 429
 
 Please ensure you have the following dependencies installed on your system:
 
-`- ℹ️ Dependency 1`
-
-`- ℹ️ Dependency 2`
-
-`- ℹ️ ...`
+`- ℹ️ If you want to use the bot make sure you have jq installed`
 
 ### 🔧 Installation
 
@@ -198,83 +195,27 @@ git clone https://github.com/hystb/ft_IRC
 cd ft_IRC
 ```
 
-3. Install the dependencies:
+3. Install the project:
 ```sh
-g++ -o myapp main.cpp
+make or make bonus to compile the bot
 ```
 
-### 🤖 Running ft_IRC
+### 🖧 Running ft_IRC
 
 ```sh
-./myapp
+./ircserv <port> <password>
 ```
 
-### 🧪 Tests
+### 🤖 Running bot
+
 ```sh
-Insert test command.
+cd bot
+./rocketBot <Server Address> <Port> <Channel> <Password> <ApiKey> <Channel Password(optional)>
 ```
-
 ---
 
 
-## 🛣 Project Roadmap
 
-> - [X] `ℹ️  Task 1: Implement X`
-> - [ ] `ℹ️  Task 2: Implement Y`
-> - [ ] `ℹ️ ...`
-
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here are several ways you can contribute:
-
-- **[Submit Pull Requests](https://github.com/hystb/ft_IRC/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
-- **[Join the Discussions](https://github.com/hystb/ft_IRC/discussions)**: Share your insights, provide feedback, or ask questions.
-- **[Report Issues](https://github.com/hystb/ft_IRC/issues)**: Submit bugs found or log feature requests for HYSTB.
-
-#### *Contributing Guidelines*
-
-<details closed>
-<summary>Click to expand</summary>
-
-1. **Fork the Repository**: Start by forking the project repository to your GitHub account.
-2. **Clone Locally**: Clone the forked repository to your local machine using a Git client.
-   ```sh
-   git clone <your-forked-repo-url>
-   ```
-3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
-   ```sh
-   git checkout -b new-feature-x
-   ```
-4. **Make Your Changes**: Develop and test your changes locally.
-5. **Commit Your Changes**: Commit with a clear and concise message describing your updates.
-   ```sh
-   git commit -m 'Implemented new feature x.'
-   ```
-6. **Push to GitHub**: Push the changes to your forked repository.
-   ```sh
-   git push origin new-feature-x
-   ```
-7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
-
-Once your PR is reviewed and approved, it will be merged into the main branch.
-
-</details>
-
----
-
-## 📄 License
-
-
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-## 👏 Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
 
 [**Return**](#Top)
 
