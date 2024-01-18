@@ -177,7 +177,7 @@ The repository is an IRC (Internet Relay Chat) server program called ft_IRC. It 
 
 Please ensure you have the following dependencies installed on your system:
 
-`- ℹ️ jq if you want to run the bot`
+`- ℹ️ jq in shell if you want to run the bot`
 
 ### 🔧 Installation
 
